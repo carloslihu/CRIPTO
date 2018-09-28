@@ -11,16 +11,43 @@ Autores: Carlos Li Hu y David López Ramos
 #include <string.h>
 #include <time.h>
 #include <getopt.h>
+#include <gmp.h>
 
 /*Definicion de constantes *************************************************/
 
+int mcd(int a, int b) 
+{ 
+    if (a == 0) 
+        return b; 
+    return mcd(b%a, a); 
+}
+// Se guarda en a el inverso de a modulo m en x
+int mcdExtended(int a, int m, int *x, int *y) 
+{ 
+    // Base Case 
+    if (a == 0) 
+    { 
+        *x = 0; 
+        *y = 1; 
+        return m; 
+    } 
+  
+    int x1, y1; // To store results of recursive call 
+    int mcd = mcdExtended(m%a, a, &x1, &y1); 
+  
+    // Update x and y using results of recursive 
+    // call 
+    *x = y1 - (m/a) * x1; 
+    *y = x1; 
+  
+    return mcd; 
+}  
 
-
-
+/* PROGRAMA PRINCIPAL */
 int main(int argc, char **argv)
 {
 	char entrada[256];
-	int long_index = 0, retorno = 0;
+	int long_index = 0;//, retorno = 0;
 	char opt;
 
 	if (argc > 1) {
@@ -89,7 +116,11 @@ int main(int argc, char **argv)
 			break;
 		}
 	}
-
+	int x, y; 
+	int a = 488 , b= 721; 
+	int g = mcdExtended(a, b, &x, &y); 
+	printf("mcd(%d, %d) = %d\n", a, b, mcd(a, b)); 
+	printf("gcd(%d, %d) = %d, x=%d, y=%d\n", a, b, g,x,y);
 
 
 
