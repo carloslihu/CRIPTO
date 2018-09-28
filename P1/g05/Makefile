@@ -3,6 +3,7 @@ ODIR=obj
 SDIR=src
 CC=gcc
 CFLAGS= -g -Wall
+LIBS= -lgmp -L.
 
 #_DEPS =
 _OBJ =afin.o
@@ -19,7 +20,7 @@ $(ODIR)/%.o: $(SDIR)/%.c #$(DEPS)
 
 #EJECUTABLES
 afin: $(OBJ)
-	$(CC) -o $@ $^ $(CFLAGS)
+	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
 #P3
 tar:
 	tar -czvf F-CSI_p1_g05.tgz ../g05/
