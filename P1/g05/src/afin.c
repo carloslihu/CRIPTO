@@ -47,7 +47,7 @@ int main(int argc, char **argv)
 	int long_index = 0;//, retorno = 0;
 	char opt;
 	mpz_t a, b, m, inv;
-	FILE *fIn, *fOut;
+	//FILE *fIn, *fOut;
 	if (argc > 1) {
 		if (strlen(argv[1]) < 256) {
 			strcpy(entrada, argv[1]);
@@ -119,11 +119,11 @@ int main(int argc, char **argv)
 
 		if( mpz_invert (inv, a, m) !=0){
 			gmp_printf("El inverso es: %Zd\n",inv);
-		}else{
+		}else {
                     printf("La clave no determina una función afín inyectiva\n");
                 }
 	
-	mpz_clears (a,b,m, NULL);
+	mpz_clears (a,b,m,inv, NULL);
 	/*fclose(fIn);
 	fclose(fOut);*/
 	return 0;
