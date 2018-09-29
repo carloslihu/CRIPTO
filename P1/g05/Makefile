@@ -12,11 +12,22 @@ _OBJ =afin.o
 
 OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 
-all: afin
+all: autores carpetas afin
 
 $(ODIR)/%.o: $(SDIR)/%.c #$(DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS)
 
+
+autores: 
+	@echo "---------------------------------------"
+	@echo "|             Carlos Li Hu            |"
+	@echo "|           David Lopez Ramos         |"
+	@echo "---------------------------------------"
+
+
+carpetas:
+	mkdir -p includes
+	mkdir -p obj
 
 #EJECUTABLES
 afin: $(OBJ)
