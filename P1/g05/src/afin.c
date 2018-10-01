@@ -15,14 +15,14 @@ Autores: Carlos Li Hu y David López Ramos
 
 /*Definicion de constantes *************************************************/
 
-/*int mcd(int a, int b) 
+int mcd(int a, int b) 
 { 
     if (a == 0) 
         return b; 
     return mcd(b%a, a); 
-}*/
+}
 // Se guarda en a el inverso de a modulo m en x
-/*int mcdExtended(int a, int m, int *x, int *y) 
+int mcdExtended(int a, int m, int *x, int *y) 
 { 
     if (a == 0) 
     { 
@@ -38,16 +38,19 @@ Autores: Carlos Li Hu y David López Ramos
     *y = x1; 
   
     return mcd; 
-}*/  
+}
 
 /* PROGRAMA PRINCIPAL */
 int main(int argc, char **argv)
 {
 	char entrada[256];
+	char cadena[256];
 	int long_index = 0;//, retorno = 0;
-	char opt;
-	mpz_t a, b, m, inv;
-	//FILE *fIn, *fOut;
+	char opt, simbolo_in, simbolo_out;
+	mpz_t a, b, m, inv, aux, aux2;
+	FILE *fIn, *fOut;
+	int cifrar = 0;
+
 	if (argc > 1) {
 		if (strlen(argv[1]) < 256) {
 			strcpy(entrada, argv[1]);
@@ -68,18 +71,19 @@ int main(int argc, char **argv)
 		{"o", required_argument, 0, '5'},
 		{0, 0, 0, 0}
 	};
-	mpz_inits(a,b,m,inv, NULL);
+	mpz_inits(a,b,m,inv,aux,aux2, NULL);
 	
 	//Simple lectura por parametros por completar casos de error
 	while ((opt = getopt_long_only(argc, argv, "c:d:1:2:3:4:5", options, &long_index)) != -1) {
 		switch (opt) {
 		case 'c' :
 			printf("Leida opcion -C \n");
+			cifrar = 1;
 			break;
 
 		case 'd' :
 			printf("Leida opcion -D \n");
-
+			cifrar = 0;
 			break;
 
 		case '1' : 
@@ -99,12 +103,15 @@ int main(int argc, char **argv)
 
 		case '4' :
 			printf("Leida opcion -i: %s\n", optarg);
-			//fIn = fopen(optarg, "r");
+			fIn = fopen(optarg, "r");
+			if(!fIn) exit(-1);
+
 			break;
 
 		case '5' :
 			printf("Leida opcion -o: %s\n", optarg);
-			//fOut = fopen(optarg, "w");
+			fOut = fopen(optarg, "w");
+			if(!fOut) exit(-1);
 			break;
 
 		case '?' :
@@ -117,15 +124,75 @@ int main(int argc, char **argv)
 		}
 	} 
 
-		if( mpz_invert (inv, a, m) !=0){
-			gmp_printf("El inverso es: %Zd\n",inv);
-		}else {
-                    printf("La clave no determina una función afín inyectiva\n");
-                }
+	if( mpz_invert (inv, a, m) !=0){
+		gmp_printf("El inverso es: %Zd\n",inv);
+	}else {
+    	printf("La clave no determina una función afín inyectiva\n");
+    }
+
+
+    /*crear entrada estandar*/
+    if(!fIn){
+    	printf("Leyendo entrada estandar \n");
+    	fgets(cadena, 256, stdin);
+    	/*se guarda la entrada en un fichero para reutilizar codigo*/
+    	fIn = fopen("teclado.txt", "w");
+    	fwrite(cadena, 1, strlen(cadena), fIn);
+    	fclose(fIn);
+    	fIn = fopen("teclado.txt", "r");
+    }
+
+    /*leer fichero entrada o estandar*/
+    if(fIn){
+    	/*printf("Leyendo \n");*/
+		while (fscanf(fIn, "%c", &simbolo_in) != EOF) {
+			/*convertir a mayusculas*/
+			if('a' <= simbolo_in && simbolo_in <='z'){
+				simbolo_in -= ('a'-'A');
+			}
+			if('A' <= simbolo_in && simbolo_in <= 'Z'){
+				mpz_set_ui (aux, (int)simbolo_in);
+				/*Cifrar*/
+				if(cifrar==1){
+					/*gmp_printf ("Cifrando % Zd \n", aux);*/
+					mpz_mul(aux2,a,aux);
+					mpz_mod(aux2, aux2, m);
+					mpz_add(aux2,aux2,b);
+					mpz_mod(aux2, aux2, m);
+				}
+				/*Descifrar*/
+				else{
+					/*simbolo_out = (inv*(simbolo_in - b)) % m;*/
+					/*gmp_printf ("Descifrando % Zd \n", aux);*/
+					mpz_sub(aux2,aux,b);
+					mpz_mul(aux2,aux2,inv);
+					mpz_mod(aux2, aux2, m);
+				}
+
+				/*convertir a double o int y sumar 65, codigo de la primera letra A*/
+				simbolo_out = mpz_get_d(aux2);
+				simbolo_out += 65;
+			}
+			else{
+				/*si el simbolo no es una letra A-Z, se deja igual*/
+				simbolo_out = simbolo_in;
+			}
+			 /*escribir fichero salida*/
+			if(fOut){
+				fwrite(&simbolo_out, 1, 1, fOut);
+			}
+			/*escribir salida estandar*/
+			else{
+				fwrite(&simbolo_out, 1, 1, stdout);
+			}
+		}
+
+    }
 	
-	mpz_clears (a,b,m,inv, NULL);
-	/*fclose(fIn);
-	fclose(fOut);*/
+	mpz_clears (a,b,m,inv,aux,aux2, NULL);
+	if (fIn) fclose(fIn);
+	if (fOut) fclose(fOut);
+
 	return 0;
 
 

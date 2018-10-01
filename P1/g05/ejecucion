@@ -1,0 +1,2 @@
+./afin -C -m 26 -a 9 -b 4 -i entrada.txt -o cifrado.txt
+
