@@ -15,6 +15,14 @@ Autores: Carlos Li Hu y David López Ramos
 
 /*Definicion de constantes *************************************************/
 
+/**
+ * @brief Calcula el maximo comun divisor
+ *
+ * @param primer entero
+ * @param segundo entero
+ *
+ * @return el maximo comun divisor
+ */
 int mcd(int a, int b) {
     if (a == 0)
         return b;
@@ -22,6 +30,17 @@ int mcd(int a, int b) {
 }
 // Se guarda en a el inverso de a modulo m en x
 
+/**
+ * @brief Realiza la descomposición de Euclides Extendida.
+ *        Calcula el inverso de a modulo m en x
+ *
+ * @param el entero a calcular su inverso
+ * @param el modulo de la operación
+ * @param el inverso de a
+ * @param el otro factor por descomposición
+ *
+ * @return el maximo comun divisor
+ */
 int mcdExtended(int a, int m, int *x, int *y) {
     if (a == 0) {
         *x = 0;
@@ -47,11 +66,9 @@ int main(int argc, char **argv) {
     mpz_t a, b, m, inv, aux, aux2;
     FILE *fIn, *fOut;
     int cifrar = -1;
-    if (argc > 1) {
-        if (strlen(argv[1]) < 256) {
-            strcpy(entrada, argv[1]);
-        }
 
+    if (argc > 1) {
+        strncpy(entrada, argv[1], 256);
     } else {
         printf("Ejecucion: %s {-C|-D} {-m |Zm|} {-a N×} {-b N+} [-i filein] [-o fileout]\n", argv[0]);
         exit(-1);
@@ -67,45 +84,36 @@ int main(int argc, char **argv) {
         {"o", required_argument, 0, '5'},
         {0, 0, 0, 0}
     };
-    mpz_inits(a, b, m, inv, aux, aux2, NULL);
 
-    //Simple lectura por parametros por completar casos de error
+    mpz_inits(a, b, m, inv, aux, aux2, NULL);
     while ((opt = getopt_long_only(argc, argv, "c:d:1:2:3:4:5", options, &long_index)) != -1) {
         switch (opt) {
             case 'c':
-                printf("Leida opcion -C \n");
                 cifrar = 1;
                 break;
 
             case 'd':
-                printf("Leida opcion -D \n");
                 cifrar = 0;
                 break;
 
             case '1':
-                printf("Leida opcion -m: %s\n", optarg);
                 mpz_set_str(m, optarg, 10);
                 break;
 
             case '2':
-                printf("Leida opcion -a: %s\n", optarg);
                 mpz_set_str(a, optarg, 10);
                 break;
 
             case '3':
-                printf("Leida opcion -b: %s\n", optarg);
                 mpz_set_str(b, optarg, 10);
                 break;
 
             case '4':
-                printf("Leida opcion -i: %s\n", optarg);
                 fIn = fopen(optarg, "r");
                 if (!fIn) exit(-1);
-
                 break;
 
             case '5':
-                printf("Leida opcion -o: %s\n", optarg);
                 fOut = fopen(optarg, "w");
                 if (!fOut) exit(-1);
                 break;
@@ -119,19 +127,17 @@ int main(int argc, char **argv) {
                 break;
         }
     }
-    if(cifrar == -1){
+    //Si no se ha especificado si cifrar o descifrar
+    if (cifrar == -1) {
         printf("Ejecucion: %s {-C|-D} {-m |Zm|} {-a N×} {-b N+} [-i filein] [-o fileout]\n", argv[0]);
         exit(-1);
     }
-        
-    
-    if (mpz_invert(inv, a, m) != 0) {
-        gmp_printf("El inverso es: %Zd\n", inv);
-    } else {
+
+
+    if (mpz_invert(inv, a, m) == 0) {
         printf("La clave no determina una función afín inyectiva\n");
         exit(-1);
     }
-
 
     /*crear entrada estandar*/
     if (!fIn) {
@@ -146,19 +152,19 @@ int main(int argc, char **argv) {
 
     /*leer fichero entrada o estandar*/
     if (fIn) {
-        /*printf("Leyendo \n");*/
         while (fscanf(fIn, "%c", &simbolo_in) != EOF) {
             /*convertir a mayusculas*/
             if ('a' <= simbolo_in && simbolo_in <= 'z') {
                 simbolo_in -= ('a' - 'A');
             }
             if ('A' <= simbolo_in && simbolo_in <= 'Z') {
-                //aux = simbolo de entrada
+                //aux es nuestro simbolo de entrada
+                //aux2 es nuestro simbolo de salida
                 mpz_set_ui(aux, (int) simbolo_in);
+                simbolo_in -= 65;
+
                 /*Cifrar*/
-                simbolo_in-=65;
                 if (cifrar == 1) {
-                    /*gmp_printf ("Cifrando % Zd \n", aux);*/
                     mpz_mul(aux2, a, aux);
                     mpz_mod(aux2, aux2, m);
                     mpz_add(aux2, aux2, b);
@@ -166,7 +172,6 @@ int main(int argc, char **argv) {
                 }/*Descifrar*/
                 else {
                     /*simbolo_out = (inv*(simbolo_in - b)) % m;*/
-                    /*gmp_printf ("Descifrando % Zd \n", aux);*/
                     mpz_sub(aux2, aux, b);
                     mpz_mul(aux2, aux2, inv);
                     mpz_mod(aux2, aux2, m);
