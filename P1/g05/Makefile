@@ -12,7 +12,7 @@ LIBS= -lgmp -L.
 
 #OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 
-all: autores carpetas afin hill
+all: autores carpetas afin hill vigenere
 
 $(ODIR)/%.o: $(SDIR)/%.c #$(DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS)
@@ -36,6 +36,9 @@ afin: $(ODIR)/afin.o
 hill: $(ODIR)/hill.o
 	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
 	
+vigenere: $(ODIR)/vigenere.o
+	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
+	
 #P3
 tar:
 	tar -czvf F-CSI_p1_g05.tgz ../g05/
@@ -44,4 +47,4 @@ tar:
 clean:
 	-rm -f $(ODIR)/*.o *~ core $(INCDIR)/*~ 
 	-rm -f *.tar.gz
-	-rm -f afin
+	-rm -f afin hill vigenere
