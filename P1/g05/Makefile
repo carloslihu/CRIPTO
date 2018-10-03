@@ -6,13 +6,13 @@ CFLAGS= -g -Wall
 LIBS= -lgmp -L.
 
 #_DEPS =
-_OBJ =afin.o
+#_OBJ =
 
 #DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))
 
-OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
+#OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 
-all: autores carpetas afin
+all: autores carpetas afin hill
 
 $(ODIR)/%.o: $(SDIR)/%.c #$(DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS)
@@ -30,8 +30,12 @@ carpetas:
 	mkdir -p obj
 
 #EJECUTABLES
-afin: $(OBJ)
+afin: $(ODIR)/afin.o
 	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
+
+hill: $(ODIR)/hill.o
+	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
+	
 #P3
 tar:
 	tar -czvf F-CSI_p1_g05.tgz ../g05/
