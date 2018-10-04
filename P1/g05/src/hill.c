@@ -15,6 +15,45 @@ Autores: Carlos Li Hu y David López Ramos
 
 /*Definicion de constantes *************************************************/
 
+
+
+int parsear(FILE *fIn, FILE **fAux){
+
+    char simbolo_in;
+    int count=0;
+
+    /*Limpiar texto de entrada con letras A-Z*/
+    if (fIn) {
+        *fAux = fopen("auxiliar.txt", "w");
+        if (fAux) {
+            while (fscanf(fIn, "%c", &simbolo_in) != EOF) {
+                /*convertir a mayusculas*/
+                if ('a' <= simbolo_in && simbolo_in <= 'z') {
+                    simbolo_in -= ('a' - 'A');
+                }
+                /*miramos si hay acentos*/
+                else{
+                    if(simbolo_in == -127 || simbolo_in == -95) simbolo_in = 'A';
+                    else if(simbolo_in == -119 || simbolo_in == -87) simbolo_in = 'E';
+                    else if(simbolo_in == -115 || simbolo_in == -83) simbolo_in = 'I';
+                    else if(simbolo_in == -109 || simbolo_in == -77) simbolo_in = 'O';
+                    else if(simbolo_in == -102 || simbolo_in == -70) simbolo_in = 'U';
+                }
+
+                if ('A' <= simbolo_in && simbolo_in <= 'Z') {
+                    /*escribir fichero auxiliar de entrada*/
+                    printf("Anadiendo a auxiliar \n");    
+                    fwrite(&simbolo_in, 1, 1, *fAux);
+                    count++;
+                }
+            }
+        }
+    }
+    /*fclose(*fAux);*/
+    return count; 
+}
+
+
 /**
  * @brief Calcula el maximo comun divisor
  *
@@ -189,35 +228,23 @@ int main(int argc, char **argv) {
         fIn = fopen("teclado.txt", "r");
     }
 
-    /*Limpiar texto de entrada con letras A-Z*/
-    if (fIn) {
-        fAux= fopen("auxiliar.txt", "w");
-        if (fAux) {
-            while (fscanf(fIn, "%c", &simbolo_in) != EOF) {
-                /*convertir a mayusculas*/
-                if ('a' <= simbolo_in && simbolo_in <= 'z') {
-                    simbolo_in -= ('a' - 'A');
-                }
-                if ('A' <= simbolo_in && simbolo_in <= 'Z') {
-                    /*escribir fichero auxiliar de entrada*/
-                    printf("Anadiendo a auxiliar \n");    
-                    fwrite(&simbolo_in, 1, 1, fAux);
-                    count++;
-                }
-            }
-            /*rellenar texto para hacerlo modulo N*/
-            count = count%n;
-            for(i=0; i<count; i++) fwrite(&fill, 1, 1, fAux);
-            fclose(fAux);
-            fIn = fopen("auxiliar.txt", "r");
-        }
-    }
+
+    /*rellenar texto para hacerlo modulo N*/
+    /*en fAux se guarda la direccion del texto nuevo parseado*/
+    count = parsear(fIn, &fAux);
+    printf("Retorno count es %d\n", count);
+    count = count%n;
+    /*fAux  = fopen("auxiliar.txt", "a");*/
+    for(i=0; i<count; i++) fwrite(&fill, 1, 1, fAux);
+    fclose(fAux);
+    fIn = fAux;
+    /*fIn = fopen("auxiliar.txt", "r");*/
 
 
 
       /*leer fichero entrada o estandar*/
     // if (fIn) {
-    //     while (fread(fIn, "%c", &simbolo_in) != EOF) {
+    //     while (fread(cadena, sizeof (char), n, fIn) != 0) {
     //         /*convertir a mayusculas*/
     //         if ('a' <= simbolo_in && simbolo_in <= 'z') {
     //             simbolo_in -= ('a' - 'A');
@@ -255,12 +282,12 @@ int main(int argc, char **argv) {
     // }
 
 
-    // if(fOut){
-    //     printf("Hay fOut\n"); 
-    // }
-    // else{
-    //     printf("No hay fOut\n"); 
-    // }
+    if(fOut){
+        printf("Hay fOut\n"); 
+    }
+    else{
+        printf("No hay fOut\n"); 
+    }
 
 
 
