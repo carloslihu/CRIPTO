@@ -15,47 +15,6 @@ Autores: Carlos Li Hu y David López Ramos
 #include "../includes/utils.h"
 /*Definicion de constantes *************************************************/
 
-/**
- * @brief Calcula el maximo comun divisor
- *
- * @param primer entero
- * @param segundo entero
- *
- * @return el maximo comun divisor
- */
-int mcd(int a, int b) {
-    if (a == 0)
-        return b;
-    return mcd(b % a, a);
-}
-
-/**
- * @brief Realiza la descomposición de Euclides Extendida.
- *        Calcula el inverso de a modulo m en x
- *
- * @param el entero a calcular su inverso
- * @param el modulo de la operación
- * @param el inverso de a
- * @param el otro factor por descomposición
- *
- * @return el maximo comun divisor
- */
-int mcdExtended(int a, int m, int *x, int *y) {
-    if (a == 0) {
-        *x = 0;
-        *y = 1;
-        return m;
-    }
-
-    int x1, y1;
-    int mcd = mcdExtended(m % a, a, &x1, &y1);
-
-    *x = y1 - (m / a) * x1;
-    *y = x1;
-
-    return mcd;
-}
-
 /* PROGRAMA PRINCIPAL */
 int main(int argc, char **argv) {
     char entrada[256];
@@ -64,22 +23,23 @@ int main(int argc, char **argv) {
     int long_index = 0;
     char opt;
     FILE *fIn, *fOut;
-    int n, i, m = 26;
+    int n, i, m;
     int cifrar = -1;
 
     if (argc > 1) {
         strncpy(entrada, argv[1], 256);
     } else {
-        printf("Ejecucion: %s {-C|-D} {-k clave} [-i filein] [-o fileout]\n", argv[0]);
+        printf("Ejecucion: %s {-C|-D} {-m |Zm|} {-k clave} [-i filein] [-o fileout]\n", argv[0]);
         exit(-1);
     }
 
     static struct option options[] = {
         {"C", no_argument, 0, 'c'},
         {"D", no_argument, 0, 'd'},
-        {"k", required_argument, 0, '1'},
-        {"i", required_argument, 0, '2'},
-        {"o", required_argument, 0, '3'},
+        {"m", required_argument, 0, '1'},
+        {"k", required_argument, 0, '2'},
+        {"i", required_argument, 0, '3'},
+        {"o", required_argument, 0, '4'},
         {0, 0, 0, 0}
     };
 
@@ -94,15 +54,19 @@ int main(int argc, char **argv) {
                 break;
 
             case '1':
+                m = atoi(optarg);
+                break;
+                
+            case '2':
                 strncpy(clave, optarg, 256);
                 break;
 
-            case '2':
+            case '3':
                 fIn = fopen(optarg, "r");
                 if (!fIn) exit(-1);
                 break;
 
-            case '3':
+            case '4':
                 fOut = fopen(optarg, "w");
                 if (!fOut) exit(-1);
                 break;
@@ -111,14 +75,14 @@ int main(int argc, char **argv) {
                 break;
 
             default:
-                printf("Ejecucion: %s {-C|-D} {-k clave} [-i filein] [-o fileout]\n", argv[0]);
+                printf("Ejecucion: %s {-C|-D} {-m |Zm|} {-k clave} [-i filein] [-o fileout]\n", argv[0]);
                 exit(-1);
                 break;
         }
     }
     /*Si no se ha especificado si cifrar o descifrar*/
     if (cifrar == -1) {
-        printf("Ejecucion: %s {-C|-D} {-k clave} [-i filein] [-o fileout]\n", argv[0]);
+        printf("Ejecucion: %s {-C|-D} {-m |Zm|} {-k clave} [-i filein] [-o fileout]\n", argv[0]);
         exit(-1);
     }
 
