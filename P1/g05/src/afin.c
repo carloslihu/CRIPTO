@@ -26,15 +26,15 @@ Autores: Carlos Li Hu y David López Ramos
 void gmp_mcd(mpz_t rop, mpz_t op1, mpz_t op2) {
     mpz_t a, b, r;
     mpz_inits(a, b, r, NULL);
-    mpz_set(a,op1);
-    mpz_set(b,op2);
+    mpz_set(a, op1);
+    mpz_set(b, op2);
 
-    if (mpz_cmp_d (a, 0) == 0){
-      mpz_set(rop,b);
-      mpz_clears(a, b, r, NULL);
-      return;
+    if (mpz_cmp_d(a, 0) == 0) {
+        mpz_set(rop, b);
+        mpz_clears(a, b, r, NULL);
+        return;
     }
-    mpz_mod (r, b, a);
+    mpz_mod(r, b, a);
     gmp_mcd(rop, r, a);
     mpz_clears(a, b, r, NULL);
 }
@@ -50,45 +50,29 @@ void gmp_mcd(mpz_t rop, mpz_t op1, mpz_t op2) {
  *
  * @return el maximo comun divisor
  */
-void gmp_mcdext (mpz_t g, mpz_t s, mpz_t t, const mpz_t a1, const mpz_t m1){
-  mpz_t a, m, x, y,x1,y1,aux;
-  mpz_inits(a,m,x,y,x1,y1,aux,NULL);
-  mpz_set(a,a1);
-  mpz_set(m,m1);
+void gmp_mcdext(mpz_t g, mpz_t s, mpz_t t, const mpz_t a1, const mpz_t m1) {
+    mpz_t a, m, x, y, x1, y1, aux;
+    mpz_inits(a, m, x, y, x1, y1, aux, NULL);
+    mpz_set(a, a1);
+    mpz_set(m, m1);
 
 
-  if (mpz_cmp_d (a, 0) == 0){
-    mpz_set_d(x,0);
-    mpz_set_d(y,1);
-    return;
-  }
-  mpz_mod (aux, m, a);
-  gmp_mcdext (g,x1,y1,aux,a);
-
-  mpz_cdiv_q (aux, m, a);
-  mpz_mul (aux, aux, x1);
-  mpz_sub(aux, y1, aux);
-
-  mpz_set(x,aux);
-  mpz_set(y,x1);
-  mpz_clears(a,m,x,y,x1,y1,aux,NULL);
-}
-
-/*int mcdExtended(int a, int m, int *x, int *y) {
-    if (a == 0) {
-        *x = 0;
-        *y = 1;
-        return m;
+    if (mpz_cmp_d(a, 0) == 0) {
+        mpz_set_d(s, 0);
+        mpz_set_d(t, 1);
+        mpz_set(g, m);
+        return;
     }
+    mpz_mod(aux, m, a);
+    gmp_mcdext(g, x1, y1, aux, a);
+    mpz_mul(aux, m, x1);
+    mpz_tdiv_q(aux, aux, a);
 
-    int x1, y1;
-    int mcd = mcdExtended(m % a, a, &x1, &y1);
+    mpz_sub(s, y1, aux);
 
-    *x = y1 - (m / a) * x1;
-    *y = x1;
-
-    return mcd;
-}*/
+    mpz_set(t, x1);
+    mpz_clears(a, m, x, y, x1, y1, aux, NULL);
+}
 
 /* PROGRAMA PRINCIPAL */
 int main(int argc, char **argv) {
@@ -96,7 +80,7 @@ int main(int argc, char **argv) {
     char cadena[256];
     int long_index = 0; //, retorno = 0;
     char opt, simbolo_in, simbolo_out;
-    mpz_t a, b, m, inv, mcd,t, aux, aux2;
+    mpz_t a, b, m, inv, mcd, t, aux, aux2;
     FILE *fIn, *fOut;
     int cifrar = -1;
 
@@ -118,7 +102,7 @@ int main(int argc, char **argv) {
         {0, 0, 0, 0}
     };
 
-    mpz_inits(a, b, m, inv,t, mcd, aux, aux2, NULL);
+    mpz_inits(a, b, m, inv, t, mcd, aux, aux2, NULL);
     while ((opt = getopt_long_only(argc, argv, "c:d:1:2:3:4:5", options, &long_index)) != -1) {
         switch (opt) {
             case 'c':
@@ -166,18 +150,24 @@ int main(int argc, char **argv) {
         exit(-1);
     }
 
-    gmp_mcd(mcd, a, m);
-    gmp_printf ("El resultado del mcd es %Zd\n", mcd);
-    gmp_mcdext (mcd, inv, t, a,m);
-    gmp_printf ("Los resultados del mcdext son: %Zd %Zd %Zd\n", mcd,inv,t);
-    mpz_gcdext (mcd, inv, t,a, m);
-    gmp_printf ("Los resultados del mcdext deberian ser: %Zd %Zd %Zd\n", mcd,inv,t);
-    return 0;
+    /*gmp_mcd(mcd, a, m);
+    gmp_printf("El resultado del mcd es %Zd\n", mcd);
+    gmp_mcdext(mcd, inv, t, a, m);
+    gmp_printf("Los resultados del mcdext son: %Zd %Zd %Zd\n", mcd, inv, t);
+    mpz_gcdext(mcd, inv, t, a, m);
+    gmp_printf("Los resultados del mcdext deberian ser: %Zd %Zd %Zd\n", mcd, inv, t);
+    return 0;*/
 
-    if (mpz_invert(inv, a, m) == 0) {
+    /*if (mpz_invert(inv, a, m) == 0) {
+        printf("La clave no determina una función afín inyectiva\n");
+        exit(-1);
+    }*/
+    gmp_mcd(mcd, a, m);
+    if (mpz_cmp_d(mcd, 1) != 0) {
         printf("La clave no determina una función afín inyectiva\n");
         exit(-1);
     }
+    mpz_gcdext(mcd, inv, t, a, m);
 
     /*crear entrada estandar*/
     if (!fIn) {
@@ -235,7 +225,7 @@ int main(int argc, char **argv) {
 
     }
 
-    mpz_clears(a, b, m, inv, aux, aux2, NULL);
+    mpz_clears(a, b, m, inv, t, mcd, aux, aux2, NULL);
     if (fIn) fclose(fIn);
     if (fOut) fclose(fOut);
 
