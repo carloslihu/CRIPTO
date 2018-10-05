@@ -12,7 +12,7 @@ Autores: Carlos Li Hu y David López Ramos
 #include <time.h>
 #include <getopt.h>
 #include <gmp.h>
-
+#include "../includes/utils.h"
 /*Definicion de constantes *************************************************/
 
 /**

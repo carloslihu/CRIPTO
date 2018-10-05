@@ -5,16 +5,16 @@ CC=gcc
 CFLAGS= -g -Wall
 LIBS= -lgmp -L.
 
-#_DEPS =
-#_OBJ =
+_DEPS =utils.h
+_OBJ =utils.o
 
-#DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))
+DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))
 
-#OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
+OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 
 all: autores carpetas afin hill vigenere
 
-$(ODIR)/%.o: $(SDIR)/%.c #$(DEPS)
+$(ODIR)/%.o: $(SDIR)/%.c $(DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS)
 
 
@@ -30,13 +30,13 @@ carpetas:
 	mkdir -p obj
 
 #EJECUTABLES
-afin: $(ODIR)/afin.o
+afin: $(OBJ) $(ODIR)/afin.o
 	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
 
-hill: $(ODIR)/hill.o
+hill: $(OBJ) $(ODIR)/hill.o
 	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
 	
-vigenere: $(ODIR)/vigenere.o
+vigenere: $(OBJ) $(ODIR)/vigenere.o
 	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
 	
 #P3
