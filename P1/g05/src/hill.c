@@ -42,7 +42,7 @@ int parsear(FILE *fIn, FILE **fAux){
 
                 if ('A' <= simbolo_in && simbolo_in <= 'Z') {
                     /*escribir fichero auxiliar de entrada*/
-                    printf("Anadiendo a auxiliar \n");    
+                    /*printf("Anadiendo a auxiliar \n");  */  
                     fwrite(&simbolo_in, 1, 1, *fAux);
                     count++;
                 }
@@ -51,6 +51,20 @@ int parsear(FILE *fIn, FILE **fAux){
     }
     /*fclose(*fAux);*/
     return count; 
+}
+
+
+int mult(int *fila, char *columna, int tam){
+
+    int res=0, i=0;
+
+    for(i=0;i<tam;i++){
+        printf("Fila es %d y columna es %d\n", fila[i], columna[i]);
+        res += fila[i]*columna[i];
+        printf("res es %d\n", res);
+    }
+    printf("RES FINAL es %d\n", res);
+    return res;
 }
 
 
@@ -103,7 +117,7 @@ int main(int argc, char **argv) {
     int long_index = 0; //, retorno = 0;
     char opt, simbolo_in, simbolo_out, fill='W';
     FILE *fIn=NULL, *fOut=NULL, *fK=NULL, *fAux=NULL;
-    int cifrar = -1;
+    int cifrar = -1, resultado=0;
     int matrix[3][3] = { 0 };
     int m=0, n=0, count=0, i=0, j=0, det=0;
 
@@ -235,51 +249,46 @@ int main(int argc, char **argv) {
     printf("Retorno count es %d\n", count);
     count = count%n;
     /*fAux  = fopen("auxiliar.txt", "a");*/
-    for(i=0; i<count; i++) fwrite(&fill, 1, 1, fAux);
+    for(i=0; i<n-count && count!=0; i++) fwrite(&fill, 1, 1, fAux);
     fclose(fAux);
-    fIn = fAux;
-    /*fIn = fopen("auxiliar.txt", "r");*/
+    fIn = fopen("auxiliar.txt", "r");
 
+    /*leer fichero entrada o estandar*/
+    if (fIn) {
+        while (fread(cadena, sizeof (char), n, fIn) != 0) {
+            /*convertir a formatao 0,...,n-1*/
+            for(i=0;i<n;i++) {
+                cadena[i] -= 65;
+                printf("Simbolo in: %d \n", cadena[i]);
+            }
+            
+            /*Cifrar*/
+            if (cifrar == 1) {
+                for(i=0;i<n;i++){
+                    resultado = mult(matrix[i],cadena, n);
+                    /*printf("RES tras mult: %d \n",resultado);*/
+                    simbolo_out = resultado%m;
+                    /*printf("Simbolo out tras mult: %d \n",simbolo_out);*/
+                    /*modulos con resultado de operacion negativa*/
+                    if(simbolo_out<0) simbolo_out += m;
+                    /*printf("Simbolo out tras modulo: %d \n", simbolo_out);*/
+                    simbolo_out += 65;
+                    /*escribir fichero salida*/
+                    if (fOut) {
+                        fwrite(&simbolo_out, 1, 1, fOut);
+                    }/*escribir salida estandar*/
+                    else {
+                        fwrite(&simbolo_out, 1, 1, stdout);
+                    }
+                }
+            }/*Descifrar*/
+            else {
+                
+            }
 
+        }
 
-      /*leer fichero entrada o estandar*/
-    // if (fIn) {
-    //     while (fread(cadena, sizeof (char), n, fIn) != 0) {
-    //         /*convertir a mayusculas*/
-    //         if ('a' <= simbolo_in && simbolo_in <= 'z') {
-    //             simbolo_in -= ('a' - 'A');
-    //         }
-    //         if ('A' <= simbolo_in && simbolo_in <= 'Z') {
-    //             //aux es nuestro simbolo de entrada
-    //             //aux2 es nuestro simbolo de salida
-    //             mpz_set_ui(aux, (int) simbolo_in);
-    //             simbolo_in -= 65;
-
-    //             /*Cifrar*/
-    //             if (cifrar == 1) {
-
-    //             }/*Descifrar*/
-    //             else {
-                    
-    //             }
-
-    //             convertir a double o int y sumar 65, codigo de la primera letra A
-    //             simbolo_out = mpz_get_d(aux2);
-    //             simbolo_out += 65;
-    //         } else {
-    //             /*si el simbolo no es una letra A-Z, se deja igual*/
-    //             simbolo_out = simbolo_in;
-    //         }
-    //         /*escribir fichero salida*/
-    //         if (fOut) {
-    //             fwrite(&simbolo_out, 1, 1, fOut);
-    //         }/*escribir salida estandar*/
-    //         else {
-    //             fwrite(&simbolo_out, 1, 1, stdout);
-    //         }
-    //     }
-
-    // }
+    }
 
 
     if(fOut){
@@ -288,10 +297,6 @@ int main(int argc, char **argv) {
     else{
         printf("No hay fOut\n"); 
     }
-
-
-
-
 
 
     if (fIn) fclose(fIn);
