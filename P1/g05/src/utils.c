@@ -48,3 +48,57 @@ int parsear(FILE *fIn, FILE **fAux) {
     /*fclose(*fAux);*/
     return count;
 }
+
+int mult(int *fila, char *columna, int tam) {
+
+    int res = 0, i = 0;
+
+    for (i = 0; i < tam; i++) {
+        printf("Fila es %d y columna es %d\n", fila[i], columna[i]);
+        res += fila[i] * columna[i];
+        printf("res es %d\n", res);
+    }
+    printf("RES FINAL es %d\n", res);
+    return res;
+}
+
+/**
+ * @brief Calcula el maximo comun divisor
+ *
+ * @param primer entero
+ * @param segundo entero
+ *
+ * @return el maximo comun divisor
+ */
+int mcd(int a, int b) {
+    if (a == 0)
+        return b;
+    return mcd(b % a, a);
+}
+
+/**
+ * @brief Realiza la descomposición de Euclides Extendida.
+ *        Calcula el inverso de a modulo m en x
+ *
+ * @param el entero a calcular su inverso
+ * @param el modulo de la operación
+ * @param el inverso de a
+ * @param el otro factor por descomposición
+ *
+ * @return el maximo comun divisor
+ */
+int mcdExtended(int a, int m, int *x, int *y) {
+    if (a == 0) {
+        *x = 0;
+        *y = 1;
+        return m;
+    }
+
+    int x1, y1;
+    int mcd = mcdExtended(m % a, a, &x1, &y1);
+
+    *x = y1 - (m / a) * x1;
+    *y = x1;
+
+    return mcd;
+}
