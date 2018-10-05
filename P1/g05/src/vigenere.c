@@ -157,10 +157,10 @@ int main(int argc, char **argv) {
                 }
                 /*escribir fichero salida*/
                 if (fOut) {
-                    fwrite(cadena, sizeof(char), n, fOut);
+                    fwrite(cadena, sizeof (char), n, fOut);
                 }/*escribir salida estandar*/
                 else {
-                    fwrite(cadena, sizeof(char), n, stdout);
+                    fwrite(cadena, sizeof (char), n, stdout);
                 }
             }
         }
