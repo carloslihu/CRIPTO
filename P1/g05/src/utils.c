@@ -102,15 +102,3 @@ int mcdExtended(int a, int m, int *x, int *y) {
 
     return mcd;
 }
-
-
-int inverso_enteros(int a, int modulo){
-    
-    int b=0;
-
-    for(b=0; b<modulo; b++){
-        if( (a * b) % modulo == 1 ) return b;
-    }
-
-    return 0;
-}

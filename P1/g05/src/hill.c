@@ -21,10 +21,10 @@ int main(int argc, char **argv) {
     char entrada[256];
     char cadena[256];
     int long_index = 0; //, retorno = 0;
-    char opt, simbolo_in, simbolo_out, fill = 'W';
+    char opt, simbolo_out, fill = 'W';
     FILE *fIn = NULL, *fOut = NULL, *fK = NULL, *fAux = NULL;
-    int cifrar = -1, resultado = 0;
-    int matrix[3][3] = {0}, inversa[3][3] = {0};
+    int cifrar = -1, resultado = 0, inv = 0, muda = 0;
+    int matrix[3][3] = {0}, inversa[3][3] = {0}, adjunta[3][3] = {0};
     int m = 0, n = 0, count = 0, i = 0, j = 0, det = 0;
 
     if (argc > 1) {
@@ -129,6 +129,7 @@ int main(int argc, char **argv) {
     }
 
     printf("El determinante es %d\n", det);
+    mcdExtended(det, m, &inv, &muda);
 
     if (mcd(m, det) != 1) {
         printf("La clave no determina una función inyectiva\n");
@@ -138,7 +139,7 @@ int main(int argc, char **argv) {
     /*calculo de la inversa*/
     else{
         if (n == 1) {
-            inversa[0][0] = inverso_enteros(matrix[0][0], m);
+            inversa[0][0] = inv;
         } else if (n == 2) {
             inversa[0][0] = matrix[1][1];
             inversa[1][1] = matrix[0][0];
@@ -147,6 +148,25 @@ int main(int argc, char **argv) {
             inversa[1][0] = -matrix[1][0] %m;
             if(inversa[1][0]<0) inversa[1][0] +=m;
         } else if (n == 3) {
+            /*calculamos la adjunta de la matriz*/
+            adjunta[0][0] =   matrix[1][1]*matrix[2][2] - matrix[2][1]*matrix[1][2];
+            adjunta[0][1] = -(matrix[1][0]*matrix[2][2] - matrix[2][0]*matrix[1][2]);
+            adjunta[0][2] =   matrix[1][0]*matrix[2][1] - matrix[2][0]*matrix[1][1];
+            adjunta[1][0] = -(matrix[0][1]*matrix[2][2] - matrix[2][1]*matrix[0][2]);
+            adjunta[1][1] =   matrix[0][0]*matrix[2][2] - matrix[2][0]*matrix[0][2];
+            adjunta[1][2] = -(matrix[0][0]*matrix[2][1] - matrix[2][0]*matrix[0][1]);
+            adjunta[2][0] =   matrix[0][1]*matrix[1][2] - matrix[1][1]*matrix[0][2];
+            adjunta[2][1] = -(matrix[0][0]*matrix[1][2] - matrix[1][0]*matrix[0][2]);
+            adjunta[2][2] =   matrix[0][0]*matrix[1][1] - matrix[1][0]*matrix[0][1];
+
+
+            /*traspuesta y multiplicar por el inverso*/
+            for(i=0; i<3 ; i++) {
+                for(j=0; j<3 ; j++) {
+                    inversa[i][j] = (adjunta[j][i]*inv)%m;
+                    if(inversa[i][j]<0) inversa[i][j] += m;
+                }
+            }
 
         }
     }
@@ -181,41 +201,33 @@ int main(int argc, char **argv) {
                 /*printf("Simbolo in: %d \n", cadena[i]);*/
             }
 
-            /*Cifrar*/
-            if (cifrar == 1) {
-                for (i = 0; i < n; i++) {
+            for (i = 0; i < n; i++) { 
+                /*Cifrar*/
+                if (cifrar == 1) {
                     resultado = mult(matrix[i], cadena, n);
-                    /*printf("RES tras mult: %d \n",resultado);*/
-                    simbolo_out = resultado % m;
-                    /*printf("Simbolo out tras mult: %d \n",simbolo_out);*/
-                    /*modulos con resultado de operacion negativa*/
-                    if (simbolo_out < 0) simbolo_out += m;
-                    /*printf("Simbolo out tras modulo: %d \n", simbolo_out);*/
-                    simbolo_out += 65;
-                    /*escribir fichero salida*/
-                    if (fOut) {
-                        fwrite(&simbolo_out, 1, 1, fOut);
-                    }/*escribir salida estandar*/
-                    else {
-                        fwrite(&simbolo_out, 1, 1, stdout);
-                    }
+                }/*Descifrar*/
+                else {
+                    resultado = mult(inversa[i], cadena, n);
                 }
-            }/*Descifrar*/
-            else {
-
+                /*printf("RES tras mult: %d \n",resultado);*/
+                simbolo_out = resultado % m;
+                /*printf("Simbolo out tras mult: %d \n",simbolo_out);*/
+                /*modulos con resultado de operacion negativa*/
+                if (simbolo_out < 0) simbolo_out += m;
+                /*printf("Simbolo out tras modulo: %d \n", simbolo_out);*/
+                simbolo_out += 65;
+                /*escribir fichero salida*/
+                if (fOut) {
+                    fwrite(&simbolo_out, 1, 1, fOut);
+                }/*escribir salida estandar*/
+                else {
+                    fwrite(&simbolo_out, 1, 1, stdout);
+                }
             }
 
         }
 
     }
-
-
-    if (fOut) {
-        printf("Hay fOut\n");
-    } else {
-        printf("No hay fOut\n");
-    }
-
 
     if (fIn) fclose(fIn);
     if (fOut) fclose(fOut);

@@ -36,5 +36,6 @@ int mcd(int a, int b);
  */
 int mcdExtended(int a, int m, int *x, int *y);
 
+
 #endif /* UTILS_H */
 
