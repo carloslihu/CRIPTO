@@ -81,7 +81,7 @@ int main(int argc, char **argv) {
     int long_index = 0; //, retorno = 0;
     char opt, simbolo_in, simbolo_out;
     mpz_t a, b, m, inv, mcd, t, aux, aux2;
-    FILE *fIn, *fOut;
+    FILE *fIn, *fOut, *fAux;
     int cifrar = -1;
 
     if (argc > 1) {
