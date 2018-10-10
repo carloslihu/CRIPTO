@@ -77,11 +77,11 @@ void gmp_mcdext(mpz_t g, mpz_t s, mpz_t t, const mpz_t a1, const mpz_t m1) {
 /* PROGRAMA PRINCIPAL */
 int main(int argc, char **argv) {
     char entrada[256];
-    char cadena[256];
+    char cadena[512];
     int long_index = 0; //, retorno = 0;
     char opt, simbolo_in, simbolo_out;
     mpz_t a, b, m, inv, mcd, t, aux, aux2;
-    FILE *fIn, *fOut, *fAux;
+    FILE *fIn = NULL, *fOut = NULL, *fAux = NULL;
     int cifrar = -1;
 
     if (argc > 1) {
@@ -172,7 +172,7 @@ int main(int argc, char **argv) {
     /*crear entrada estandar*/
     if (!fIn) {
         printf("Leyendo entrada estandar \n");
-        fgets(cadena, 256, stdin);
+        fgets(cadena, 512, stdin);
         /*se guarda la entrada en un fichero para reutilizar codigo*/
         fIn = fopen("teclado.txt", "w");
         fwrite(cadena, 1, strlen(cadena), fIn);
@@ -180,40 +180,38 @@ int main(int argc, char **argv) {
         fIn = fopen("teclado.txt", "r");
     }
 
+    /*parsear texto*/
+    parsear(fIn, &fAux);
+    fclose(fAux);
+    fIn = fopen("auxiliar.txt", "r");
+
     /*leer fichero entrada o estandar*/
     if (fIn) {
         while (fscanf(fIn, "%c", &simbolo_in) != EOF) {
-            /*convertir a mayusculas*/
-            if ('a' <= simbolo_in && simbolo_in <= 'z') {
-                simbolo_in -= ('a' - 'A');
-            }
-            if ('A' <= simbolo_in && simbolo_in <= 'Z') {
-                //aux es nuestro simbolo de entrada
-                //aux2 es nuestro simbolo de salida
-                mpz_set_ui(aux, (int) simbolo_in);
-                simbolo_in -= 65;
+            
+            //aux es nuestro simbolo de entrada
+            //aux2 es nuestro simbolo de salida
+            mpz_set_ui(aux, (int) simbolo_in);
+            simbolo_in -= 65;
 
-                /*Cifrar*/
-                if (cifrar == 1) {
-                    mpz_mul(aux2, a, aux);
-                    mpz_mod(aux2, aux2, m);
-                    mpz_add(aux2, aux2, b);
-                    mpz_mod(aux2, aux2, m);
-                }/*Descifrar*/
-                else {
-                    /*simbolo_out = (inv*(simbolo_in - b)) % m;*/
-                    mpz_sub(aux2, aux, b);
-                    mpz_mul(aux2, aux2, inv);
-                    mpz_mod(aux2, aux2, m);
-                }
-
-                /*convertir a double o int y sumar 65, codigo de la primera letra A*/
-                simbolo_out = mpz_get_d(aux2);
-                simbolo_out += 65;
-            } else {
-                /*si el simbolo no es una letra A-Z, se deja igual*/
-                simbolo_out = simbolo_in;
+            /*Cifrar*/
+            if (cifrar == 1) {
+                mpz_mul(aux2, a, aux);
+                mpz_mod(aux2, aux2, m);
+                mpz_add(aux2, aux2, b);
+                mpz_mod(aux2, aux2, m);
+            }/*Descifrar*/
+            else {
+                /*simbolo_out = (inv*(simbolo_in - b)) % m;*/
+                mpz_sub(aux2, aux, b);
+                mpz_mul(aux2, aux2, inv);
+                mpz_mod(aux2, aux2, m);
             }
+
+            /*convertir a double o int y sumar 65, codigo de la primera letra A*/
+            simbolo_out = mpz_get_d(aux2);
+            simbolo_out += 65;
+
             /*escribir fichero salida*/
             if (fOut) {
                 fwrite(&simbolo_out, 1, 1, fOut);
@@ -228,6 +226,8 @@ int main(int argc, char **argv) {
     mpz_clears(a, b, m, inv, t, mcd, aux, aux2, NULL);
     if (fIn) fclose(fIn);
     if (fOut) fclose(fOut);
+
+    printf("\n");
 
     return 0;
 
