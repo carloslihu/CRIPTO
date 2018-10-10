@@ -24,7 +24,7 @@ int main(int argc, char **argv) {
     char opt, simbolo_in, simbolo_out, fill = 'W';
     FILE *fIn = NULL, *fOut = NULL, *fK = NULL, *fAux = NULL;
     int cifrar = -1, resultado = 0;
-    int matrix[3][3] = {0};
+    int matrix[3][3] = {0}, inversa[3][3] = {0};
     int m = 0, n = 0, count = 0, i = 0, j = 0, det = 0;
 
     if (argc > 1) {
@@ -118,7 +118,6 @@ int main(int argc, char **argv) {
         det = matrix[0][0] * matrix[1][1] - matrix[0][1] - matrix[1][0];
     } else if (n == 3) {
         det = matrix[0][0] * matrix[1][1] * matrix[2][2] + matrix[1][0] * matrix[2][1] * matrix[0][2] + matrix[0][1] * matrix[1][2] * matrix[2][0] - matrix[0][2] * matrix[1][1] * matrix[2][0] - matrix[2][1] * matrix[1][2] * matrix[0][0] - matrix[1][0] * matrix[0][1] * matrix[2][2];
-        ;
     } else {
         printf("La matriz de claves no puede superar 3x3\n");
         exit(-1);
@@ -136,6 +135,22 @@ int main(int argc, char **argv) {
         exit(-1);
     }
 
+    /*calculo de la inversa*/
+    else{
+        if (n == 1) {
+            inversa[0][0] = inverso_enteros(matrix[0][0], m);
+        } else if (n == 2) {
+            inversa[0][0] = matrix[1][1];
+            inversa[1][1] = matrix[0][0];
+            inversa[0][1] = -matrix[0][1] %m;
+            if(inversa[0][1]<0) inversa[0][1] +=m;
+            inversa[1][0] = -matrix[1][0] %m;
+            if(inversa[1][0]<0) inversa[1][0] +=m;
+        } else if (n == 3) {
+
+        }
+    }
+
     /*crear entrada estandar*/
     if (!fIn) {
         printf("Leyendo entrada estandar \n");
@@ -150,7 +165,7 @@ int main(int argc, char **argv) {
     /*rellenar texto para hacerlo modulo N*/
     /*en fAux se guarda la direccion del texto nuevo parseado*/
     count = parsear(fIn, &fAux);
-    printf("Retorno count es %d\n", count);
+    /*printf("Retorno count es %d\n", count);*/
     count = count % n;
     /*fAux  = fopen("auxiliar.txt", "a");*/
     for (i = 0; i < n - count && count != 0; i++) fwrite(&fill, 1, 1, fAux);
@@ -163,7 +178,7 @@ int main(int argc, char **argv) {
             /*convertir a formatao 0,...,n-1*/
             for (i = 0; i < n; i++) {
                 cadena[i] -= 65;
-                printf("Simbolo in: %d \n", cadena[i]);
+                /*printf("Simbolo in: %d \n", cadena[i]);*/
             }
 
             /*Cifrar*/
