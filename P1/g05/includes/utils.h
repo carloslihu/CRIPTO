@@ -9,6 +9,14 @@ Autores: Carlos Li Hu y David López Ramos
 #ifndef UTILS_H
 #define UTILS_H
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h> 
+#include <string.h>
+#include <time.h>
+#include <getopt.h>
+#include <gmp.h>
+
 /**
  * @brief Lee el fichero fIn las letras, y las pasa a mayusculas y les quita el acento.
  *  se escriben en fAux sólo los caracteres en mayuscula (ignora los espacios)

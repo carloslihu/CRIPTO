@@ -5,13 +5,6 @@ Autores: Carlos Li Hu y David López Ramos
 2018 EPS-UAM
  ***************************************************************************/
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h> 
-#include <string.h>
-#include <time.h>
-#include <getopt.h>
-#include <gmp.h>
 #include "../includes/utils.h"
 
 /*Definicion de constantes *************************************************/
@@ -147,22 +140,22 @@ int main(int argc, char **argv) {
             if (inversa[1][0] < 0) inversa[1][0] += m;
         } else if (n == 3) {
             /*calculamos la adjunta de la matriz*/
-            adjunta[0][0] =   matrix[1][1]*matrix[2][2] - matrix[2][1]*matrix[1][2];
-            adjunta[0][1] = -(matrix[1][0]*matrix[2][2] - matrix[2][0]*matrix[1][2]);
-            adjunta[0][2] =   matrix[1][0]*matrix[2][1] - matrix[2][0]*matrix[1][1];
-            adjunta[1][0] = -(matrix[0][1]*matrix[2][2] - matrix[2][1]*matrix[0][2]);
-            adjunta[1][1] =   matrix[0][0]*matrix[2][2] - matrix[2][0]*matrix[0][2];
-            adjunta[1][2] = -(matrix[0][0]*matrix[2][1] - matrix[2][0]*matrix[0][1]);
-            adjunta[2][0] =   matrix[0][1]*matrix[1][2] - matrix[1][1]*matrix[0][2];
-            adjunta[2][1] = -(matrix[0][0]*matrix[1][2] - matrix[1][0]*matrix[0][2]);
-            adjunta[2][2] =   matrix[0][0]*matrix[1][1] - matrix[1][0]*matrix[0][1];
+            adjunta[0][0] = matrix[1][1] * matrix[2][2] - matrix[2][1] * matrix[1][2];
+            adjunta[0][1] = -(matrix[1][0] * matrix[2][2] - matrix[2][0] * matrix[1][2]);
+            adjunta[0][2] = matrix[1][0] * matrix[2][1] - matrix[2][0] * matrix[1][1];
+            adjunta[1][0] = -(matrix[0][1] * matrix[2][2] - matrix[2][1] * matrix[0][2]);
+            adjunta[1][1] = matrix[0][0] * matrix[2][2] - matrix[2][0] * matrix[0][2];
+            adjunta[1][2] = -(matrix[0][0] * matrix[2][1] - matrix[2][0] * matrix[0][1]);
+            adjunta[2][0] = matrix[0][1] * matrix[1][2] - matrix[1][1] * matrix[0][2];
+            adjunta[2][1] = -(matrix[0][0] * matrix[1][2] - matrix[1][0] * matrix[0][2]);
+            adjunta[2][2] = matrix[0][0] * matrix[1][1] - matrix[1][0] * matrix[0][1];
 
 
             /*traspuesta y multiplicar por el inverso*/
-            for(i=0; i<3 ; i++) {
-                for(j=0; j<3 ; j++) {
-                    inversa[i][j] = (adjunta[j][i]*inv)%m;
-                    if(inversa[i][j]<0) inversa[i][j] += m;
+            for (i = 0; i < 3; i++) {
+                for (j = 0; j < 3; j++) {
+                    inversa[i][j] = (adjunta[j][i] * inv) % m;
+                    if (inversa[i][j] < 0) inversa[i][j] += m;
                 }
             }
 
@@ -199,7 +192,7 @@ int main(int argc, char **argv) {
                 /*printf("Simbolo in: %d \n", cadena[i]);*/
             }
 
-            for (i = 0; i < n; i++) { 
+            for (i = 0; i < n; i++) {
                 /*Cifrar*/
                 if (cifrar == 1) {
                     resultado = mult(matrix[i], cadena, n);
@@ -229,7 +222,7 @@ int main(int argc, char **argv) {
 
     if (fIn) fclose(fIn);
     if (fOut) fclose(fOut);
-    
+
     printf("\n");
 
     return 0;

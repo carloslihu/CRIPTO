@@ -5,13 +5,6 @@ Autores: Carlos Li Hu y David López Ramos
 2018 EPS-UAM
  ***************************************************************************/
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
-#include <string.h>
-#include <time.h>
-#include <getopt.h>
-#include <gmp.h>
 #include "../includes/utils.h"
 /*Definicion de constantes *************************************************/
 
