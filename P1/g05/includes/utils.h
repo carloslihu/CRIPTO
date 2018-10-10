@@ -9,8 +9,26 @@ Autores: Carlos Li Hu y David López Ramos
 #ifndef UTILS_H
 #define UTILS_H
 
+/**
+ * @brief Lee el fichero fIn las letras, y las pasa a mayusculas y les quita el acento.
+ *  se escriben en fAux sólo los caracteres en mayuscula (ignora los espacios)
+ * 
+ * @param el fichero a parsear
+ * @param el fichero de salida con el texto parseado
+ *
+ * @return el numero de letras escritas en fAux
+ */
 int parsear(FILE *fIn, FILE **fAux);
 
+/**
+ * @brief Realiza el producto escalar de 2 vectores
+ * 
+ * @param primer vector
+ * @param segundo vector
+ * @param tamaño de los vectores
+ *
+ * @return el resultado de la operacion
+ */
 int mult(int *fila, char *columna, int tam);
 
 /**

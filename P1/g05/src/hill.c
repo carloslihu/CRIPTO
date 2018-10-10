@@ -134,19 +134,17 @@ int main(int argc, char **argv) {
     if (mcd(m, det) != 1) {
         printf("La clave no determina una función inyectiva\n");
         exit(-1);
-    }
-
-    /*calculo de la inversa*/
-    else{
+    }/*calculo de la inversa*/
+    else {
         if (n == 1) {
             inversa[0][0] = inv;
         } else if (n == 2) {
             inversa[0][0] = matrix[1][1];
             inversa[1][1] = matrix[0][0];
-            inversa[0][1] = -matrix[0][1] %m;
-            if(inversa[0][1]<0) inversa[0][1] +=m;
-            inversa[1][0] = -matrix[1][0] %m;
-            if(inversa[1][0]<0) inversa[1][0] +=m;
+            inversa[0][1] = -matrix[0][1] % m;
+            if (inversa[0][1] < 0) inversa[0][1] += m;
+            inversa[1][0] = -matrix[1][0] % m;
+            if (inversa[1][0] < 0) inversa[1][0] += m;
         } else if (n == 3) {
             /*calculamos la adjunta de la matriz*/
             adjunta[0][0] =   matrix[1][1]*matrix[2][2] - matrix[2][1]*matrix[1][2];

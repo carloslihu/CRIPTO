@@ -14,6 +14,15 @@ Autores: Carlos Li Hu y David López Ramos
 #include <gmp.h>
 #include "../includes/utils.h"
 
+/**
+ * @brief Lee el fichero fIn las letras, y las pasa a mayusculas y les quita el acento.
+ *  se escriben en fAux sólo los caracteres en mayuscula (ignora los espacios)
+ * 
+ * @param el fichero a parsear
+ * @param el fichero de salida con el texto parseado
+ *
+ * @return el numero de letras escritas en fAux
+ */
 int parsear(FILE *fIn, FILE **fAux) {
 
     char simbolo_in;
@@ -27,7 +36,7 @@ int parsear(FILE *fIn, FILE **fAux) {
                 /*convertir a mayusculas*/
                 if ('a' <= simbolo_in && simbolo_in <= 'z') {
                     simbolo_in -= ('a' - 'A');
-                }/*miramos si hay acentos*/
+                }/*quitamos los acentos*/
                 else {
                     if (simbolo_in == -127 || simbolo_in == -95) simbolo_in = 'A';
                     else if (simbolo_in == -119 || simbolo_in == -87) simbolo_in = 'E';
@@ -49,6 +58,15 @@ int parsear(FILE *fIn, FILE **fAux) {
     return count;
 }
 
+/**
+ * @brief Realiza el producto escalar de 2 vectores
+ * 
+ * @param primer vector
+ * @param segundo vector
+ * @param tamaño de los vectores
+ *
+ * @return el resultado de la operacion
+ */
 int mult(int *fila, char *columna, int tam) {
 
     int res = 0, i = 0;
@@ -58,7 +76,7 @@ int mult(int *fila, char *columna, int tam) {
         res += fila[i] * columna[i];
         /*printf("res es %d\n", res);*/
     }
-   /* printf("RES FINAL es %d\n", res);*/
+    /* printf("RES FINAL es %d\n", res);*/
     return res;
 }
 

@@ -1,3 +1,5 @@
+#bien
 ./afin -C -m 26 -a 9 -b 4 -i entrada.txt -o cifrado.txt
+#mal
 ./afin -C -m 26 -a 4 -b 5 -i entrada.txt -o cifrado.txt
 
