@@ -21,10 +21,10 @@ int main(int argc, char **argv) {
     char cadena[256];
     char clave[256];
     int long_index = 0;
-    char opt;
-    FILE *fIn, *fOut;
+    char opt, fill = 'W';
+    FILE *fIn, *fOut, *fAux;
     int n, i, m;
-    int cifrar = -1;
+    int cifrar = -1, count = 0;
 
     if (argc > 1) {
         strncpy(entrada, argv[1], 256);
@@ -56,7 +56,7 @@ int main(int argc, char **argv) {
             case '1':
                 m = atoi(optarg);
                 break;
-                
+
             case '2':
                 strncpy(clave, optarg, 256);
                 break;
@@ -80,6 +80,7 @@ int main(int argc, char **argv) {
                 break;
         }
     }
+    n = strlen(clave);
     /*Si no se ha especificado si cifrar o descifrar*/
     if (cifrar == -1) {
         printf("Ejecucion: %s {-C|-D} {-m |Zm|} {-k clave} [-i filein] [-o fileout]\n", argv[0]);
@@ -96,16 +97,23 @@ int main(int argc, char **argv) {
         fclose(fIn);
         fIn = fopen("teclado.txt", "r");
     }
-
+    /*rellenar texto para hacerlo modulo N*/
+    /*en fAux se guarda la direccion del texto nuevo parseado*/
+    count = parsear(fIn, &fAux);
+    /*printf("Retorno count es %d\n", count);*/
+    count = count % n;
+    /*fAux  = fopen("auxiliar.txt", "a");*/
+    for (i = 0; i < n - count && count != 0; i++) fwrite(&fill, 1, 1, fAux);
+    fclose(fAux);
+    fIn = fopen("auxiliar.txt", "r");
     /*leer fichero entrada o estandar*/
     if (fIn) {
-        n = strlen(clave);
+        /* Pasamos las claves a Zm */
+        for (i = 0; i < n; i++) {
+            clave[i] -= 65;
+        }
         while (fread(cadena, sizeof (char), n, fIn) != 0) {
             for (i = 0; i < n; i++) {
-                /*convertir a mayusculas*/
-                if ('a' <= cadena[i] && cadena[i] <= 'z') {
-                    cadena[i] -= ('a' - 'A');
-                }
                 if ('A' <= cadena[i] && cadena[i] <= 'Z') {
                     cadena[i] -= 65;
 
@@ -119,13 +127,14 @@ int main(int argc, char **argv) {
                     cadena[i] %= m;
                     cadena[i] += 65;
                 }
-                /*escribir fichero salida*/
-                if (fOut) {
-                    fwrite(cadena, sizeof (char), n, fOut);
-                }/*escribir salida estandar*/
-                else {
-                    fwrite(cadena, sizeof (char), n, stdout);
-                }
+
+            }
+            /*escribir fichero salida*/
+            if (fOut) {
+                fwrite(cadena, sizeof (char), n, fOut);
+            }/*escribir salida estandar*/
+            else {
+                fwrite(cadena, sizeof (char), n, stdout);
             }
         }
 
