@@ -176,9 +176,8 @@ int main(int argc, char **argv) {
     /*rellenar texto para hacerlo modulo N*/
     /*en fAux se guarda la direccion del texto nuevo parseado*/
     count = parsear(fIn, &fAux);
-    /*printf("Retorno count es %d\n", count);*/
     count = count % n;
-    /*fAux  = fopen("auxiliar.txt", "a");*/
+
     for (i = 0; i < n - count && count != 0; i++) fwrite(&fill, 1, 1, fAux);
     fclose(fAux);
     fIn = fopen("auxiliar.txt", "r");
@@ -189,7 +188,6 @@ int main(int argc, char **argv) {
             /*convertir a formatao 0,...,n-1*/
             for (i = 0; i < n; i++) {
                 cadena[i] -= 65;
-                /*printf("Simbolo in: %d \n", cadena[i]);*/
             }
 
             for (i = 0; i < n; i++) {
@@ -200,12 +198,9 @@ int main(int argc, char **argv) {
                 else {
                     resultado = mult(inversa[i], cadena, n);
                 }
-                /*printf("RES tras mult: %d \n",resultado);*/
                 simbolo_out = resultado % m;
-                /*printf("Simbolo out tras mult: %d \n",simbolo_out);*/
                 /*modulos con resultado de operacion negativa*/
                 if (simbolo_out < 0) simbolo_out += m;
-                /*printf("Simbolo out tras modulo: %d \n", simbolo_out);*/
                 simbolo_out += 65;
                 /*escribir fichero salida*/
                 if (fOut) {

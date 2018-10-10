@@ -93,9 +93,7 @@ int main(int argc, char **argv) {
     /*rellenar texto para hacerlo modulo N*/
     /*en fAux se guarda la direccion del texto nuevo parseado*/
     count = parsear(fIn, &fAux);
-    /*printf("Retorno count es %d\n", count);*/
     count = count % n;
-    /*fAux  = fopen("auxiliar.txt", "a");*/
     for (i = 0; i < n - count && count != 0; i++) fwrite(&fill, 1, 1, fAux);
     fclose(fAux);
     fIn = fopen("auxiliar.txt", "r");

@@ -143,18 +143,6 @@ int main(int argc, char **argv) {
         exit(-1);
     }
 
-    /*gmp_mcd(mcd, a, m);
-    gmp_printf("El resultado del mcd es %Zd\n", mcd);
-    gmp_mcdext(mcd, inv, t, a, m);
-    gmp_printf("Los resultados del mcdext son: %Zd %Zd %Zd\n", mcd, inv, t);
-    mpz_gcdext(mcd, inv, t, a, m);
-    gmp_printf("Los resultados del mcdext deberian ser: %Zd %Zd %Zd\n", mcd, inv, t);
-    return 0;*/
-
-    /*if (mpz_invert(inv, a, m) == 0) {
-        printf("La clave no determina una función afín inyectiva\n");
-        exit(-1);
-    }*/
     gmp_mcd(mcd, a, m);
     if (mpz_cmp_d(mcd, 1) != 0) {
         printf("La clave no determina una función afín inyectiva\n");
@@ -181,7 +169,7 @@ int main(int argc, char **argv) {
     /*leer fichero entrada o estandar*/
     if (fIn) {
         while (fscanf(fIn, "%c", &simbolo_in) != EOF) {
-            
+
             //aux es nuestro simbolo de entrada
             //aux2 es nuestro simbolo de salida
             mpz_set_ui(aux, (int) simbolo_in);
