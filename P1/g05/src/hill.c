@@ -21,7 +21,7 @@ int main(int argc, char **argv) {
     char entrada[256];
     char cadena[256];
     int long_index = 0; //, retorno = 0;
-    char opt, simbolo_in, simbolo_out, fill = 'W';
+    char opt, simbolo_out, fill = 'W';
     FILE *fIn = NULL, *fOut = NULL, *fK = NULL, *fAux = NULL;
     int cifrar = -1, resultado = 0;
     int matrix[3][3] = {0}, inversa[3][3] = {0};
@@ -133,19 +133,17 @@ int main(int argc, char **argv) {
     if (mcd(m, det) != 1) {
         printf("La clave no determina una función inyectiva\n");
         exit(-1);
-    }
-
-    /*calculo de la inversa*/
-    else{
+    }/*calculo de la inversa*/
+    else {
         if (n == 1) {
             inversa[0][0] = inverso_enteros(matrix[0][0], m);
         } else if (n == 2) {
             inversa[0][0] = matrix[1][1];
             inversa[1][1] = matrix[0][0];
-            inversa[0][1] = -matrix[0][1] %m;
-            if(inversa[0][1]<0) inversa[0][1] +=m;
-            inversa[1][0] = -matrix[1][0] %m;
-            if(inversa[1][0]<0) inversa[1][0] +=m;
+            inversa[0][1] = -matrix[0][1] % m;
+            if (inversa[0][1] < 0) inversa[0][1] += m;
+            inversa[1][0] = -matrix[1][0] % m;
+            if (inversa[1][0] < 0) inversa[1][0] += m;
         } else if (n == 3) {
 
         }
