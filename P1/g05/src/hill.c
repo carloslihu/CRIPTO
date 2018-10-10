@@ -19,7 +19,7 @@ Autores: Carlos Li Hu y David López Ramos
 /* PROGRAMA PRINCIPAL */
 int main(int argc, char **argv) {
     char entrada[256];
-    char cadena[256];
+    char cadena[512];
     int long_index = 0; //, retorno = 0;
     char opt, simbolo_out, fill = 'W';
     FILE *fIn = NULL, *fOut = NULL, *fK = NULL, *fAux = NULL;
@@ -172,7 +172,7 @@ int main(int argc, char **argv) {
     /*crear entrada estandar*/
     if (!fIn) {
         printf("Leyendo entrada estandar \n");
-        fgets(cadena, 256, stdin);
+        fgets(cadena, 512, stdin);
         fIn = fopen("teclado.txt", "w");
         fwrite(cadena, 1, strlen(cadena), fIn);
         fclose(fIn);
@@ -229,6 +229,8 @@ int main(int argc, char **argv) {
 
     if (fIn) fclose(fIn);
     if (fOut) fclose(fOut);
+    
+    printf("\n");
 
     return 0;
 
