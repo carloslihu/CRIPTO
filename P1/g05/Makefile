@@ -12,7 +12,7 @@ DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))
 
 OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 
-all: autores carpetas afin hill vigenere IC
+all: autores carpetas afin hill vigenere IC kasiski transposicion
 
 $(ODIR)/%.o: $(SDIR)/%.c $(DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS)
@@ -38,8 +38,16 @@ hill: $(OBJ) $(ODIR)/hill.o
 	
 vigenere: $(OBJ) $(ODIR)/vigenere.o
 	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
+
 IC: $(OBJ) $(ODIR)/IC.o
 	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
+	
+kasiski: $(OBJ) $(ODIR)/kasiski.o
+	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
+	
+transposicion: $(OBJ) $(ODIR)/transposicion.o
+	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
+	
 #P3
 tar:
 	tar -czvf F-CSI_p1_g05.tgz ../g05/
@@ -48,4 +56,4 @@ tar:
 clean:
 	-rm -f $(ODIR)/*.o *~ core $(INCDIR)/*~ 
 	-rm -f *.tar.gz
-	-rm -f afin hill vigenere IC
+	-rm -f afin hill vigenere IC kasiski transposicion
