@@ -18,7 +18,7 @@ int main(int argc, char **argv) {
     char opt, simbolo_out, fill = 'W';
     char* p=NULL;
     FILE *fIn = NULL, *fOut = NULL, *fAux = NULL;
-    int cifrar = -1, resultado = 0, count=0;
+    int cifrar = -1, count=0;
     int i=0, j=0, n=0;
 
     if (argc > 1) {
@@ -51,7 +51,7 @@ int main(int argc, char **argv) {
 
             case '1':
                 p = optarg;
-                printf("P es %s\n", p);
+                /*printf("P es %s\n", p);*/
                 break;
 
             case '2':
@@ -98,24 +98,23 @@ int main(int argc, char **argv) {
         }
     }
 
-    for(i=0;i<n;i++){
+/*    for(i=0;i<n;i++){
         printf("%d", permutacion[i]);
     }
-    printf("\n");
+    printf("\n");*/
 
-
+    /*calculo de la permutacion para decodificar*/
     for(i=0;i<n;i++){
         for(j=0;j<n;j++){
             if(permutacion[j]==i+1){
                 inversa[i]=j+1;
             } 
         }
-
     }
 
-    for(i=0;i<n;i++){
+/*    for(i=0;i<n;i++){
         printf("%d", inversa[i]);
-    }
+    }*/
 
     /*crear entrada estandar*/
     if (!fIn) {

@@ -14,6 +14,7 @@ OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 
 all: autores carpetas afin hill vigenere IC kasiski transposicion
 
+
 $(ODIR)/%.o: $(SDIR)/%.c $(DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS)
 
