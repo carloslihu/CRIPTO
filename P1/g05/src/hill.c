@@ -9,6 +9,27 @@ Autores: Carlos Li Hu y David López Ramos
 
 /*Definicion de constantes *************************************************/
 
+/**
+ * @brief Realiza el producto escalar de 2 vectores
+ * 
+ * @param primer vector
+ * @param segundo vector
+ * @param tamaño de los vectores
+ *
+ * @return el resultado de la operacion
+ */
+int mult(int *fila, char *columna, int tam) {
+
+    int res = 0, i = 0;
+
+    for (i = 0; i < tam; i++) {
+        /*printf("Fila es %d y columna es %d\n", fila[i], columna[i]);*/
+        res += fila[i] * columna[i];
+        /*printf("res es %d\n", res);*/
+    }
+    /* printf("RES FINAL es %d\n", res);*/
+    return res;
+}
 /* PROGRAMA PRINCIPAL */
 int main(int argc, char **argv) {
     char entrada[256];
