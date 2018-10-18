@@ -163,6 +163,8 @@ int main(int argc, char **argv) {
 
     if (fIn) fclose(fIn);
     if (fOut) fclose(fOut);
+    free(permutacion);
+    free(inversa);
 
     printf("\n");
 
