@@ -12,7 +12,7 @@ DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))
 
 OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 
-all: autores carpetas afin hill vigenere IC kasiski transposicion
+all: autores carpetas afin hill vigenere IC kasiski transposicion permutacion
 
 
 $(ODIR)/%.o: $(SDIR)/%.c $(DEPS)
@@ -48,6 +48,9 @@ kasiski: $(OBJ) $(ODIR)/kasiski.o
 	
 transposicion: $(OBJ) $(ODIR)/transposicion.o
 	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
+
+permutacion: $(OBJ) $(ODIR)/permutacion.o
+	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
 	
 #P3
 tar:
@@ -57,4 +60,4 @@ tar:
 clean:
 	-rm -f $(ODIR)/*.o *~ core $(INCDIR)/*~ 
 	-rm -f *.tar.gz
-	-rm -f afin hill vigenere IC kasiski transposicion
+	-rm -f afin hill vigenere IC kasiski transposicion permutacion
