@@ -7,6 +7,7 @@ Autores: Carlos Li Hu y David López Ramos
 #include "../includes/utils.h"
 
 /*Definicion de constantes *************************************************/
+#define M 26
 
 /* PROGRAMA PRINCIPAL */
 int main(int argc, char **argv) {
@@ -14,12 +15,25 @@ int main(int argc, char **argv) {
     int long_index = 0; //, retorno = 0;
     char opt;
     FILE *fIn = NULL, *fOut = NULL;
-    int l;
-
+    int l, i;
+    double IC_c = 0, IC_i = 0;
+    double f_c[M] = {11.96, 0.92, 2.92, 6.87, 16.78, 0.52, 0.73, 0.89, 4.15,
+        0.30, 0.0, 8.37, 2.12, 7.01, 8.69, 2.77, 1.53, 4.94, 7.88, 3.31, 4.80,
+        0.39, 0.0, 0.06, 1.54, 0.15};
+    double f_i[M] = {8.04, 1.54, 3.06, 3.99, 12.51, 2.30, 1.96, 5.49, 7.26,
+        0.16, 0.67, 4.14, 2.53, 7.09, 7.60, 2.00, 0.11, 6.12, 6.54, 9.25, 2.71,
+        0.99, 1.92, 0.19, 1.73, 0.19};
     if (argc > 1) {
         strncpy(entrada, argv[1], 256);
     } else {
         printf("Ejecucion: %s {-l Ngrama} [-i filein] [-o fileout]\n", argv[0]);
+        for (i = 0; i < M; i++) {
+            IC_c += f_c[i] * f_c[i];
+            IC_i += f_i[i] * f_i[i];
+        }
+        IC_c /= 10000;
+        IC_i /= 10000;
+        printf("IC_c: %lf\nIC_i: %lf\n", IC_c, IC_i);
         exit(-1);
     }
 

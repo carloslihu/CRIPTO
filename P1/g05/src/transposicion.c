@@ -14,12 +14,12 @@ int main(int argc, char **argv) {
     char entrada[256];
     char cadena[512];
     int long_index = 0;
-    int *permutacion=NULL, *inversa=NULL;
+    int *permutacion = NULL, *inversa = NULL;
     char opt, simbolo_out, fill = 'W';
-    char* p=NULL;
+    char* p = NULL;
     FILE *fIn = NULL, *fOut = NULL, *fAux = NULL;
-    int cifrar = -1, count=0;
-    int i=0, j=0, n=0;
+    int cifrar = -1, count = 0;
+    int i = 0, j = 0, n = 0;
 
     if (argc > 1) {
         strncpy(entrada, argv[1], 256);
@@ -88,33 +88,33 @@ int main(int argc, char **argv) {
 
 
     /*leer fichero claves*/
-    permutacion =(int*)malloc(sizeof(int)*n);
-    inversa =(int*)malloc(sizeof(int)*n);
+    permutacion = (int*) malloc(sizeof (int)*n);
+    inversa = (int*) malloc(sizeof (int)*n);
 
-    for(i=0,j=0;i<strlen(p);i++){
-        if(0<(p[i]-'0') && (p[i]-'0')<=n){
-            permutacion[j]=(p[i]-'0');
+    for (i = 0, j = 0; i < strlen(p); i++) {
+        if (0 < (p[i] - '0') && (p[i] - '0') <= n) {
+            permutacion[j] = (p[i] - '0');
             j++;
         }
     }
 
-/*    for(i=0;i<n;i++){
-        printf("%d", permutacion[i]);
-    }
-    printf("\n");*/
+    /*    for(i=0;i<n;i++){
+            printf("%d", permutacion[i]);
+        }
+        printf("\n");*/
 
     /*calculo de la permutacion para decodificar*/
-    for(i=0;i<n;i++){
-        for(j=0;j<n;j++){
-            if(permutacion[j]==i+1){
-                inversa[i]=j+1;
-            } 
+    for (i = 0; i < n; i++) {
+        for (j = 0; j < n; j++) {
+            if (permutacion[j] == i + 1) {
+                inversa[i] = j + 1;
+            }
         }
     }
 
-/*    for(i=0;i<n;i++){
-        printf("%d", inversa[i]);
-    }*/
+    /*    for(i=0;i<n;i++){
+            printf("%d", inversa[i]);
+        }*/
 
     /*crear entrada estandar*/
     if (!fIn) {
@@ -143,10 +143,10 @@ int main(int argc, char **argv) {
             for (i = 0; i < n; i++) {
                 /*Cifrar*/
                 if (cifrar == 1) {
-                    simbolo_out = cadena[permutacion[i]-1];
+                    simbolo_out = cadena[permutacion[i] - 1];
                 }/*Descifrar*/
                 else {
-                    simbolo_out = cadena[permutacion[i]-1];
+                    simbolo_out = cadena[permutacion[i] - 1];
                 }
 
                 if (fOut) {

@@ -29,17 +29,6 @@ Autores: Carlos Li Hu y David López Ramos
 int parsear(FILE *fIn, FILE **fAux);
 
 /**
- * @brief Realiza el producto escalar de 2 vectores
- * 
- * @param primer vector
- * @param segundo vector
- * @param tamaño de los vectores
- *
- * @return el resultado de la operacion
- */
-int mult(int *fila, char *columna, int tam);
-
-/**
  * @brief Calcula el maximo comun divisor
  *
  * @param primer entero
