@@ -14,26 +14,27 @@ int main(int argc, char **argv) {
     char entrada[256];
     char cadena[512];
     int long_index = 0;
-    int *permutacion = NULL, *inversa = NULL;
+    int perm_fila[20] = {0}, perm_columna[20] = {0}, inv_fila[20] = {0}, inv_columna[20] = {0};
     char opt, simbolo_out, fill = 'W';
-    char* p = NULL;
+    char *k1 = NULL, *k2 = NULL;
+    char *matrix = NULL;
     FILE *fIn = NULL, *fOut = NULL, *fAux = NULL;
     int cifrar = -1, count = 0;
-    int i = 0, j = 0, n = 0;
+    int i = 0, j = 0, n = 0, m = 0;
 
     if (argc > 1) {
         strncpy(entrada, argv[1], 256);
     } else {
-        printf("Ejecucion: %s {-C | -D} {-p permutacion | -n Nperm} [-i filein] [-o fileout]\n", argv[0]);
-        printf("Ejemplo: %s -C -p \"5 4 3 2 1\" -n 5 -i entrada.txt -o codificado.txt\n", argv[0]);
+        printf("Ejecucion: %s {-C | -D} {-k1 K1 -k2 K2} [-i filein] [-o fileout]\n", argv[0]);
+        printf("Ejemplo: %s -C -k1 \"4 3 2 1\" -k2 \"3 2 1\" -i entrada.txt -o cifrado.txt\n", argv[0]);
         exit(-1);
     }
 
     static struct option options[] = {
         {"C", no_argument, 0, 'c'},
         {"D", no_argument, 0, 'd'},
-        {"p", required_argument, 0, '1'},
-        {"n", required_argument, 0, '2'},
+        {"k1", required_argument, 0, '1'},
+        {"k2", required_argument, 0, '2'},
         {"i", required_argument, 0, '3'},
         {"o", required_argument, 0, '4'},
         {0, 0, 0, 0}
@@ -50,12 +51,13 @@ int main(int argc, char **argv) {
                 break;
 
             case '1':
-                p = optarg;
-                /*printf("P es %s\n", p);*/
+                k1 = optarg;
+                printf("K1 es %s\n", k1);
                 break;
 
             case '2':
-                n = atoi(optarg);
+                k2 = optarg;
+                printf("K2 es %s\n", k2);
                 break;
 
             case '3':
@@ -72,8 +74,8 @@ int main(int argc, char **argv) {
                 break;
 
             default:
-                printf("Ejecucion: %s {-C | -D} {-p permutacion | -n Nperm} [-i filein] [-o fileout]\n", argv[0]);
-                printf("Ejemplo: %s -C -p \"5 4 3 2 1\" -n 5 -i entrada.txt -o codificado.txt\n", argv[0]);
+                printf("Ejecucion: %s {-C | -D} {-k1 K1 -k2 K2} [-i filein] [-o fileout]\n", argv[0]);
+                printf("Ejemplo: %s -C -k1 \"4 3 2 1\" -k2 \"3 2 1\" -i entrada.txt -o cifrado.txt\n", argv[0]);
                 exit(-1);
                 break;
         }
@@ -81,40 +83,71 @@ int main(int argc, char **argv) {
 
     //Si no se ha especificado si cifrar o descifrar
     if (cifrar == -1) {
-        printf("Ejecucion: %s {-C | -D} {-p permutacion | -n Nperm} [-i filein] [-o fileout]\n", argv[0]);
-        printf("Ejemplo: %s -C -p \"5 4 3 2 1\" -n 5 -i entrada.txt -o codificado.txt\n", argv[0]);
+        printf("Ejecucion: %s {-C | -D} {-k1 K1 -k2 K2} [-i filein] [-o fileout]\n", argv[0]);
+        printf("Ejemplo: %s -C -k1 \"4 3 2 1\" -k2 \"3 2 1\" -i entrada.txt -o cifrado.txt\n", argv[0]);
         exit(-1);
     }
 
 
-    /*leer fichero claves*/
-    permutacion = (int*) malloc(sizeof (int)*n);
-    inversa = (int*) malloc(sizeof (int)*n);
 
-    for (i = 0, j = 0; i < strlen(p); i++) {
-        if (0 < (p[i] - '0') && (p[i] - '0') <= n) {
-            permutacion[j] = (p[i] - '0');
+    for (i = 0, j = 0; i < strlen(k1); i++) {
+        if (0 < (k1[i] - '0') && (k1[i] - '0') <= strlen(k1)) {
+            perm_fila[j] = (k1[i] - '0');
+            m++;
             j++;
         }
     }
 
-    /*    for(i=0;i<n;i++){
-            printf("%d", permutacion[i]);
-        }
-        printf("\n");*/
 
-    /*calculo de la permutacion para decodificar*/
-    for (i = 0; i < n; i++) {
-        for (j = 0; j < n; j++) {
-            if (permutacion[j] == i + 1) {
-                inversa[i] = j + 1;
+    for (i = 0, j = 0; i < strlen(k2); i++) {
+        if (0 < (k2[i] - '0') && (k2[i] - '0') <= strlen(k2)) {
+            perm_columna[j] = (k2[i] - '0');
+            n++;
+            j++;
+        }
+    }
+
+    matrix = (char**) malloc(sizeof (char*)*m);
+    for (i = 0, i < m; i++) {
+        matrix[i] = (char*) malloc(sizeof (char)*n);
+    }
+
+/*    for(i=0;i<m;i++){
+            printf("%d", perm_fila[i]);
+        }
+    printf("Tamano %d\n", m);
+
+    for(i=0;i<n;i++){
+            printf("%d", perm_columna[i]);
+        }
+    printf("Tamano %d\n", n);*/
+
+
+    /*calculo de las permutaciones para descifrar*/
+    for (i = 0; i < m; i++) {
+        for (j = 0; j < m; j++) {
+            if (perm_fila[j] == i + 1) {
+                inv_fila[i] = j + 1;
             }
         }
     }
 
-    /*    for(i=0;i<n;i++){
-            printf("%d", inversa[i]);
-        }*/
+    for (i = 0; i < n; i++) {
+        for (j = 0; j < n; j++) {
+            if (perm_columna[j] == i + 1) {
+                inv_columna[i] = j + 1;
+            }
+        }
+    }
+
+    for(i=0;i<m;i++){
+            printf("%d", inv_fila[i]);
+    }
+
+    for(i=0;i<n;i++){
+            printf("%d", inv_columna[i]);
+    }
+
 
     /*crear entrada estandar*/
     if (!fIn) {
@@ -130,23 +163,25 @@ int main(int argc, char **argv) {
     /*rellenar texto para hacerlo modulo N*/
     /*en fAux se guarda la direccion del texto nuevo parseado*/
     count = parsear(fIn, &fAux);
-    count = count % n;
-    for (i = 0; i < n - count && count != 0; i++) fwrite(&fill, 1, 1, fAux);
+    count = count % (m*n);
+    for (i = 0; i < (m*n) - count && count != 0; i++) fwrite(&fill, 1, 1, fAux);
     fclose(fAux);
     fIn = fopen("auxiliar.txt", "r");
 
 
+    return 0;
+
     /*leer fichero entrada o estandar*/
     if (fIn) {
-        while (fread(cadena, sizeof (char), n, fIn) != 0) {
+        while (fread(cadena, sizeof (char), m*n, fIn) != 0) {
 
             for (i = 0; i < n; i++) {
                 /*Cifrar*/
                 if (cifrar == 1) {
-                    simbolo_out = cadena[permutacion[i] - 1];
+                    simbolo_out = cadena[perm_columna[i] - 1];
                 }/*Descifrar*/
                 else {
-                    simbolo_out = cadena[permutacion[i] - 1];
+                    simbolo_out = cadena[perm_columna[i] - 1];
                 }
 
                 if (fOut) {
@@ -163,8 +198,6 @@ int main(int argc, char **argv) {
 
     if (fIn) fclose(fIn);
     if (fOut) fclose(fOut);
-    free(permutacion);
-    free(inversa);
 
     printf("\n");
 
