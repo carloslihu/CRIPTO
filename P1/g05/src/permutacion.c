@@ -17,7 +17,7 @@ int main(int argc, char **argv) {
     int perm_fila[20] = {0}, perm_columna[20] = {0}, inv_fila[20] = {0}, inv_columna[20] = {0};
     char opt, simbolo_out, fill = 'W';
     char *k1 = NULL, *k2 = NULL;
-    char *matrix = NULL;
+    char **matrix = NULL;
     FILE *fIn = NULL, *fOut = NULL, *fAux = NULL;
     int cifrar = -1, count = 0;
     int i = 0, j = 0, n = 0, m = 0;
@@ -108,7 +108,7 @@ int main(int argc, char **argv) {
     }
 
     matrix = (char**) malloc(sizeof (char*)*m);
-    for (i = 0, i < m; i++) {
+    for (i = 0; i < m; i++) {
         matrix[i] = (char*) malloc(sizeof (char)*n);
     }
 
