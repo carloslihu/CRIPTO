@@ -58,3 +58,4 @@ clean:
 	-rm -f $(ODIR)/*.o *~ core $(INCDIR)/*~ 
 	-rm -f *.tar.gz
 	-rm -f afin hill vigenere IC kasiski transposicion
+	-rm -f auxiliar.txt teclado.txt
