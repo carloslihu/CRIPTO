@@ -30,6 +30,7 @@ int mult(int *fila, char *columna, int tam) {
     /* printf("RES FINAL es %d\n", res);*/
     return res;
 }
+
 /* PROGRAMA PRINCIPAL */
 int main(int argc, char **argv) {
     char entrada[256];

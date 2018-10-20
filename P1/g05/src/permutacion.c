@@ -148,74 +148,72 @@ int main(int argc, char **argv) {
     /*rellenar texto para hacerlo modulo m*n */
     /*en fAux se guarda la direccion del texto nuevo parseado*/
     count = parsear(fIn, &fAux);
-    count = count % (m*n);
-    for (i = 0; i < (m*n) - count && count != 0; i++) fwrite(&fill, 1, 1, fAux);
+    count = count % (m * n);
+    for (i = 0; i < (m * n) - count && count != 0; i++) fwrite(&fill, 1, 1, fAux);
     fclose(fAux);
     fIn = fopen("auxiliar.txt", "r");
 
 
     /*leer fichero entrada o estandar*/
     if (fIn) {
-        while (fread(cadena, sizeof (char), m*n, fIn) != 0) {
+        while (fread(cadena, sizeof (char), m * n, fIn) != 0) {
 
             for (i = 0; i < m; i++) {
-                memcpy(matrix[i], cadena+(n*i), n);
+                memcpy(matrix[i], cadena + (n * i), n);
             }
 
             /*Cifrar*/
-            if (cifrar == 1){
+            if (cifrar == 1) {
                 /*permutar filas*/
-                for (r = 0; r < m; r++){
+                for (r = 0; r < m; r++) {
                     t = perm_fila[r];
-                    for (s = 0; s < n; s++){
-                        matrix2[r][s] = matrix[t-1][s];
+                    for (s = 0; s < n; s++) {
+                        matrix2[r][s] = matrix[t - 1][s];
                     }
                 }
                 /*permutar columnas*/
-                for (r = 0; r < n; r++){
+                for (r = 0; r < n; r++) {
                     t = perm_columna[r];
-                    for (s = 0; s < m; s++){
-                        matrix3[s][r] = matrix2[s][t-1];
+                    for (s = 0; s < m; s++) {
+                        matrix3[s][r] = matrix2[s][t - 1];
                     }
                 }
-            }
-
-            /*Descifrar*/
-            else{
+            }/*Descifrar*/
+            else {
                 /*permutar columnas*/
-                for (r = 0; r < n; r++){
+                for (r = 0; r < n; r++) {
                     t = inv_columna[r];
-                    for (s = 0; s < m; s++){
-                        matrix2[s][r] = matrix[s][t-1];
+                    for (s = 0; s < m; s++) {
+                        matrix2[s][r] = matrix[s][t - 1];
                     }
                 }
                 /*permutar filas*/
-                for (r = 0; r < m; r++){
+                for (r = 0; r < m; r++) {
                     t = inv_fila[r];
-                    for (s = 0; s < n; s++){
-                        matrix3[r][s] = matrix2[t-1][s];
+                    for (s = 0; s < n; s++) {
+                        matrix3[r][s] = matrix2[t - 1][s];
                     }
                 }
 
             }
-/*
-            printf("Matriz\n");
-            for(i=0;i<m;i++){
-                 for(j=0;j<n;j++){
-                    printf("%c ", matrix[i][j]);
-                }
-                printf("\n");
-            }
-            printf("Matriz2\n");
-            for(i=0;i<m;i++){
-                 for(j=0;j<n;j++){
-                    printf("%c ", matrix2[i][j]);
-                }
-                printf("\n");
-            }
-            printf("Matriz3\n");*/
-            for(i=0;i<m;i++){
-                 for(j=0;j<n;j++){
+            /*
+                        printf("Matriz\n");
+                        for(i=0;i<m;i++){
+                             for(j=0;j<n;j++){
+                                printf("%c ", matrix[i][j]);
+                            }
+                            printf("\n");
+                        }
+                        printf("Matriz2\n");
+                        for(i=0;i<m;i++){
+                             for(j=0;j<n;j++){
+                                printf("%c ", matrix2[i][j]);
+                            }
+                            printf("\n");
+                        }
+                        printf("Matriz3\n");*/
+            for (i = 0; i < m; i++) {
+                for (j = 0; j < n; j++) {
                     /*printf("%c ", matrix3[i][j]);*/
 
                     if (fOut) {
@@ -236,7 +234,7 @@ int main(int argc, char **argv) {
     if (fIn) fclose(fIn);
     if (fOut) fclose(fOut);
 
-    for(i=0;i<m;i++){
+    for (i = 0; i < m; i++) {
         free(matrix[i]);
         free(matrix2[i]);
         free(matrix3[i]);
