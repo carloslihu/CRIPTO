@@ -13,7 +13,7 @@ Autores: Carlos Li Hu y David López Ramos
 
 /* PROGRAMA PRINCIPAL */
 int main(int argc, char **argv) {
-    char entrada[256];
+    char entrada[256], cadena[256];
     int long_index = 0, iflag = 1;
     char opt, simbolo_in;
     FILE *fIn = NULL, *fOut = NULL;
@@ -77,13 +77,26 @@ int main(int argc, char **argv) {
                 break;
         }
     }
+    /*crear entrada estandar*/
+    if (!fIn) {
+        printf("Leyendo entrada estandar \n");
+        fgets(cadena, 256, stdin);
+        /*se guarda la entrada en un fichero para reutilizar codigo*/
+        fIn = fopen("teclado.txt", "w");
+        fwrite(cadena, 1, strlen(cadena), fIn);
+        fclose(fIn);
+        fIn = fopen("teclado.txt", "r");
+    }
+    if (!fOut) {
+        fOut = stdout;
+    }
     for (i = 0; i < M; i++) {
         IC_c += f_c[i] * f_c[i];
         IC_i += f_i[i] * f_i[i];
     }
     IC_c /= 10000;
     IC_i /= 10000;
-    printf("IC_c: %lf\nIC_i: %lf\n", IC_c, IC_i);
+    fprintf(fOut, "IC Castellano: %lf\nIC Inglés: %lf\n\n", IC_c, IC_i);
 
     /*Inicializamos variables*/
     f = (int**) calloc(l, sizeof (int*));
@@ -113,13 +126,12 @@ int main(int argc, char **argv) {
         }
         /*En j guardamos el tamaño de cada vector */
         IC[i] /= j * (j - 1);
-        //printf("IC_%d: %lf\n", i, IC[i]);
         fprintf(fOut, "IC_%d: %lf\n", i, IC[i]);
     }
     /* para cada coordenada Ki de la clave */
     for (i = 0; i < l; i++) {
         /* Si desplazamos -n las frecuencias */
-        fprintf(fOut, "Valores K_%d\n", i);
+        fprintf(fOut, "Valores del Mg para K_%d\n", i);
         max = 0;
         imax = 0;
         for (n = 0; n < M; n++) {

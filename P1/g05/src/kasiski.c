@@ -8,11 +8,11 @@ Autores: Carlos Li Hu y David López Ramos
 #define TAM 1000000
 
 int main(int argc, char **argv) {
-    char entrada[256];
+    char entrada[256], cadena[256];
     int long_index = 0;
     char opt;
     FILE *fIn = NULL, *fOut = NULL;
-    int l, Clen;
+    int l = 3, Clen;
     int i, j, k;
     char C[TAM], R[TAM];
 
@@ -55,6 +55,19 @@ int main(int argc, char **argv) {
                 break;
         }
     }
+    /*crear entrada estandar*/
+    if (!fIn) {
+        printf("Leyendo entrada estandar \n");
+        fgets(cadena, 256, stdin);
+        /*se guarda la entrada en un fichero para reutilizar codigo*/
+        fIn = fopen("teclado.txt", "w");
+        fwrite(cadena, 1, strlen(cadena), fIn);
+        fclose(fIn);
+        fIn = fopen("teclado.txt", "r");
+    }
+    if (!fOut) {
+        fOut = stdout;
+    }
     fscanf(fIn, "%s", C);
     Clen = strlen(C) + 1;
     for (i = 0; i < Clen; i++) {
@@ -63,9 +76,8 @@ int main(int argc, char **argv) {
                 R[k] = C[i + k];
             }
             R[k] = '\0';
-            //printf("%s\n", R);
             if (k >= l) {
-                printf("%s\tposiciones: %d  y %d con distancia %d\n", R, i, j, j - i);
+                fprintf(fOut, "%s\tposiciones: %d  y %d con distancia %d\n", R, i, j, j - i);
             }
         }
     }
