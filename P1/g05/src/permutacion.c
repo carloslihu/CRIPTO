@@ -52,12 +52,12 @@ int main(int argc, char **argv) {
 
             case '1':
                 k1 = optarg;
-                printf("K1 es %s\n", k1);
+                /*printf("K1 es %s\n", k1);*/
                 break;
 
             case '2':
                 k2 = optarg;
-                printf("K2 es %s\n", k2);
+                /*printf("K2 es %s\n", k2);*/
                 break;
 
             case '3':
@@ -89,7 +89,7 @@ int main(int argc, char **argv) {
     }
 
 
-
+    /*crear vector de permutacion de filas*/
     for (i = 0, j = 0; i < strlen(k1); i++) {
         if (0 < (k1[i] - '0') && (k1[i] - '0') <= strlen(k1)) {
             perm_fila[j] = (k1[i] - '0');
@@ -98,7 +98,7 @@ int main(int argc, char **argv) {
         }
     }
 
-
+    /*crear vector de permutacion de columnas*/
     for (i = 0, j = 0; i < strlen(k2); i++) {
         if (0 < (k2[i] - '0') && (k2[i] - '0') <= strlen(k2)) {
             perm_columna[j] = (k2[i] - '0');
@@ -107,6 +107,7 @@ int main(int argc, char **argv) {
         }
     }
 
+    /*matrices para las permutaciones del metodo*/
     matrix = (char**) malloc(sizeof (char*)*m);
     matrix2 = (char**) malloc(sizeof (char*)*m);
     matrix3 = (char**) malloc(sizeof (char*)*m);
@@ -115,17 +116,6 @@ int main(int argc, char **argv) {
         matrix2[i] = (char*) malloc(sizeof (char)*n);
         matrix3[i] = (char*) malloc(sizeof (char)*n);
     }
-
-/*    for(i=0;i<m;i++){
-            printf("%d", perm_fila[i]);
-        }
-    printf("Tamano %d\n", m);
-
-    for(i=0;i<n;i++){
-            printf("%d", perm_columna[i]);
-        }
-    printf("Tamano %d\n", n);*/
-
 
     /*calculo de las permutaciones para descifrar*/
     for (i = 0; i < m; i++) {
@@ -144,15 +134,6 @@ int main(int argc, char **argv) {
         }
     }
 
-/*    for(i=0;i<m;i++){
-            printf("%d", inv_fila[i]);
-    }
-
-    for(i=0;i<n;i++){
-            printf("%d", inv_columna[i]);
-    }*/
-
-
     /*crear entrada estandar*/
     if (!fIn) {
         printf("Leyendo entrada estandar \n");
@@ -164,7 +145,7 @@ int main(int argc, char **argv) {
     }
 
 
-    /*rellenar texto para hacerlo modulo N*/
+    /*rellenar texto para hacerlo modulo m*n */
     /*en fAux se guarda la direccion del texto nuevo parseado*/
     count = parsear(fIn, &fAux);
     count = count % (m*n);
@@ -183,14 +164,14 @@ int main(int argc, char **argv) {
 
             /*Cifrar*/
             if (cifrar == 1){
-
+                /*permutar filas*/
                 for (r = 0; r < m; r++){
                     t = perm_fila[r];
                     for (s = 0; s < n; s++){
                         matrix2[r][s] = matrix[t-1][s];
                     }
                 }
-
+                /*permutar columnas*/
                 for (r = 0; r < n; r++){
                     t = perm_columna[r];
                     for (s = 0; s < m; s++){
@@ -201,13 +182,14 @@ int main(int argc, char **argv) {
 
             /*Descifrar*/
             else{
+                /*permutar columnas*/
                 for (r = 0; r < n; r++){
                     t = inv_columna[r];
                     for (s = 0; s < m; s++){
                         matrix2[s][r] = matrix[s][t-1];
                     }
                 }
-
+                /*permutar filas*/
                 for (r = 0; r < m; r++){
                     t = inv_fila[r];
                     for (s = 0; s < n; s++){

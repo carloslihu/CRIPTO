@@ -98,11 +98,6 @@ int main(int argc, char **argv) {
         }
     }
 
-    /*    for(i=0;i<n;i++){
-            printf("%d", permutacion[i]);
-        }
-        printf("\n");*/
-
     /*calculo de la permutacion para decodificar*/
     for (i = 0; i < n; i++) {
         for (j = 0; j < n; j++) {
@@ -111,10 +106,6 @@ int main(int argc, char **argv) {
             }
         }
     }
-
-    /*    for(i=0;i<n;i++){
-            printf("%d", inversa[i]);
-        }*/
 
     /*crear entrada estandar*/
     if (!fIn) {
@@ -146,7 +137,7 @@ int main(int argc, char **argv) {
                     simbolo_out = cadena[permutacion[i] - 1];
                 }/*Descifrar*/
                 else {
-                    simbolo_out = cadena[permutacion[i] - 1];
+                    simbolo_out = cadena[inversa[i] - 1];
                 }
 
                 if (fOut) {
