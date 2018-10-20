@@ -14,7 +14,7 @@ Autores: Carlos Li Hu y David López Ramos
 /* PROGRAMA PRINCIPAL */
 int main(int argc, char **argv) {
     char entrada[256];
-    int long_index = 0;
+    int long_index = 0, iflag = 1;
     char opt, simbolo_in;
     FILE *fIn = NULL, *fOut = NULL;
     int l = 0, i = 0, j = 0, k = 0, n = 0;
@@ -32,18 +32,20 @@ int main(int argc, char **argv) {
     if (argc > 1) {
         strncpy(entrada, argv[1], 256);
     } else {
-        printf("Ejecucion: %s {-l Ngrama} [-i filein] [-o fileout]\n", argv[0]);
+        printf("Ejecucion: %s {-l Ngrama} [-i filein] [-o fileout] {-E|-C}\n", argv[0]);
         exit(-1);
     }
 
     static struct option options[] = {
+        {"E", no_argument, 0, 'e'},
+        {"C", no_argument, 0, 'c'},
         {"l", required_argument, 0, '1'},
         {"i", required_argument, 0, '2'},
         {"o", required_argument, 0, '3'},
         {0, 0, 0, 0}
     };
 
-    while ((opt = getopt_long_only(argc, argv, "1:2:3", options, &long_index)) != -1) {
+    while ((opt = getopt_long_only(argc, argv, "1:2:3:e:c", options, &long_index)) != -1) {
         switch (opt) {
             case '1':
                 l = atoi(optarg);
@@ -58,12 +60,19 @@ int main(int argc, char **argv) {
                 fOut = fopen(optarg, "w");
                 if (!fOut) exit(-1);
                 break;
+            case 'e':
+                iflag = 0;
+                break;
+
+            case 'c':
+                iflag = 1;
+                break;
 
             case '?':
                 break;
 
             default:
-                printf("Ejecucion: %s {-l Ngrama} [-i filein] [-o fileout]\n", argv[0]);
+                printf("Ejecucion: %s {-l Ngrama} [-i filein] [-o fileout] {-E|-C}\n", argv[0]);
                 exit(-1);
                 break;
         }
@@ -117,9 +126,19 @@ int main(int argc, char **argv) {
             /* Calculamos los IC */
             for (k = 0; k < M; k++) {
                 if ((k + n) < M) {
-                    Mg[i][n] += f_c[k] * f[i][k + n];
+                    /* En caso de texto en castellano */
+                    if (iflag == 1) {
+                        Mg[i][n] += f_c[k] * f[i][k + n];
+                    } else {/* En caso de texto en ingles */
+                        Mg[i][n] += f_i[k] * f[i][k + n];
+                    }
                 } else {
-                    Mg[i][n] += f_c[k] * f[i][(k + n) - M];
+                    /* En caso de texto en castellano */
+                    if (iflag == 1) {
+                        Mg[i][n] += f_c[k] * f[i][(k + n) - M];
+                    } else {/* En caso de texto en ingles */
+                        Mg[i][n] += f_i[k] * f[i][(k + n) - M];
+                    }
                 }
             }
             if (max < Mg[i][n]) {
@@ -132,9 +151,8 @@ int main(int argc, char **argv) {
         }
 
 
-        fprintf(fOut, "\nLa posible clave para K%d es %c\n\n", i, imax + 65);
+        fprintf(fOut, "\nLa posible clave para K%d es %c\n\n", i, imax + K);
     }
-
 
     for (i = 0; i < l; i++) {
         free(f[i]);

@@ -9,11 +9,11 @@ Autores: Carlos Li Hu y David López Ramos
 
 int main(int argc, char **argv) {
     char entrada[256];
-    int long_index = 0; //, retorno = 0;
+    int long_index = 0;
     char opt;
     FILE *fIn = NULL, *fOut = NULL;
     int l, Clen;
-    int i, j, k, i0 = -1, k0 = 0;
+    int i, j, k;
     char C[TAM], R[TAM];
 
     if (argc > 1) {
