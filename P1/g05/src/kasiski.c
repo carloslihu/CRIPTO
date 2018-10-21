@@ -5,7 +5,6 @@ Autores: Carlos Li Hu y David López Ramos
 2018 EPS-UAM
  ***************************************************************************/
 #include "../includes/utils.h"
-#define TAM 1000000
 
 int main(int argc, char **argv) {
     char entrada[256], cadena[256];
@@ -14,7 +13,8 @@ int main(int argc, char **argv) {
     FILE *fIn = NULL, *fOut = NULL;
     int l = 3, Clen;
     int i, j, k;
-    char C[TAM], R[TAM];
+    char C[TAM], R[TAM]; /*En C guardamos la cadena cifrada
+                          * En R las subcadenas repetidas*/
 
     if (argc > 1) {
         strncpy(entrada, argv[1], 256);
@@ -65,6 +65,7 @@ int main(int argc, char **argv) {
         fclose(fIn);
         fIn = fopen("teclado.txt", "r");
     }
+    /* Si no se especifica, usamos salida estandar */
     if (!fOut) {
         fOut = stdout;
     }

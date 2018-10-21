@@ -6,7 +6,6 @@ Autores: Carlos Li Hu y David López Ramos
  ***************************************************************************/
 
 #include "../includes/utils.h"
-/*Definicion de constantes *************************************************/
 
 /* PROGRAMA PRINCIPAL */
 int main(int argc, char **argv) {
@@ -90,6 +89,10 @@ int main(int argc, char **argv) {
         fclose(fIn);
         fIn = fopen("teclado.txt", "r");
     }
+    /* Si no se especifica, usamos salida estandar */
+    if (!fOut) {
+        fOut = stdout;
+    }
     /*rellenar texto para hacerlo modulo N*/
     /*en fAux se guarda la direccion del texto nuevo parseado*/
     count = parsear(fIn, &fAux);
@@ -101,13 +104,12 @@ int main(int argc, char **argv) {
     if (fIn) {
         /* Pasamos las claves a Zm */
         for (i = 0; i < n; i++) {
-            clave[i] -= 65;
+            clave[i] -= K;
         }
         while (fread(cadena, sizeof (char), n, fIn) != 0) {
             for (i = 0; i < n; i++) {
                 if ('A' <= cadena[i] && cadena[i] <= 'Z') {
-                    cadena[i] -= 65;
-
+                    cadena[i] -= K;
                     /*Cifrar*/
                     if (cifrar == 1) {
                         cadena[i] += clave[i];
@@ -116,26 +118,16 @@ int main(int argc, char **argv) {
                         cadena[i] -= clave[i];
                     }
                     cadena[i] %= m;
-                    cadena[i] += 65;
+                    cadena[i] += K;
                 }
-
             }
-            /*escribir fichero salida*/
-            if (fOut) {
-                fwrite(cadena, sizeof (char), n, fOut);
-            }/*escribir salida estandar*/
-            else {
-                fwrite(cadena, sizeof (char), n, stdout);
-            }
+            fwrite(cadena, sizeof (char), n, fOut);
         }
-
     }
 
     if (fIn) fclose(fIn);
     if (fOut) fclose(fOut);
 
     return 0;
-
-
 }
 

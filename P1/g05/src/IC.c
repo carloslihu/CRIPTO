@@ -6,18 +6,13 @@ Autores: Carlos Li Hu y David López Ramos
  ***************************************************************************/
 #include "../includes/utils.h"
 
-/*Definicion de constantes *************************************************/
-#define M 26
-#define TAM 1000000
-#define K 65
-
 /* PROGRAMA PRINCIPAL */
 int main(int argc, char **argv) {
     char entrada[256], cadena[256];
     int long_index = 0, iflag = 1;
     char opt, simbolo_in;
     FILE *fIn = NULL, *fOut = NULL;
-    int l = 0, i = 0, j = 0, k = 0, n = 0;
+    int l = 0, i = 0, j = 0, k = 0, n = 0, o = 0;
     double IC_c = 0, IC_i = 0;
     double f_c[M] = {11.96, 0.92, 2.92, 6.87, 16.78, 0.52, 0.73, 0.89, 4.15,
         0.30, 0.0, 8.37, 2.12, 7.01, 8.69, 2.77, 1.53, 4.94, 7.88, 3.31, 4.80,
@@ -29,6 +24,7 @@ int main(int argc, char **argv) {
     int max = 0;
     char imax = 0;
     int **f = NULL;
+
     if (argc > 1) {
         strncpy(entrada, argv[1], 256);
     } else {
@@ -87,9 +83,11 @@ int main(int argc, char **argv) {
         fclose(fIn);
         fIn = fopen("teclado.txt", "r");
     }
+    /* Si no se especifica, usamos salida estandar */
     if (!fOut) {
         fOut = stdout;
     }
+    /* Calculamos los Indices de coincidencia del castellano e ingles */
     for (i = 0; i < M; i++) {
         IC_c += f_c[i] * f_c[i];
         IC_i += f_i[i] * f_i[i];
@@ -120,6 +118,7 @@ int main(int argc, char **argv) {
         }
         f[i][(int) (simbolo_in - 65)]++;
     }
+    /*Calculamos los indices de coincidencia de cada vector */
     for (i = 0; i < l; i++) {
         for (k = 0; k < M; k++) {
             IC[i] += f[i][k] * (f[i][k] - 1);
@@ -128,6 +127,7 @@ int main(int argc, char **argv) {
         IC[i] /= j * (j - 1);
         fprintf(fOut, "IC_%d: %lf\n", i, IC[i]);
     }
+    /*Asumimos que la l usada es correcta y procedemos a calcular la Mg para buscar la clave */
     /* para cada coordenada Ki de la clave */
     for (i = 0; i < l; i++) {
         /* Si desplazamos -n las frecuencias */
@@ -137,22 +137,21 @@ int main(int argc, char **argv) {
         for (n = 0; n < M; n++) {
             /* Calculamos los IC */
             for (k = 0; k < M; k++) {
+                /* en o guardamos el indice del desplazamiento de frecuencias */
                 if ((k + n) < M) {
-                    /* En caso de texto en castellano */
-                    if (iflag == 1) {
-                        Mg[i][n] += f_c[k] * f[i][k + n];
-                    } else {/* En caso de texto en ingles */
-                        Mg[i][n] += f_i[k] * f[i][k + n];
-                    }
+                    o = k + n;
                 } else {
-                    /* En caso de texto en castellano */
-                    if (iflag == 1) {
-                        Mg[i][n] += f_c[k] * f[i][(k + n) - M];
-                    } else {/* En caso de texto en ingles */
-                        Mg[i][n] += f_i[k] * f[i][(k + n) - M];
-                    }
+                    o = k + n - M;
+                }
+
+                if (iflag == 1) {/*Si es castellano*/
+                    Mg[i][n] += f_c[k] * f[i][o];
+                } else {/*Si es ingles*/
+                    Mg[i][n] += f_i[k] * f[i][o];
                 }
             }
+            /*Caculamos de cada vector el desplazamiento mas probable para ser 
+             la clave correcta */
             if (max < Mg[i][n]) {
                 max = Mg[i][n];
                 imax = n;
@@ -161,7 +160,6 @@ int main(int argc, char **argv) {
 
             fprintf(fOut, "%lf\t", Mg[i][n]);
         }
-
 
         fprintf(fOut, "\nLa posible clave para K%d es %c\n\n", i, imax + K);
     }

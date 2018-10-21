@@ -33,15 +33,16 @@ void gmp_mcd(mpz_t rop, mpz_t op1, mpz_t op2) {
 }
 
 /**
- * @brief Realiza la descomposición de Euclides Extendida.
- *        Calcula el inverso de a modulo m en x
+ * @brief Realiza la descomposición de Euclides Extendida:
+ *        g = s*a1 + t*m1
+ *        Calcula el inverso de a1 modulo m1 en s
  *
- * @param el entero a calcular su inverso
- * @param el modulo de la operación
- * @param el inverso de a
- * @param el otro factor por descomposición
+ * @param g el mcd de a1 y m1
+ * @param s el inverso de a1
+ * @param t el otro factor de la descomposición
+ * @param a1 el elemento al que le calculamos el inverso
+ * @param m1 el módulo de la operación
  *
- * @return el maximo comun divisor
  */
 void gmp_mcdext(mpz_t g, mpz_t s, mpz_t t, const mpz_t a1, const mpz_t m1) {
     mpz_t a, m, x, y, x1, y1, aux;
@@ -69,9 +70,8 @@ void gmp_mcdext(mpz_t g, mpz_t s, mpz_t t, const mpz_t a1, const mpz_t m1) {
 
 /* PROGRAMA PRINCIPAL */
 int main(int argc, char **argv) {
-    char entrada[256];
-    char cadena[512];
-    int long_index = 0; //, retorno = 0;
+    char entrada[256], cadena[512];
+    int long_index = 0;
     char opt, simbolo_in, simbolo_out;
     mpz_t a, b, m, inv, mcd, t, aux, aux2;
     FILE *fIn = NULL, *fOut = NULL, *fAux = NULL;
@@ -142,12 +142,13 @@ int main(int argc, char **argv) {
         printf("Ejecucion: %s {-C|-D} {-m |Zm|} {-a N×} {-b N+} [-i filein] [-o fileout]\n", argv[0]);
         exit(-1);
     }
-
+    /* Comprobamos si la clave es válida */
     gmp_mcd(mcd, a, m);
     if (mpz_cmp_d(mcd, 1) != 0) {
         printf("La clave no determina una función afín inyectiva\n");
         exit(-1);
     }
+    /* Calculamos mcd e inverso para luego */
     mpz_gcdext(mcd, inv, t, a, m);
 
     /*crear entrada estandar*/
@@ -160,7 +161,11 @@ int main(int argc, char **argv) {
         fclose(fIn);
         fIn = fopen("teclado.txt", "r");
     }
-
+    /* Si no se especifica, usamos salida estandar */
+    if (!fOut) {
+        fOut = stdout;
+    }
+    
     /*parsear texto*/
     parsear(fIn, &fAux);
     fclose(fAux);
@@ -173,7 +178,7 @@ int main(int argc, char **argv) {
             //aux es nuestro simbolo de entrada
             //aux2 es nuestro simbolo de salida
             mpz_set_ui(aux, (int) simbolo_in);
-            simbolo_in -= 65;
+            simbolo_in -= K;
 
             /*Cifrar*/
             if (cifrar == 1) {
@@ -191,15 +196,10 @@ int main(int argc, char **argv) {
 
             /*convertir a double o int y sumar 65, codigo de la primera letra A*/
             simbolo_out = mpz_get_d(aux2);
-            simbolo_out += 65;
+            simbolo_out += K;
 
-            /*escribir fichero salida*/
-            if (fOut) {
-                fwrite(&simbolo_out, 1, 1, fOut);
-            }/*escribir salida estandar*/
-            else {
-                fwrite(&simbolo_out, 1, 1, stdout);
-            }
+            fwrite(&simbolo_out, 1, 1, fOut);
+
         }
 
     }
@@ -207,9 +207,6 @@ int main(int argc, char **argv) {
     mpz_clears(a, b, m, inv, t, mcd, aux, aux2, NULL);
     if (fIn) fclose(fIn);
     if (fOut) fclose(fOut);
-
-    printf("\n");
-
     return 0;
 
 

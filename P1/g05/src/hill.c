@@ -7,8 +7,6 @@ Autores: Carlos Li Hu y David López Ramos
 
 #include "../includes/utils.h"
 
-/*Definicion de constantes *************************************************/
-
 /**
  * @brief Realiza el producto escalar de 2 vectores
  * 
@@ -209,7 +207,7 @@ int main(int argc, char **argv) {
         while (fread(cadena, sizeof (char), n, fIn) != 0) {
             /*convertir a formatao 0,...,n-1*/
             for (i = 0; i < n; i++) {
-                cadena[i] -= 65;
+                cadena[i] -= K;
             }
 
             for (i = 0; i < n; i++) {
@@ -223,7 +221,7 @@ int main(int argc, char **argv) {
                 simbolo_out = resultado % m;
                 /*modulos con resultado de operacion negativa*/
                 if (simbolo_out < 0) simbolo_out += m;
-                simbolo_out += 65;
+                simbolo_out += K;
                 /*escribir fichero salida*/
                 if (fOut) {
                     fwrite(&simbolo_out, 1, 1, fOut);
