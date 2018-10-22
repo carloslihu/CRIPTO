@@ -21,7 +21,7 @@ Autores: Carlos Li Hu y David López Ramos
 #define M 26 /* Tamaño del alfabeto */
 #define TAM 1000000
 #define K 65 /* Desplazamiento para operar A-Z en Zm */
-
+#define SIZE 512
 /**
  * @brief Lee el fichero fIn las letras, y las pasa a mayusculas y les quita el acento.
  *  se escriben en fAux sólo los caracteres en mayuscula (ignora los espacios)

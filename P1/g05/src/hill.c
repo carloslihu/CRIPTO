@@ -17,23 +17,20 @@ Autores: Carlos Li Hu y David López Ramos
  * @return el resultado de la operacion
  */
 int mult(int *fila, char *columna, int tam) {
-
     int res = 0, i = 0;
 
     for (i = 0; i < tam; i++) {
-        /*printf("Fila es %d y columna es %d\n", fila[i], columna[i]);*/
         res += fila[i] * columna[i];
-        /*printf("res es %d\n", res);*/
     }
-    /* printf("RES FINAL es %d\n", res);*/
+
     return res;
 }
 
 /* PROGRAMA PRINCIPAL */
 int main(int argc, char **argv) {
-    char entrada[256];
-    char cadena[512];
-    int long_index = 0; //, retorno = 0;
+    char entrada[SIZE];
+    char cadena[SIZE];
+    int long_index = 0;
     char opt, simbolo_out, fill = 'W';
     FILE *fIn = NULL, *fOut = NULL, *fK = NULL, *fAux = NULL;
     int cifrar = -1, resultado = 0, inv = 0, muda = 0;
@@ -41,7 +38,7 @@ int main(int argc, char **argv) {
     int m = 0, n = 0, count = 0, i = 0, j = 0, det = 0;
 
     if (argc > 1) {
-        strncpy(entrada, argv[1], 256);
+        strncpy(entrada, argv[1], SIZE);
     } else {
         printf("Ejecucion: %s {-C|-D} {-m |Zm|} {-n NK} {-k fileK} [-i filein] [-o fileout]\n", argv[0]);
         exit(-1);
@@ -117,9 +114,9 @@ int main(int argc, char **argv) {
         for (j = 0; j < n; j++) {
             if (!fscanf(fK, "%d", &matrix[i][j]))
                 break;
-            printf("%d ", matrix[i][j]);
+            //printf("%d ", matrix[i][j]);
         }
-        printf("\n");
+        //printf("\n");
     }
     fclose(fK);
 
@@ -185,13 +182,16 @@ int main(int argc, char **argv) {
     /*crear entrada estandar*/
     if (!fIn) {
         printf("Leyendo entrada estandar \n");
-        fgets(cadena, 512, stdin);
+        fgets(cadena, SIZE, stdin);
         fIn = fopen("teclado.txt", "w");
         fwrite(cadena, 1, strlen(cadena), fIn);
         fclose(fIn);
         fIn = fopen("teclado.txt", "r");
     }
-
+    /* Si no se especifica, usamos salida estandar */
+    if (!fOut) {
+        fOut = stdout;
+    }
 
     /*rellenar texto para hacerlo modulo N*/
     /*en fAux se guarda la direccion del texto nuevo parseado*/
@@ -222,13 +222,10 @@ int main(int argc, char **argv) {
                 /*modulos con resultado de operacion negativa*/
                 if (simbolo_out < 0) simbolo_out += m;
                 simbolo_out += K;
+                
                 /*escribir fichero salida*/
-                if (fOut) {
-                    fwrite(&simbolo_out, 1, 1, fOut);
-                }/*escribir salida estandar*/
-                else {
-                    fwrite(&simbolo_out, 1, 1, stdout);
-                }
+                fwrite(&simbolo_out, 1, 1, fOut);
+
             }
 
         }

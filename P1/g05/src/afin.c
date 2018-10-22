@@ -70,7 +70,7 @@ void gmp_mcdext(mpz_t g, mpz_t s, mpz_t t, const mpz_t a1, const mpz_t m1) {
 
 /* PROGRAMA PRINCIPAL */
 int main(int argc, char **argv) {
-    char entrada[256], cadena[512];
+    char entrada[SIZE], cadena[SIZE];
     int long_index = 0;
     char opt, simbolo_in, simbolo_out;
     mpz_t a, b, m, inv, mcd, t, aux, aux2;
@@ -78,7 +78,7 @@ int main(int argc, char **argv) {
     int cifrar = -1;
 
     if (argc > 1) {
-        strncpy(entrada, argv[1], 256);
+        strncpy(entrada, argv[1], SIZE);
     } else {
         printf("Ejecucion: %s {-C|-D} {-m |Zm|} {-a N×} {-b N+} [-i filein] [-o fileout]\n", argv[0]);
         exit(-1);
@@ -154,7 +154,7 @@ int main(int argc, char **argv) {
     /*crear entrada estandar*/
     if (!fIn) {
         printf("Leyendo entrada estandar \n");
-        fgets(cadena, 512, stdin);
+        fgets(cadena, SIZE, stdin);
         /*se guarda la entrada en un fichero para reutilizar codigo*/
         fIn = fopen("teclado.txt", "w");
         fwrite(cadena, 1, strlen(cadena), fIn);
@@ -207,6 +207,7 @@ int main(int argc, char **argv) {
     mpz_clears(a, b, m, inv, t, mcd, aux, aux2, NULL);
     if (fIn) fclose(fIn);
     if (fOut) fclose(fOut);
+    printf("\n");
     return 0;
 
 

@@ -9,9 +9,9 @@ Autores: Carlos Li Hu y David López Ramos
 
 /* PROGRAMA PRINCIPAL */
 int main(int argc, char **argv) {
-    char entrada[256];
-    char cadena[256];
-    char clave[256];
+    char entrada[SIZE];
+    char cadena[SIZE];
+    char clave[SIZE];
     int long_index = 0;
     char opt, fill = 'W';
     FILE *fIn, *fOut, *fAux;
@@ -19,7 +19,7 @@ int main(int argc, char **argv) {
     int cifrar = -1, count = 0;
 
     if (argc > 1) {
-        strncpy(entrada, argv[1], 256);
+        strncpy(entrada, argv[1], SIZE);
     } else {
         printf("Ejecucion: %s {-C|-D} {-m |Zm|} {-k clave} [-i filein] [-o fileout]\n", argv[0]);
         exit(-1);
@@ -50,7 +50,7 @@ int main(int argc, char **argv) {
                 break;
 
             case '2':
-                strncpy(clave, optarg, 256);
+                strncpy(clave, optarg, SIZE);
                 break;
 
             case '3':
@@ -82,7 +82,7 @@ int main(int argc, char **argv) {
     /*crear entrada estandar*/
     if (!fIn) {
         printf("Leyendo entrada estandar \n");
-        fgets(cadena, 256, stdin);
+        fgets(cadena, SIZE, stdin);
         /*se guarda la entrada en un fichero para reutilizar codigo*/
         fIn = fopen("teclado.txt", "w");
         fwrite(cadena, 1, strlen(cadena), fIn);
@@ -127,7 +127,7 @@ int main(int argc, char **argv) {
 
     if (fIn) fclose(fIn);
     if (fOut) fclose(fOut);
-
+    printf("\n");
     return 0;
 }
 

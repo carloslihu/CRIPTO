@@ -8,15 +8,17 @@ Autores: Carlos Li Hu y David López Ramos
 
 /* PROGRAMA PRINCIPAL */
 int main(int argc, char **argv) {
-    char entrada[256], cadena[256];
+    char entrada[SIZE], cadena[SIZE];
     int long_index = 0, iflag = 1;
     char opt, simbolo_in;
     FILE *fIn = NULL, *fOut = NULL;
     int l = 0, i = 0, j = 0, k = 0, n = 0, o = 0;
     double IC_c = 0, IC_i = 0;
+    /*Tablas de porcentajes de cada letra del alfabeto en castellano */
     double f_c[M] = {11.96, 0.92, 2.92, 6.87, 16.78, 0.52, 0.73, 0.89, 4.15,
         0.30, 0.0, 8.37, 2.12, 7.01, 8.69, 2.77, 1.53, 4.94, 7.88, 3.31, 4.80,
         0.39, 0.0, 0.06, 1.54, 0.15};
+    /*Tablas de porcentajes de cada letra del alfabeto en ingles */
     double f_i[M] = {8.04, 1.54, 3.06, 3.99, 12.51, 2.30, 1.96, 5.49, 7.26,
         0.16, 0.67, 4.14, 2.53, 7.09, 7.60, 2.00, 0.11, 6.12, 6.54, 9.25, 2.71,
         0.99, 1.92, 0.19, 1.73, 0.19};
@@ -26,9 +28,11 @@ int main(int argc, char **argv) {
     int **f = NULL;
 
     if (argc > 1) {
-        strncpy(entrada, argv[1], 256);
+        strncpy(entrada, argv[1], SIZE);
     } else {
-        printf("Ejecucion: %s {-l Ngrama} [-i filein] [-o fileout] {-E|-C}\n", argv[0]);
+
+        printf("Ejecucion: %s {-l Ngrama} [-i filein] [-o fileout] {-E|-C}\n"
+                "(E significa English, C significa Castellano (por defecto))\n", argv[0]);
         exit(-1);
     }
 
@@ -68,7 +72,8 @@ int main(int argc, char **argv) {
                 break;
 
             default:
-                printf("Ejecucion: %s {-l Ngrama} [-i filein] [-o fileout] {-E|-C}\n", argv[0]);
+                printf("Ejecucion: %s {-l Ngrama} [-i filein] [-o fileout] {-E|-C}\n"
+                        "(E significa English, C significa Castellano (por defecto))\n", argv[0]);
                 exit(-1);
                 break;
         }
@@ -76,7 +81,7 @@ int main(int argc, char **argv) {
     /*crear entrada estandar*/
     if (!fIn) {
         printf("Leyendo entrada estandar \n");
-        fgets(cadena, 256, stdin);
+        fgets(cadena, SIZE, stdin);
         /*se guarda la entrada en un fichero para reutilizar codigo*/
         fIn = fopen("teclado.txt", "w");
         fwrite(cadena, 1, strlen(cadena), fIn);
@@ -114,6 +119,7 @@ int main(int argc, char **argv) {
     for (i = 0, j = 0; fscanf(fIn, "%c", &simbolo_in) != EOF; i++) {
         if (i == l) {
             i = 0;
+            /*En j guardo el tamaño total de cada vector*/
             j++;
         }
         f[i][(int) (simbolo_in - 65)]++;
@@ -173,6 +179,7 @@ int main(int argc, char **argv) {
     free(IC);
     if (fIn) fclose(fIn);
     if (fOut) fclose(fOut);
+    printf("\n");
     return 0;
 }
 

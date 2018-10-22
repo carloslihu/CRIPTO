@@ -7,7 +7,7 @@ Autores: Carlos Li Hu y David López Ramos
 #include "../includes/utils.h"
 
 int main(int argc, char **argv) {
-    char entrada[256], cadena[256];
+    char entrada[SIZE], cadena[SIZE];
     int long_index = 0;
     char opt;
     FILE *fIn = NULL, *fOut = NULL;
@@ -17,7 +17,7 @@ int main(int argc, char **argv) {
                           * En R las subcadenas repetidas*/
 
     if (argc > 1) {
-        strncpy(entrada, argv[1], 256);
+        strncpy(entrada, argv[1], SIZE);
     } else {
         printf("Ejecucion: %s {-l Ngrama} [-i filein] [-o fileout]\n", argv[0]);
         exit(-1);
@@ -58,7 +58,7 @@ int main(int argc, char **argv) {
     /*crear entrada estandar*/
     if (!fIn) {
         printf("Leyendo entrada estandar \n");
-        fgets(cadena, 256, stdin);
+        fgets(cadena, SIZE, stdin);
         /*se guarda la entrada en un fichero para reutilizar codigo*/
         fIn = fopen("teclado.txt", "w");
         fwrite(cadena, 1, strlen(cadena), fIn);
@@ -70,13 +70,19 @@ int main(int argc, char **argv) {
         fOut = stdout;
     }
     fscanf(fIn, "%s", C);
+    /*Tamaño del texto cifrado*/
     Clen = strlen(C) + 1;
     for (i = 0; i < Clen; i++) {
         for (j = i + 1; j < Clen; j++) {
+            /*Vemos cuantos caracteres coinciden seguidos */
             for (k = 0; C[i + k] == C[j + k]; k++) {
+                /*En R se guarda la subcadena posible */
                 R[k] = C[i + k];
             }
+            /*No coinciden mas caracteres para esta subcadena */
             R[k] = '\0';
+            /* Numero de caracteres que coinciden
+             Vemos si superan el valor minimo pedido*/
             if (k >= l) {
                 fprintf(fOut, "%s\tposiciones: %d  y %d con distancia %d\n", R, i, j, j - i);
             }
@@ -84,5 +90,6 @@ int main(int argc, char **argv) {
     }
     if (fIn) fclose(fIn);
     if (fOut) fclose(fOut);
+    printf("\n");
     return 0;
 }

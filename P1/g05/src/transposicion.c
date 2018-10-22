@@ -7,12 +7,10 @@ Autores: Carlos Li Hu y David López Ramos
 
 #include "../includes/utils.h"
 
-/*Definicion de constantes *************************************************/
-
 /* PROGRAMA PRINCIPAL */
 int main(int argc, char **argv) {
-    char entrada[256];
-    char cadena[512];
+    char entrada[SIZE];
+    char cadena[SIZE];
     int long_index = 0;
     int *permutacion = NULL, *inversa = NULL;
     char opt, simbolo_out, fill = 'W';
@@ -22,7 +20,7 @@ int main(int argc, char **argv) {
     int i = 0, j = 0, n = 0;
 
     if (argc > 1) {
-        strncpy(entrada, argv[1], 256);
+        strncpy(entrada, argv[1], SIZE);
     } else {
         printf("Ejecucion: %s {-C | -D} {-p permutacion | -n Nperm} [-i filein] [-o fileout]\n", argv[0]);
         printf("Ejemplo: %s -C -p \"5 4 3 2 1\" -n 5 -i entrada.txt -o codificado.txt\n", argv[0]);
@@ -51,7 +49,6 @@ int main(int argc, char **argv) {
 
             case '1':
                 p = optarg;
-                /*printf("P es %s\n", p);*/
                 break;
 
             case '2':
@@ -110,13 +107,16 @@ int main(int argc, char **argv) {
     /*crear entrada estandar*/
     if (!fIn) {
         printf("Leyendo entrada estandar \n");
-        fgets(cadena, 512, stdin);
+        fgets(cadena, SIZE, stdin);
         fIn = fopen("teclado.txt", "w");
         fwrite(cadena, 1, strlen(cadena), fIn);
         fclose(fIn);
         fIn = fopen("teclado.txt", "r");
     }
-
+    /* Si no se especifica, usamos salida estandar */
+    if (!fOut) {
+        fOut = stdout;
+    }
 
     /*rellenar texto para hacerlo modulo N*/
     /*en fAux se guarda la direccion del texto nuevo parseado*/
@@ -140,12 +140,8 @@ int main(int argc, char **argv) {
                     simbolo_out = cadena[inversa[i] - 1];
                 }
 
-                if (fOut) {
-                    fwrite(&simbolo_out, 1, 1, fOut);
-                }/*escribir salida estandar*/
-                else {
-                    fwrite(&simbolo_out, 1, 1, stdout);
-                }
+                fwrite(&simbolo_out, 1, 1, fOut);
+
             }
 
         }
