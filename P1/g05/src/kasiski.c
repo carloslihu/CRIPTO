@@ -12,10 +12,10 @@ int main(int argc, char **argv) {
     char opt;
     FILE *fIn = NULL, *fOut = NULL;
     int l = 3, Clen;
-    int i, j, k;
+    int i, j, k, m;
     char C[TAM], R[TAM]; /*En C guardamos la cadena cifrada
                           * En R las subcadenas repetidas*/
-
+    int mcd, dist[TAM] = {0};
     if (argc > 1) {
         strncpy(entrada, argv[1], SIZE);
     } else {
@@ -73,6 +73,7 @@ int main(int argc, char **argv) {
     /*Tamaño del texto cifrado*/
     Clen = strlen(C) + 1;
     for (i = 0; i < Clen; i++) {
+        m = 0;
         for (j = i + 1; j < Clen; j++) {
             /*Vemos cuantos caracteres coinciden seguidos */
             for (k = 0; C[i + k] == C[j + k]; k++) {
@@ -84,8 +85,15 @@ int main(int argc, char **argv) {
             /* Numero de caracteres que coinciden
              Vemos si superan el valor minimo pedido*/
             if (k >= l) {
-                fprintf(fOut, "%s\tposiciones: %d  y %d con distancia %d\n", R, i, j, j - i);
+                dist[m] = j - i;
+                fprintf(fOut, "%s\tposiciones: %d  y %d con distancia %d\n", R, i, j, dist[m]);
+                m++;
             }
+        }
+        /*En caso de más de una distancia para la misma subcadena */
+        if (m > 1) {
+            mcd = mcdRec(dist, m);
+            fprintf(fOut, "MCD: %d\n\n", mcd);
         }
     }
     if (fIn) fclose(fIn);

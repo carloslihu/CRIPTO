@@ -43,6 +43,7 @@ int parsear(FILE *fIn, FILE **fAux);
  */
 int mcd(int a, int b);
 
+int mcdRec(int*t, int n);
 /**
  * @brief Realiza la descomposición de Euclides Extendida.
  *        Calcula el inverso de a modulo m en x

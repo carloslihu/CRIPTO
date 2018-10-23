@@ -65,6 +65,14 @@ int mcd(int a, int b) {
     return mcd(b % a, a);
 }
 
+int mcdRec(int*t, int n) {
+    int i, gcd = 0;
+    for (i = 0; i < n; i++) {
+        gcd = mcd(gcd, t[i]);
+    }
+    return gcd;
+}
+
 /**
  * @brief Realiza la descomposición de Euclides Extendida.
  *        Calcula el inverso de a modulo m en x
