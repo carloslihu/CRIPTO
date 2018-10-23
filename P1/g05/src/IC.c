@@ -12,8 +12,9 @@ int main(int argc, char **argv) {
     int long_index = 0, iflag = 1;
     char opt, simbolo_in;
     FILE *fIn = NULL, *fOut = NULL;
-    int l = 0, i = 0, j = 0, k = 0, n = 0, o = 0;
-    double IC_c = 0, IC_i = 0;
+    int lmin = 0, lmax = 0;
+    int i = 0, j = 0, k = 0, l = 0, n = 0, o = 0;
+    double IC_c = 0, IC_i = 0, IC_mean = 0;
     /*Tablas de porcentajes de cada letra del alfabeto en castellano */
     double f_c[M] = {11.96, 0.92, 2.92, 6.87, 16.78, 0.52, 0.73, 0.89, 4.15,
         0.30, 0.0, 8.37, 2.12, 7.01, 8.69, 2.77, 1.53, 4.94, 7.88, 3.31, 4.80,
@@ -31,7 +32,7 @@ int main(int argc, char **argv) {
         strncpy(entrada, argv[1], SIZE);
     } else {
 
-        printf("Ejecucion: %s {-l Ngrama} [-i filein] [-o fileout] {-E|-C}\n"
+        printf("Ejecucion: %s {-lmin Ngrama} {-lmax Ngrama} [-i filein] [-o fileout] {-E|-C}\n"
                 "(E significa English, C significa Castellano (por defecto))\n", argv[0]);
         exit(-1);
     }
@@ -39,27 +40,33 @@ int main(int argc, char **argv) {
     static struct option options[] = {
         {"E", no_argument, 0, 'e'},
         {"C", no_argument, 0, 'c'},
-        {"l", required_argument, 0, '1'},
-        {"i", required_argument, 0, '2'},
-        {"o", required_argument, 0, '3'},
+        {"lmin", required_argument, 0, '1'},
+        {"lmax", required_argument, 0, '2'},
+        {"i", required_argument, 0, '3'},
+        {"o", required_argument, 0, '4'},
         {0, 0, 0, 0}
     };
 
-    while ((opt = getopt_long_only(argc, argv, "1:2:3:e:c", options, &long_index)) != -1) {
+    while ((opt = getopt_long_only(argc, argv, "1:2:3:4:e:c", options, &long_index)) != -1) {
         switch (opt) {
             case '1':
-                l = atoi(optarg);
+                lmin = atoi(optarg);
                 break;
 
             case '2':
+                lmax = atoi(optarg);
+                break;
+
+            case '3':
                 fIn = fopen(optarg, "r");
                 if (!fIn) exit(-1);
                 break;
 
-            case '3':
+            case '4':
                 fOut = fopen(optarg, "w");
                 if (!fOut) exit(-1);
                 break;
+                
             case 'e':
                 iflag = 0;
                 break;
@@ -72,7 +79,7 @@ int main(int argc, char **argv) {
                 break;
 
             default:
-                printf("Ejecucion: %s {-l Ngrama} [-i filein] [-o fileout] {-E|-C}\n"
+                printf("Ejecucion: %s {-lmin Ngrama} {-lmax Ngrama} [-i filein] [-o fileout] {-E|-C}\n"
                         "(E significa English, C significa Castellano (por defecto))\n", argv[0]);
                 exit(-1);
                 break;
@@ -101,85 +108,103 @@ int main(int argc, char **argv) {
     IC_i /= 10000;
     fprintf(fOut, "IC Castellano: %lf\nIC Inglés: %lf\n\n", IC_c, IC_i);
 
-    /*Inicializamos variables*/
-    f = (int**) calloc(l, sizeof (int*));
-    IC = (double*) calloc(l, sizeof (double));
-    Mg = (double**) calloc(l, sizeof (double*));
-    for (i = 0; i < l; i++) {
-        f[i] = (int*) calloc(M, sizeof (int));
-        Mg[i] = (double*) calloc(M, sizeof (double));
-        for (j = 0; j < M; j++) {
-            f[i][j] = 0;
-            Mg[i][j] = 0;
+    /*Calculamos los IC en el intervalo pedido de Ngramas*/
+    for (l = lmin; l <= lmax; l++) {
+        fprintf(fOut, "\nNGRAMAS DE TAMAÑO %d\n\n", l);
+        fseek(fIn, 0, SEEK_SET);
+
+        /*Inicializamos variables*/
+        f = (int**) calloc(l, sizeof (int*));
+        IC = (double*) calloc(l, sizeof (double));
+        Mg = (double**) calloc(l, sizeof (double*));
+        for (i = 0; i < l; i++) {
+            f[i] = (int*) calloc(M, sizeof (int));
+            Mg[i] = (double*) calloc(M, sizeof (double));
+            for (j = 0; j < M; j++) {
+                f[i][j] = 0;
+                Mg[i][j] = 0;
+            }
+            IC[i] = 0;
         }
-        IC[i] = 0;
-    }
-    /*Leemos letras uno a uno y actualizamos las frecuencias absolutas */
-    /*f[i][k] guardará para el vector i, la frecuencia absoluta del caracter k */
-    for (i = 0, j = 0; fscanf(fIn, "%c", &simbolo_in) != EOF; i++) {
-        if (i == l) {
-            i = 0;
-            /*En j guardo el tamaño total de cada vector*/
-            j++;
+        /*Leemos letras uno a uno y actualizamos las frecuencias absolutas */
+        /*f[i][k] guardará para el vector i, la frecuencia absoluta del caracter k */
+        for (i = 0, j = 0; fscanf(fIn, "%c", &simbolo_in) != EOF; i++) {
+            if (i == l) {
+                i = 0;
+                /*En j guardo el tamaño total de cada vector*/
+                j++;
+            }
+            f[i][(int) (simbolo_in - 65)]++;
         }
-        f[i][(int) (simbolo_in - 65)]++;
-    }
-    /*Calculamos los indices de coincidencia de cada vector */
-    for (i = 0; i < l; i++) {
-        for (k = 0; k < M; k++) {
-            IC[i] += f[i][k] * (f[i][k] - 1);
-        }
-        /*En j guardamos el tamaño de cada vector */
-        IC[i] /= j * (j - 1);
-        fprintf(fOut, "IC_%d: %lf\n", i, IC[i]);
-    }
-    /*Asumimos que la l usada es correcta y procedemos a calcular la Mg para buscar la clave */
-    /* para cada coordenada Ki de la clave */
-    for (i = 0; i < l; i++) {
-        /* Si desplazamos -n las frecuencias */
-        fprintf(fOut, "Valores del Mg para K_%d\n", i);
-        max = 0;
-        imax = 0;
-        for (n = 0; n < M; n++) {
-            /* Calculamos los IC */
+        IC_mean = 0;
+        /*Calculamos los indices de coincidencia de cada vector */
+        for (i = 0; i < l; i++) {
             for (k = 0; k < M; k++) {
-                /* en o guardamos el indice del desplazamiento de frecuencias */
-                if ((k + n) < M) {
-                    o = k + n;
-                } else {
-                    o = k + n - M;
-                }
-
-                if (iflag == 1) {/*Si es castellano*/
-                    Mg[i][n] += f_c[k] * f[i][o];
-                } else {/*Si es ingles*/
-                    Mg[i][n] += f_i[k] * f[i][o];
-                }
+                IC[i] += f[i][k] * (f[i][k] - 1);
             }
-            /*Caculamos de cada vector el desplazamiento mas probable para ser 
-             la clave correcta */
-            if (max < Mg[i][n]) {
-                max = Mg[i][n];
-                imax = n;
-            }
-            Mg[i][n] = Mg[i][n] / (j * 100);
-
-            fprintf(fOut, "%lf\t", Mg[i][n]);
+            /*En j guardamos el tamaño de cada vector */
+            IC[i] /= j * (j - 1);
+            IC_mean += IC[i];
+            fprintf(fOut, "IC_%d: %lf\n", i, IC[i]);
         }
+        /*En IC_mean guardamos el IC medio de los vectores*/
+        IC_mean /= l;
+        /*Miramos si cumple el umbral, es decir, si el IC está suficientemente 
+         * cercano del idioma elegido*/
+        if ((iflag == 0 && (IC_i - IC_mean) < ERROR) ||
+                (iflag == 1 && (IC_c - IC_mean) < ERROR)) {
+            /*Asumimos que la l usada es correcta y procedemos a calcular la Mg para buscar la clave */
+            /* para cada coordenada Ki de la clave */
+            fprintf(fOut, "SE CUMPLE IC DEL IDIOMA PARA NGRAMAS DE TAMAÑO %d:\n", l);
 
-        fprintf(fOut, "\nLa posible clave para K%d es %c\n\n", i, imax + K);
-    }
+            for (i = 0; i < l; i++) {
+                /* Si desplazamos -n las frecuencias */
+                fprintf(fOut, "Valores del Mg para K_%d\n", i);
+                max = 0;
+                imax = 0;
+                for (n = 0; n < M; n++) {
+                    /* Calculamos los IC */
+                    for (k = 0; k < M; k++) {
+                        /* en o guardamos el indice del desplazamiento de frecuencias */
+                        if ((k + n) < M) {
+                            o = k + n;
+                        } else {
+                            o = k + n - M;
+                        }
 
-    for (i = 0; i < l; i++) {
-        free(f[i]);
-        free(Mg[i]);
+                        if (iflag == 1) {/*Si es castellano*/
+                            Mg[i][n] += f_c[k] * f[i][o];
+                        } else {/*Si es ingles*/
+                            Mg[i][n] += f_i[k] * f[i][o];
+                        }
+                    }
+                    /*Caculamos de cada vector el desplazamiento mas probable para ser 
+                     la clave correcta */
+                    if (max < Mg[i][n]) {
+                        max = Mg[i][n];
+                        imax = n;
+                    }
+                    Mg[i][n] = Mg[i][n] / (j * 100);
+
+                    fprintf(fOut, "%lf\t", Mg[i][n]);
+                }
+
+                fprintf(fOut, "\nLa posible clave para K%d es %c\n\n", i, imax + K);
+            }
+        }
+        /*Liberamos los recursos*/
+        for (i = 0; i < l; i++) {
+            free(f[i]);
+            free(Mg[i]);
+        }
+        free(f);
+        free(Mg);
+        free(IC);
     }
-    free(f);
-    free(Mg);
-    free(IC);
     if (fIn) fclose(fIn);
     if (fOut) fclose(fOut);
+    
     printf("\n");
+    
     return 0;
 }
-

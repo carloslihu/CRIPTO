@@ -22,6 +22,8 @@ Autores: Carlos Li Hu y David López Ramos
 #define TAM 1000000
 #define K 65 /* Desplazamiento para operar A-Z en Zm */
 #define SIZE 512
+#define ERROR 0.01
+
 /**
  * @brief Lee el fichero fIn las letras, y las pasa a mayusculas y les quita el acento.
  *  se escriben en fAux sólo los caracteres en mayuscula (ignora los espacios)
@@ -43,7 +45,16 @@ int parsear(FILE *fIn, FILE **fAux);
  */
 int mcd(int a, int b);
 
+/**
+ * @brief Calcula el maximo comun divisor para un array de valores
+ *
+ * @param tabla con los valores a calcular el mcd
+ * @param tamaño de la tabla
+ *
+ * @return el maximo comun divisor
+ */
 int mcdRec(int*t, int n);
+
 /**
  * @brief Realiza la descomposición de Euclides Extendida.
  *        Calcula el inverso de a modulo m en x
