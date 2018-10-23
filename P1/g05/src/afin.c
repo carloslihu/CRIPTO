@@ -177,8 +177,8 @@ int main(int argc, char **argv) {
 
             //aux es nuestro simbolo de entrada
             //aux2 es nuestro simbolo de salida
-            mpz_set_ui(aux, (int) simbolo_in);
             simbolo_in -= K;
+            mpz_set_ui(aux, (int) simbolo_in);
 
             /*Cifrar*/
             if (cifrar == 1) {
