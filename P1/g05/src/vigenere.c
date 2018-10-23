@@ -14,7 +14,7 @@ int main(int argc, char **argv) {
     char clave[SIZE];
     int long_index = 0;
     char opt, fill = 'W';
-    FILE *fIn, *fOut, *fAux;
+    FILE *fIn = NULL, *fOut = NULL, *fAux = NULL;
     int n, i, m;
     int cifrar = -1, count = 0;
 
