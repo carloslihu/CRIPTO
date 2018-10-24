@@ -168,7 +168,7 @@ int main(int argc, char **argv) {
     if (!fOut) {
         fOut = stdout;
     }
-    
+
     /*parsear texto*/
     parsear(fIn, &fAux);
     fclose(fAux);

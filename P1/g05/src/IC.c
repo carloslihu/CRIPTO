@@ -66,7 +66,7 @@ int main(int argc, char **argv) {
                 fOut = fopen(optarg, "w");
                 if (!fOut) exit(-1);
                 break;
-                
+
             case 'e':
                 iflag = 0;
                 break;
@@ -203,8 +203,8 @@ int main(int argc, char **argv) {
     }
     if (fIn) fclose(fIn);
     if (fOut) fclose(fOut);
-    
+
     printf("\n");
-    
+
     return 0;
 }

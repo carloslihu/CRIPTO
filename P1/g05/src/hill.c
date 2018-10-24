@@ -225,7 +225,7 @@ int main(int argc, char **argv) {
                 /*modulos con resultado de operacion negativa*/
                 if (simbolo_out < 0) simbolo_out += m;
                 simbolo_out += K;
-                
+
                 /*escribir fichero salida*/
                 fwrite(&simbolo_out, 1, 1, fOut);
 

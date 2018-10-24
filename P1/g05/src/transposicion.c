@@ -91,36 +91,35 @@ int main(int argc, char **argv) {
     inversa = (int*) malloc(sizeof (int)*n);
 
     /*crear permutacion aleatoria tamano n*/
-    if(flag_aleatoria == 1){
-        if(cifrar == 1){
+    if (flag_aleatoria == 1) {
+        if (cifrar == 1) {
             fPer = fopen("permutacion.dat", "w");
-            srand (time(NULL));
-            for(i = 0; i < n; i++) {
+            srand(time(NULL));
+            for (i = 0; i < n; i++) {
                 permutacion[i] = i;
             }
-            for(i = 0; i < n; i++) {
+            for (i = 0; i < n; i++) {
                 j = (rand() % n);
-                temp = permutacion[i]; permutacion[i] = permutacion[j]; permutacion[j] = temp;
+                temp = permutacion[i];
+                permutacion[i] = permutacion[j];
+                permutacion[j] = temp;
             }
-            for(i = 0; i < n; i++) {
+            for (i = 0; i < n; i++) {
                 permutacion[i]++;
                 simbolo_out = permutacion[i] + '0';
                 fwrite(&simbolo_out, 1, 1, fPer);
                 fwrite(&espacio, 1, 1, fPer);
-            }   
+            }
             fclose(fPer);
-        }
-        else{
+        } else {
             fPer = fopen("permutacion.dat", "r");
             for (i = 0; i < n; i++) {
                 if (!fscanf(fPer, "%d", &permutacion[i]))
                     break;
             }
         }
-    }
-
-    /*leer fichero claves*/
-    else{
+    }/*leer fichero claves*/
+    else {
         for (i = 0, j = 0; i < strlen(p); i++) {
             if (0 < (p[i] - '0') && (p[i] - '0') <= n) {
                 permutacion[j] = (p[i] - '0');

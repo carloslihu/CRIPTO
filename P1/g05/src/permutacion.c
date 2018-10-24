@@ -218,7 +218,7 @@ int main(int argc, char **argv) {
     free(matrix);
     free(matrix2);
     free(matrix3);
-    
+
     printf("\n");
 
     if (fIn) fclose(fIn);
