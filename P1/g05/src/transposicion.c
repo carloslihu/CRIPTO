@@ -6,6 +6,7 @@ Autores: Carlos Li Hu y David López Ramos
  ***************************************************************************/
 
 #include "../includes/utils.h"
+#include <time.h>
 
 /* PROGRAMA PRINCIPAL */
 int main(int argc, char **argv) {
@@ -13,16 +14,17 @@ int main(int argc, char **argv) {
     char cadena[SIZE];
     int long_index = 0;
     int *permutacion = NULL, *inversa = NULL;
-    char opt, simbolo_out, fill = 'W';
+    char opt, simbolo_out, fill = 'W', espacio = ' ';
     char* p = NULL;
-    FILE *fIn = NULL, *fOut = NULL, *fAux = NULL;
+    FILE *fIn = NULL, *fOut = NULL, *fAux = NULL, *fPer = NULL;
     int cifrar = -1, count = 0;
     int i = 0, j = 0, n = 0;
+    int flag_aleatoria = 1, temp = 0;
 
     if (argc > 1) {
         strncpy(entrada, argv[1], SIZE);
     } else {
-        printf("Ejecucion: %s {-C | -D} {-p permutacion | -n Nperm} [-i filein] [-o fileout]\n", argv[0]);
+        printf("Ejecucion: %s {-C | -D} [-p permutacion] {-n Nperm} [-i filein] [-o fileout]\n", argv[0]);
         printf("Ejemplo: %s -C -p \"5 4 3 2 1\" -n 5 -i entrada.txt -o codificado.txt\n", argv[0]);
         exit(-1);
     }
@@ -49,6 +51,7 @@ int main(int argc, char **argv) {
 
             case '1':
                 p = optarg;
+                flag_aleatoria = 0;
                 break;
 
             case '2':
@@ -69,7 +72,7 @@ int main(int argc, char **argv) {
                 break;
 
             default:
-                printf("Ejecucion: %s {-C | -D} {-p permutacion | -n Nperm} [-i filein] [-o fileout]\n", argv[0]);
+                printf("Ejecucion: %s {-C | -D} [-p permutacion] {-n Nperm} [-i filein] [-o fileout]\n", argv[0]);
                 printf("Ejemplo: %s -C -p \"5 4 3 2 1\" -n 5 -i entrada.txt -o codificado.txt\n", argv[0]);
                 exit(-1);
                 break;
@@ -78,20 +81,51 @@ int main(int argc, char **argv) {
 
     //Si no se ha especificado si cifrar o descifrar
     if (cifrar == -1) {
-        printf("Ejecucion: %s {-C | -D} {-p permutacion | -n Nperm} [-i filein] [-o fileout]\n", argv[0]);
+        printf("Ejecucion: %s {-C | -D} [-p permutacion] {-n Nperm} [-i filein] [-o fileout]\n", argv[0]);
         printf("Ejemplo: %s -C -p \"5 4 3 2 1\" -n 5 -i entrada.txt -o codificado.txt\n", argv[0]);
         exit(-1);
     }
 
 
-    /*leer fichero claves*/
     permutacion = (int*) malloc(sizeof (int)*n);
     inversa = (int*) malloc(sizeof (int)*n);
 
-    for (i = 0, j = 0; i < strlen(p); i++) {
-        if (0 < (p[i] - '0') && (p[i] - '0') <= n) {
-            permutacion[j] = (p[i] - '0');
-            j++;
+    /*crear permutacion aleatoria tamano n*/
+    if(flag_aleatoria == 1){
+        if(cifrar == 1){
+            fPer = fopen("permutacion.dat", "w");
+            srand (time(NULL));
+            for(i = 0; i < n; i++) {
+                permutacion[i] = i;
+            }
+            for(i = 0; i < n; i++) {
+                j = (rand() % n);
+                temp = permutacion[i]; permutacion[i] = permutacion[j]; permutacion[j] = temp;
+            }
+            for(i = 0; i < n; i++) {
+                permutacion[i]++;
+                simbolo_out = permutacion[i] + '0';
+                fwrite(&simbolo_out, 1, 1, fPer);
+                fwrite(&espacio, 1, 1, fPer);
+            }   
+            fclose(fPer);
+        }
+        else{
+            fPer = fopen("permutacion.dat", "r");
+            for (i = 0; i < n; i++) {
+                if (!fscanf(fPer, "%d", &permutacion[i]))
+                    break;
+            }
+        }
+    }
+
+    /*leer fichero claves*/
+    else{
+        for (i = 0, j = 0; i < strlen(p); i++) {
+            if (0 < (p[i] - '0') && (p[i] - '0') <= n) {
+                permutacion[j] = (p[i] - '0');
+                j++;
+            }
         }
     }
 

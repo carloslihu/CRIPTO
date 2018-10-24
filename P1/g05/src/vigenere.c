@@ -22,6 +22,7 @@ int main(int argc, char **argv) {
         strncpy(entrada, argv[1], SIZE);
     } else {
         printf("Ejecucion: %s {-C|-D} {-m |Zm|} {-k clave} [-i filein] [-o fileout]\n", argv[0]);
+        printf("Ejemplo: %s -C -m 26 -k FARY\n", argv[0]);
         exit(-1);
     }
 
@@ -68,6 +69,7 @@ int main(int argc, char **argv) {
 
             default:
                 printf("Ejecucion: %s {-C|-D} {-m |Zm|} {-k clave} [-i filein] [-o fileout]\n", argv[0]);
+                printf("Ejemplo: %s -C -m 26 -k FARY\n", argv[0]);
                 exit(-1);
                 break;
         }
@@ -76,6 +78,7 @@ int main(int argc, char **argv) {
     /*Si no se ha especificado si cifrar o descifrar*/
     if (cifrar == -1) {
         printf("Ejecucion: %s {-C|-D} {-m |Zm|} {-k clave} [-i filein] [-o fileout]\n", argv[0]);
+        printf("Ejemplo: %s -C -m 26 -k FARY\n", argv[0]);
         exit(-1);
     }
 
@@ -130,9 +133,9 @@ int main(int argc, char **argv) {
         }
     }
 
+    printf("\n");
     if (fIn) fclose(fIn);
     if (fOut) fclose(fOut);
-    printf("\n");
     return 0;
 }
 
