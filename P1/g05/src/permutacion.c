@@ -197,22 +197,6 @@ int main(int argc, char **argv) {
                 }
 
             }
-            /*
-                        printf("Matriz\n");
-                        for(i=0;i<m;i++){
-                             for(j=0;j<n;j++){
-                                printf("%c ", matrix[i][j]);
-                            }
-                            printf("\n");
-                        }
-                        printf("Matriz2\n");
-                        for(i=0;i<m;i++){
-                             for(j=0;j<n;j++){
-                                printf("%c ", matrix2[i][j]);
-                            }
-                            printf("\n");
-                        }
-                        printf("Matriz3\n");*/
             for (i = 0; i < m; i++) {
                 for (j = 0; j < n; j++) {
                     /*printf("%c ", matrix3[i][j]);*/
@@ -225,9 +209,6 @@ int main(int argc, char **argv) {
 
     }
 
-    if (fIn) fclose(fIn);
-    if (fOut) fclose(fOut);
-
     for (i = 0; i < m; i++) {
         free(matrix[i]);
         free(matrix2[i]);
@@ -237,8 +218,11 @@ int main(int argc, char **argv) {
     free(matrix);
     free(matrix2);
     free(matrix3);
-
+    
     printf("\n");
+
+    if (fIn) fclose(fIn);
+    if (fOut) fclose(fOut);
 
     return 0;
 

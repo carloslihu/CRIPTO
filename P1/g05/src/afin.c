@@ -81,6 +81,7 @@ int main(int argc, char **argv) {
         strncpy(entrada, argv[1], SIZE);
     } else {
         printf("Ejecucion: %s {-C|-D} {-m |Zm|} {-a N×} {-b N+} [-i filein] [-o fileout]\n", argv[0]);
+        printf("Ejemplo: %s -C -m 26 -a 5 -b 4\n", argv[0]);
         exit(-1);
     }
 
@@ -133,6 +134,7 @@ int main(int argc, char **argv) {
 
             default:
                 printf("Ejecucion: %s {-C|-D} {-m |Zm|} {-a N×} {-b N+} [-i filein] [-o fileout]\n", argv[0]);
+                printf("Ejemplo: %s -C -m 26 -a 5 -b 4\n", argv[0]);
                 exit(-1);
                 break;
         }
@@ -140,6 +142,7 @@ int main(int argc, char **argv) {
     //Si no se ha especificado si cifrar o descifrar
     if (cifrar == -1) {
         printf("Ejecucion: %s {-C|-D} {-m |Zm|} {-a N×} {-b N+} [-i filein] [-o fileout]\n", argv[0]);
+        printf("Ejemplo: %s -C -m 26 -a 5 -b 4\n", argv[0]);
         exit(-1);
     }
     /* Comprobamos si la clave es válida */
@@ -204,10 +207,10 @@ int main(int argc, char **argv) {
 
     }
 
+    printf("\n");
     mpz_clears(a, b, m, inv, t, mcd, aux, aux2, NULL);
     if (fIn) fclose(fIn);
     if (fOut) fclose(fOut);
-    printf("\n");
     return 0;
 
 

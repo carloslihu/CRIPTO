@@ -41,6 +41,7 @@ int main(int argc, char **argv) {
         strncpy(entrada, argv[1], SIZE);
     } else {
         printf("Ejecucion: %s {-C|-D} {-m |Zm|} {-n NK} {-k fileK} [-i filein] [-o fileout]\n", argv[0]);
+        printf("Ejemplo: %s -C -m 26 -n 3 -k claves.txt \n", argv[0]);
         exit(-1);
     }
 
@@ -97,6 +98,7 @@ int main(int argc, char **argv) {
 
             default:
                 printf("Ejecucion: %s {-C|-D} {-m |Zm|} {-n NK} {-k fileK} [-i filein] [-o fileout]\n", argv[0]);
+                printf("Ejemplo: %s -C -m 26 -n 3 -k claves.txt \n", argv[0]);
                 exit(-1);
                 break;
         }
@@ -104,6 +106,7 @@ int main(int argc, char **argv) {
     //Si no se ha especificado si cifrar o descifrar
     if (cifrar == -1) {
         printf("Ejecucion: %s {-C|-D} {-m |Zm|} {-n NK} {-k fileK} [-i filein] [-o fileout]\n", argv[0]);
+        printf("Ejemplo: %s -C -m 26 -n 3 -k claves.txt \n", argv[0]);
         exit(-1);
     }
 
@@ -138,7 +141,7 @@ int main(int argc, char **argv) {
         exit(-1);
     }
 
-    printf("El determinante es %d\n", det);
+    /*printf("El determinante es %d\n", det);*/
     mcdExtended(det, m, &inv, &muda);
 
     if (mcd(m, det) != 1) {
@@ -232,10 +235,9 @@ int main(int argc, char **argv) {
 
     }
 
+    printf("\n");
     if (fIn) fclose(fIn);
     if (fOut) fclose(fOut);
-
-    printf("\n");
 
     return 0;
 

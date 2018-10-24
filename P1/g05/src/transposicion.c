@@ -148,12 +148,11 @@ int main(int argc, char **argv) {
 
     }
 
+    printf("\n");
     if (fIn) fclose(fIn);
     if (fOut) fclose(fOut);
     free(permutacion);
     free(inversa);
-
-    printf("\n");
 
     return 0;
 
