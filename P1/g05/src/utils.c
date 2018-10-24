@@ -65,6 +65,14 @@ int mcd(int a, int b) {
     return mcd(b % a, a);
 }
 
+/**
+ * @brief Calcula el maximo comun divisor para un array de valores
+ *
+ * @param tabla con los valores a calcular el mcd
+ * @param tamaño de la tabla
+ *
+ * @return el maximo comun divisor
+ */
 int mcdRec(int*t, int n) {
     int i, gcd = 0;
     for (i = 0; i < n; i++) {

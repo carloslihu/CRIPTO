@@ -15,7 +15,7 @@ int main(int argc, char **argv) {
     int long_index = 0;
     char opt, fill = 'W';
     FILE *fIn = NULL, *fOut = NULL, *fAux = NULL;
-    int n, i, m;
+    int n, i, m, l;
     int cifrar = -1, count = 0;
 
     if (argc > 1) {
@@ -108,18 +108,23 @@ int main(int argc, char **argv) {
         }
         while (fread(cadena, sizeof (char), n, fIn) != 0) {
             for (i = 0; i < n; i++) {
-                if ('A' <= cadena[i] && cadena[i] <= 'Z') {
-                    cadena[i] -= K;
-                    /*Cifrar*/
-                    if (cifrar == 1) {
-                        cadena[i] += clave[i];
-                    }/*Descifrar*/
-                    else {
-                        cadena[i] -= clave[i];
+
+                cadena[i] -= K;
+                /*Cifrar*/
+                if (cifrar == 1) {
+                    cadena[i] += clave[i];
+                }/*Descifrar*/
+                else {
+                    /*Controlamos si el resultado se sale de Zm*/
+                    l = cadena[i] - clave[i];
+                    if (l >= 0) {
+                        cadena[i] = l;
+                    } else {
+                        cadena[i] = m + l;
                     }
-                    cadena[i] %= m;
-                    cadena[i] += K;
                 }
+                cadena[i] %= m;
+                cadena[i] += K;
             }
             fwrite(cadena, sizeof (char), n, fOut);
         }
