@@ -117,9 +117,7 @@ int main(int argc, char **argv) {
         for (j = 0; j < n; j++) {
             if (!fscanf(fK, "%d", &matrix[i][j]))
                 break;
-            //printf("%d ", matrix[i][j]);
         }
-        //printf("\n");
     }
     fclose(fK);
 
@@ -141,7 +139,6 @@ int main(int argc, char **argv) {
         exit(-1);
     }
 
-    /*printf("El determinante es %d\n", det);*/
     mcdExtended(det, m, &inv, &muda);
 
     if (mcd(m, det) != 1) {
@@ -208,7 +205,7 @@ int main(int argc, char **argv) {
     /*leer fichero entrada o estandar*/
     if (fIn) {
         while (fread(cadena, sizeof (char), n, fIn) != 0) {
-            /*convertir a formatao 0,...,n-1*/
+            /*convertir a formato 0,...,n-1*/
             for (i = 0; i < n; i++) {
                 cadena[i] -= K;
             }

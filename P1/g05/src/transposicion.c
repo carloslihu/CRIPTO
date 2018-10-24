@@ -6,7 +6,6 @@ Autores: Carlos Li Hu y David López Ramos
  ***************************************************************************/
 
 #include "../includes/utils.h"
-#include <time.h>
 
 /* PROGRAMA PRINCIPAL */
 int main(int argc, char **argv) {
@@ -163,7 +162,6 @@ int main(int argc, char **argv) {
     /*leer fichero entrada o estandar*/
     if (fIn) {
         while (fread(cadena, sizeof (char), n, fIn) != 0) {
-
             for (i = 0; i < n; i++) {
                 /*Cifrar*/
                 if (cifrar == 1) {
@@ -174,11 +172,8 @@ int main(int argc, char **argv) {
                 }
 
                 fwrite(&simbolo_out, 1, 1, fOut);
-
             }
-
         }
-
     }
 
     printf("\n");

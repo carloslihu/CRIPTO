@@ -201,10 +201,10 @@ int main(int argc, char **argv) {
         free(Mg);
         free(IC);
     }
-    if (fIn) fclose(fIn);
-    if (fOut) fclose(fOut);
 
     printf("\n");
+    if (fIn) fclose(fIn);
+    if (fOut) fclose(fOut);
 
     return 0;
 }

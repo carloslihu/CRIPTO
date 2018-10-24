@@ -50,12 +50,10 @@ int main(int argc, char **argv) {
 
             case '1':
                 k1 = optarg;
-                /*printf("K1 es %s\n", k1);*/
                 break;
 
             case '2':
                 k2 = optarg;
-                /*printf("K2 es %s\n", k2);*/
                 break;
 
             case '3':
@@ -195,18 +193,13 @@ int main(int argc, char **argv) {
                         matrix3[r][s] = matrix2[t - 1][s];
                     }
                 }
-
             }
             for (i = 0; i < m; i++) {
                 for (j = 0; j < n; j++) {
-                    /*printf("%c ", matrix3[i][j]);*/
                     fwrite(&matrix3[i][j], 1, 1, fOut);
                 }
-                /*printf("\n");*/
             }
-
         }
-
     }
 
     for (i = 0; i < m; i++) {

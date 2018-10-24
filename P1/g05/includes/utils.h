@@ -9,6 +9,7 @@ Autores: Carlos Li Hu y David López Ramos
 #ifndef UTILS_H
 #define UTILS_H
 
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h> 
@@ -16,13 +17,14 @@ Autores: Carlos Li Hu y David López Ramos
 #include <time.h>
 #include <getopt.h>
 #include <gmp.h>
+#include <time.h>
 
 /*Definicion de constantes *************************************************/
-#define M 26 /* Tamaño del alfabeto */
-#define TAM 1000000
-#define K 65 /* Desplazamiento para operar A-Z en Zm */
-#define SIZE 512
-#define ERROR 0.01
+#define M 26 /* tamaño del alfabeto */
+#define TAM 1000000 /*tamaño para vectores en IC*/
+#define K 65 /* desplazamiento para operar A-Z en Zm */
+#define SIZE 512 /*tamaño de cadenas*/
+#define ERROR 0.01 /*error tolerado para IC*/
 
 /**
  * @brief Lee el fichero fIn las letras, y las pasa a mayusculas y les quita el acento.

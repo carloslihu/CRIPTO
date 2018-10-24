@@ -6,7 +6,6 @@ Autores: Carlos Li Hu y David López Ramos
  ***************************************************************************/
 
 #include "../includes/utils.h"
-/*Definicion de constantes *************************************************/
 
 /**
  * @brief Calcula el maximo comun divisor usando gmp

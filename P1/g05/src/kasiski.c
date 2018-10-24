@@ -96,8 +96,9 @@ int main(int argc, char **argv) {
             fprintf(fOut, "MCD: %d\n\n", mcd);
         }
     }
+    printf("\n");
     if (fIn) fclose(fIn);
     if (fOut) fclose(fOut);
-    printf("\n");
+
     return 0;
 }
