@@ -80,7 +80,7 @@ int main(int argc, char **argv) {
     }
 
     //Si no se ha especificado si cifrar o descifrar
-    if (cifrar == -1) {
+    if (cifrar == -1 || n == 0) {
         printf("Ejecucion: %s {-C | -D} [-p permutacion] {-n Nperm} [-i filein] [-o fileout]\n", argv[0]);
         printf("Ejemplo: %s -C -p \"5 4 3 2 1\" -n 5 -i entrada.txt -o codificado.txt\n", argv[0]);
         exit(-1);
