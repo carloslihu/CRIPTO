@@ -7,8 +7,6 @@ Autores: Carlos Li Hu y David López Ramos
 
 #include "../includes/utils.h"
 
-
-
 /* PROGRAMA PRINCIPAL */
 int main(int argc, char **argv) {
     char entrada[SIZE], cadena[SIZE];
@@ -66,7 +64,7 @@ int main(int argc, char **argv) {
         }
     }
 
-    if(equi == -1){
+    if (equi == -1) {
         printf("Ejecucion: %s {-P|-I} [-i filein] [-o fileout]\n", argv[0]);
         /*printf("Ejemplo: %s -C -m 26 -a 5 -b 4\n", argv[0]);*/
         exit(-1);
@@ -92,23 +90,21 @@ int main(int argc, char **argv) {
     fIn = fopen("auxiliar.txt", "r");
     srand(time(NULL));
 
-     /*leer fichero entrada o estandar*/
+    /*leer fichero entrada o estandar*/
     if (fIn) {
         while (fscanf(fIn, "%c", &simbolo_in) != EOF) {
             simbolo_in -= K;
-            p_p[(int)simbolo_in]++;
+            p_p[(int) simbolo_in]++;
 
-            if(equi == 1){
+            if (equi == 1) {
                 k = (rand() % M);
-            }
-
-            else{
+            } else {
 
             }
             simbolo_out = simbolo_in + k;
             simbolo_out %= M;
-            p_c[(int)simbolo_out]++;
-            p_cond[(int)simbolo_in][(int)simbolo_out]++;
+            p_c[(int) simbolo_out]++;
+            p_cond[(int) simbolo_in][(int) simbolo_out]++;
             cont++;
             simbolo_out += K;
             fwrite(&simbolo_out, sizeof (char), 1, fOut);
@@ -117,20 +113,20 @@ int main(int argc, char **argv) {
 
     fprintf(fOut, "\n");
 
-    for(i=0; i<M; i++){
+    for (i = 0; i < M; i++) {
         p_p[i] /= cont;
         p_c[i] /= cont;
-        for(j=0; j<M; j++){
-            p_cond[i][j] /= (p_c[j]*cont);
+        for (j = 0; j < M; j++) {
+            p_cond[i][j] /= (p_c[j] * cont);
         }
-        fprintf(fOut, "Pp(%c) = %lf, Pc(%c) = %lf\n", i+K, p_p[i], i+K, p_c[i]);
+        fprintf(fOut, "Pp(%c) = %lf, Pc(%c) = %lf\n", i + K, p_p[i], i + K, p_c[i]);
     }
 
 
-    for(i=0; i<M; i++){
-        for(j=0; j<M; j++){
-            p_cond[i][j] /= (p_c[j]*cont);
-            fprintf(fOut, "Pp(%c|%c) = %lf\t", i+K, j+K, p_cond[i][j]);
+    for (i = 0; i < M; i++) {
+        for (j = 0; j < M; j++) {
+            p_cond[i][j] /= (p_c[j] * cont);
+            fprintf(fOut, "Pp(%c|%c) = %lf\t", i + K, j + K, p_cond[i][j]);
         }
         fprintf(fOut, "\n");
     }
@@ -138,7 +134,7 @@ int main(int argc, char **argv) {
 
     if (fIn) fclose(fIn);
     if (fOut) fclose(fOut);
-   
+
     return 0;
 
 
