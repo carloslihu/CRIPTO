@@ -6,13 +6,13 @@ CFLAGS= -g -Wall
 LIBS= -lgmp -L. -lm
 
 _DEPS =utils.h
-_OBJ =utils.o
+_OBJ =utils.o DES_tables.o AES_tables.o
 
 DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))
 
 OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 
-all: autores carpetas seg-perf
+all: autores carpetas seg-perf desCBC
 
 $(ODIR)/%.o: $(SDIR)/%.c $(DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS)
@@ -33,7 +33,8 @@ carpetas:
 seg-perf: $(OBJ) $(ODIR)/seg-perf.o
 	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
 	
-#P3
+desCBC: $(OBJ) $(ODIR)/desCBC.o
+	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
 tar:
 	tar -czvf F-CSI_p2_g05.tgz ../g05/
 
@@ -41,4 +42,4 @@ tar:
 clean:
 	-rm -f $(ODIR)/*.o *~ core $(INCDIR)/*~ 
 	-rm -f *.tar.gz
-	-rm -f seg-perf
+	-rm -f seg-perf desCBC
