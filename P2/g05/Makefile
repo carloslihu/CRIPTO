@@ -3,7 +3,7 @@ ODIR=obj
 SDIR=src
 CC=gcc
 CFLAGS= -g -Wall
-LIBS= -lgmp -L.
+LIBS= -lgmp -L. -lm
 
 _DEPS =utils.h
 _OBJ =utils.o

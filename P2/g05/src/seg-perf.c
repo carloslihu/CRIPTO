@@ -89,7 +89,6 @@ int main(int argc, char **argv) {
     fclose(fAux);
     fIn = fopen("auxiliar.txt", "r");
     srand(time(NULL));
-
     /*leer fichero entrada o estandar*/
     if (fIn) {
         while (fscanf(fIn, "%c", &simbolo_in) != EOF) {
@@ -99,6 +98,7 @@ int main(int argc, char **argv) {
             if (equi == 1) {
                 k = (rand() % M);
             } else {
+                k = (int) randn(13, 1) % M;
 
             }
             simbolo_out = simbolo_in + k;
@@ -116,7 +116,8 @@ int main(int argc, char **argv) {
     for (i = 0; i < M; i++) {
         p_p[i] /= cont;
         p_c[i] /= cont;
-        fprintf(fOut, "Pp(%c) = %lf, Pc(%c) = %lf\n", i + K, p_p[i], i + K, p_c[i]);
+        //fprintf(fOut, "Pp(%c) = %lf, Pc(%c) = %lf\n", i + K, p_p[i], i + K, p_c[i]);
+        fprintf(fOut, "Pp(%c) = %lf\n", i + K, p_p[i]);
     }
 
 
