@@ -107,18 +107,15 @@ int main(int argc, char **argv) {
             p_cond[(int) simbolo_in][(int) simbolo_out]++;
             cont++;
             simbolo_out += K;
-            fwrite(&simbolo_out, sizeof (char), 1, fOut);
+            //fwrite(&simbolo_out, sizeof (char), 1, fOut);
         }
     }
 
     fprintf(fOut, "\n");
-
+    /*Normalizamos las probabilidades*/
     for (i = 0; i < M; i++) {
         p_p[i] /= cont;
         p_c[i] /= cont;
-        for (j = 0; j < M; j++) {
-            p_cond[i][j] /= (p_c[j] * cont);
-        }
         fprintf(fOut, "Pp(%c) = %lf, Pc(%c) = %lf\n", i + K, p_p[i], i + K, p_c[i]);
     }
 
