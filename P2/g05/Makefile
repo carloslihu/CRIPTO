@@ -5,7 +5,7 @@ CC=gcc
 CFLAGS= -g -Wall
 LIBS= -lgmp -L. -lm
 
-_DEPS =utils.h
+_DEPS =utils.h DES_tables.h AES_tables.h
 _OBJ =utils.o DES_tables.o AES_tables.o
 
 DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))

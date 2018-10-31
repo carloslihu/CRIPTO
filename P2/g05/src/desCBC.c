@@ -5,16 +5,17 @@ Autores: Carlos Li Hu y David López Ramos
 2018 EPS-UAM
  ***************************************************************************/
 
-#include "../includes/utils.h"
+#include "../includes/DES_tables.h"
 
 /* PROGRAMA PRINCIPAL */
 int main(int argc, char **argv) {
     char entrada[SIZE], cadena[SIZE];
     int long_index = 0;
-    char opt, simbolo_in, simbolo_out;
+    char opt;
     FILE *fIn = NULL, *fOut = NULL;
     int cifrar = -1, i = 0, j = 0, k = 0;
     int count;
+    uint64_t key;
 
     if (argc > 1) {
         strncpy(entrada, argv[1], SIZE);
@@ -46,6 +47,8 @@ int main(int argc, char **argv) {
                 break;
 
             case '1':
+                key = strtoull(optarg, NULL, 16);
+                printf("0x%"PRIx64"\n", key);
                 break;
 
             case '2':
@@ -72,6 +75,7 @@ int main(int argc, char **argv) {
                 break;
         }
     }
+    /*Calculamos subclaves*//*TODO en función en DES_tables.c*/
 
     /*crear entrada estandar*/
     if (!fIn) {
@@ -94,8 +98,9 @@ int main(int argc, char **argv) {
     for (i = 0; i < 4 - count && count != 0; i++) fwrite("0", 1, 1, fIn);
     /*leer fichero entrada o estandar*/
     fseek(fIn, 0, SEEK_SET);
+    /*Aquí vamos leyendo del fichero*/
     if (fIn) {
-
+        /*TODO*/
     }
 
     if (fIn) fclose(fIn);

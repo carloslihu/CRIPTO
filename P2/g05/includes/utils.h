@@ -19,6 +19,8 @@ Autores: Carlos Li Hu y David López Ramos
 #include <gmp.h>
 #include <time.h>
 #include <math.h>
+#include <stdint.h>
+#include <inttypes.h>
 /*Definicion de constantes *************************************************/
 #define M 26 /* tamaño del alfabeto */
 #define TAM 1000000 /*tamaño para vectores en IC*/
