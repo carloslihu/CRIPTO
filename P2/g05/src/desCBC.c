@@ -12,8 +12,9 @@ int main(int argc, char **argv) {
     char entrada[SIZE], cadena[SIZE];
     int long_index = 0;
     char opt, simbolo_in, simbolo_out;
-    FILE *fIn = NULL, *fOut = NULL, *fAux = NULL;
+    FILE *fIn = NULL, *fOut = NULL;
     int cifrar = -1, i = 0, j = 0, k = 0;
+    int count;
 
     if (argc > 1) {
         strncpy(entrada, argv[1], SIZE);
@@ -51,7 +52,7 @@ int main(int argc, char **argv) {
                 break;
 
             case '3':
-                fIn = fopen(optarg, "r");
+                fIn = fopen(optarg, "r+");
                 if (!fIn) exit(-1);
                 break;
 
@@ -79,18 +80,20 @@ int main(int argc, char **argv) {
         fIn = fopen("teclado.txt", "w");
         fwrite(cadena, 1, strlen(cadena), fIn);
         fclose(fIn);
-        fIn = fopen("teclado.txt", "r");
+        fIn = fopen("teclado.txt", "r+");
     }
     /* Si no se especifica, usamos salida estandar */
     if (!fOut) {
         fOut = stdout;
     }
 
-    /*parsear texto*/
-    parsear(fIn, &fAux);
-    fclose(fAux);
-    fIn = fopen("auxiliar.txt", "r");
+    /*rellenar texto para hacerlo modulo 4 B*/
+    fseek(fIn, 0, SEEK_END);
+    count = ftell(fIn) % 4; /*macro para 4*/
+
+    for (i = 0; i < 4 - count && count != 0; i++) fwrite("0", 1, 1, fIn);
     /*leer fichero entrada o estandar*/
+    fseek(fIn, 0, SEEK_SET);
     if (fIn) {
 
     }
