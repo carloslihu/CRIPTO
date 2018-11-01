@@ -171,3 +171,15 @@ uint64_t set_bit(uint64_t bits, uint8_t pos, uint8_t value) {
         bits &= ~mask;
     return bits;
 }
+
+/**
+ * @brief Hace una rotación circular a la izquierda de una palabra de 28b
+ *
+ * @param palabra que desplazamos
+ * @param numero de posiciones que se desplaza
+ * 
+ * @return la palabra modificada
+ */
+uint64_t rotl(uint64_t value, unsigned int count) {
+    return (value << count | value >> (28 - count)) & 0x0FFFFFFF;
+}

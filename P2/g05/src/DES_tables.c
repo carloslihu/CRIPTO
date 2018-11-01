@@ -137,6 +137,54 @@ static const unsigned short S_BOXES[NUM_S_BOXES][ROWS_PER_SBOX][COLUMNS_PER_SBOX
     }
 };
 
+/**
+ * @brief Genera las subclaves del DES a partir de la clave principal
+ *
+ * @param la clave principal
+ * 
+ * @return las subclaves generadas
+ */
+uint64_t* createSubkeys(uint64_t key) {
+    uint64_t* subkeys;
+    uint64_t key_plus = 0, CD[16] = {0};
+    uint64_t C[17] = {0}, D[17] = {0};
+    int i = 0, j = 0;
+    /*Inicializamos las variables*/
+    subkeys = (uint64_t*) calloc(16, sizeof (uint64_t));
+    for (i = 0; i < 16; i++) {
+        subkeys[i] = 0;
+    }
+    /*Creamos K+ (56b) a partir de la clave K y PC-1*/
+    for (i = 0; i < BITS_IN_PC1; i++) {
+        //printf("%" PRIx8 "\n", get_bit(key, PC1[i] - 1));
+        key_plus = set_bit(key_plus, i + 8, get_bit(key, PC1[i] - 1));
+    }
+    //printf("%" PRIx64 "\n", key_plus);
+    /* Generamos las subclaves C0(28b) y D0(28b) separando por la mitad K+*/
+    for (i = 0; i < (BITS_IN_PC1 / 2); i++) {
+        C[0] = set_bit(C[0], i + 64 - 28, get_bit(key_plus, i + 8));
+        D[0] = set_bit(D[0], i + 64 - 28, get_bit(key_plus, i + 8 + 28));
+    }
+    //printf("%" PRIx32 "\n%" PRIx32 "\n", C[0], D[0]);
+    /*Generamos C1,...,C16 y D1,...,D16 (de 28b) haciendo rotaciones circulares*/
+    for (i = 0; i < ROUNDS; i++) {
+        C[i + 1] = rotl(C[i], ROUND_SHIFTS[i]);
+        D[i + 1] = rotl(D[i], ROUND_SHIFTS[i]);
+        //printf("C%d: %" PRIx64 "\nD%d:%" PRIx64 "\n", i + 1, C[i + 1], i + 1, D[i + 1]);
+    }
+    /*Concatenamos los C y D en CD (56b), y permutamos CD usando PC-2
+     para generar las subclaves (48b)*/
+    for (i = 0; i < ROUNDS; i++) {
+        CD[i] = (C[i + 1] << 28) | D[i + 1];
+        //printf("CD%d: %" PRIx64 "\n", i, CD[i]);
+        for (j = 0; j < BITS_IN_PC2; j++) {
+            subkeys[i] = set_bit(subkeys[i], j + (64 - 48), get_bit(CD[i], PC2[j] + (64 - 56) - 1));
+        }
+        //printf("K%d: %" PRIx64 "\n", i, subkeys[i]);
+    }
+    return subkeys;
+} 
+
 uint64_t perm_IP(uint64_t Mens){
 
     uint64_t ip;
