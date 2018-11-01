@@ -141,19 +141,32 @@ double randn(double mu, double sigma) {
     return (mu + sigma * (double) X1);
 }
 
-
-
-uint8_t get_bit(uint64_t bits, uint8_t pos)
-{
-   return (bits >> pos) & 0x01;
+/**
+ * @brief Obtenemos el bit en una posición de una palabra
+ *
+ * @param palabra de donde sacamos el bit
+ * @param posicion donde se lee el bit
+ * 
+ * @return el bit leido
+ */
+uint8_t get_bit(uint64_t bits, uint8_t pos) {
+    return (bits >> pos) & 0x01;
 }
 
-uint64_t set_bit(uint64_t bits, uint8_t pos, uint8_t value)
-{
-   uint64_t mask = 1LL << (63 - pos);
-   if (value)
-       bits |= mask;
-   else
-       bits &= ~mask;
-   return bits;
+/**
+ * @brief Obtenemos la palabra tras escribirle un bit en una posición
+ *
+ * @param palabra donde escribimos el bit
+ * @param posicion donde se escribe el bit
+ * @param valor que se escribe en la posición
+ * 
+ * @return la palabra modificada
+ */
+uint64_t set_bit(uint64_t bits, uint8_t pos, uint8_t value) {
+    uint64_t mask = 1LL << (63 - pos);
+    if (value)
+        bits |= mask;
+    else
+        bits &= ~mask;
+    return bits;
 }

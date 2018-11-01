@@ -82,5 +82,26 @@ int mcdExtended(int a, int m, int *x, int *y);
  */
 double randn(double mu, double sigma);
 
+/**
+ * @brief Obtenemos el bit en una posición de una palabra
+ *
+ * @param palabra de donde sacamos el bit
+ * @param posicion donde se lee el bit
+ * 
+ * @return el bit leido
+ */
+uint8_t get_bit(uint64_t bits, uint8_t pos);
+
+/**
+ * @brief Obtenemos la palabra tras escribirle un bit en una posición
+ *
+ * @param palabra donde escribimos el bit
+ * @param posicion donde se escribe el bit
+ * @param valor que se escribe en la posición
+ * 
+ * @return la palabra modificada
+ */
+uint64_t set_bit(uint64_t bits, uint8_t pos, uint8_t value);
+
 #endif /* UTILS_H */
 
