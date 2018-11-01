@@ -145,20 +145,21 @@ double randn(double mu, double sigma) {
  * @brief Obtenemos el bit en una posición de una palabra
  *
  * @param palabra de donde sacamos el bit
- * @param posicion donde se lee el bit
+ * @param posicion donde se lee el bit de izquierda a derecha [0, 63]
  * 
  * @return el bit leido
  */
 uint8_t get_bit(uint64_t bits, uint8_t pos) {
-    return (bits >> pos) & 0x01;
+
+    return ((bits >> (63 - pos)) & 0x01);
 }
 
 /**
  * @brief Obtenemos la palabra tras escribirle un bit en una posición
  *
  * @param palabra donde escribimos el bit
- * @param posicion donde se escribe el bit
- * @param valor que se escribe en la posición
+ * @param posicion donde se escribe el bit de izquierda a derecha [0, 63]
+ * @param valor que se escribe en la posición (1 o 0)
  * 
  * @return la palabra modificada
  */
