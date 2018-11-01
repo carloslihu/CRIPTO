@@ -136,3 +136,19 @@ static const unsigned short S_BOXES[NUM_S_BOXES][ROWS_PER_SBOX][COLUMNS_PER_SBOX
         { 2, 1, 14, 7, 4, 10, 8, 13, 15, 12, 9, 0, 3, 5, 6, 11}
     }
 };
+
+uint64_t perm_IP(uint64_t Mens){
+
+    uint64_t ip;
+    uint8_t bit;
+    int i=0;
+    /*en M guardamos los primeros 64 bits*/
+    /*creamos IP a partir de M con las permutaciones de la tabla IP*/
+    for(i=0; i<BITS_IN_IP; i++){
+        bit = get_bit(Mens, (uint8_t) IP[i]-1);
+        ip = set_bit(ip, (uint8_t) i, bit);
+    }
+    
+    printf("0x%"PRIx64"\n", ip);
+    return ip;
+}

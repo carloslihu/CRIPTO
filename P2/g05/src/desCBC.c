@@ -16,6 +16,11 @@ int main(int argc, char **argv) {
     int cifrar = -1, i = 0, j = 0, k = 0;
     int count;
     uint64_t key;
+    uint64_t Mens;
+    uint64_t ip;
+    uint8_t bit;
+    uint64_t Mens1 = 0x123456789ABCDEF;
+
 
     if (argc > 1) {
         strncpy(entrada, argv[1], SIZE);
@@ -91,16 +96,24 @@ int main(int argc, char **argv) {
         fOut = stdout;
     }
 
-    /*rellenar texto para hacerlo modulo 4 B*/
+    /*rellenar texto para hacerlo modulo 8 B*/
     fseek(fIn, 0, SEEK_END);
-    count = ftell(fIn) % 4; /*macro para 4*/
+    count = ftell(fIn) % 8; /*macro para 8*/
 
-    for (i = 0; i < 4 - count && count != 0; i++) fwrite("0", 1, 1, fIn);
+    for (i = 0; i < 8 - count && count != 0; i++) fwrite("0", 1, 1, fIn);
     /*leer fichero entrada o estandar*/
     fseek(fIn, 0, SEEK_SET);
     /*Aquí vamos leyendo del fichero*/
     if (fIn) {
         /*TODO*/
+        /*en M guardamos los primeros 64 bits*/
+        if(fread(&Mens, 8, 1, fIn)!=0){
+            printf("0x%"PRIx64"\n", Mens1);
+            ip = perm_IP(Mens1);
+        }
+
+        printf("0x%"PRIx64"\n", ip);
+            
     }
 
     if (fIn) fclose(fIn);
