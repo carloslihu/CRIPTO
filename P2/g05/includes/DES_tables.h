@@ -21,4 +21,12 @@ Autores: Carlos Li Hu y David López Ramos
 #define ROWS_PER_SBOX 4
 #define COLUMNS_PER_SBOX 16
 
+/**
+ * @brief Genera las subclaves del DES a partir de la clave principal
+ *
+ * @param la clave principal
+ * 
+ * @return las subclaves generadas
+ */
+uint64_t* createSubkeys(uint64_t key);
 #endif /* DES_TABLES_H */

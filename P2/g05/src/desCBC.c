@@ -16,6 +16,7 @@ int main(int argc, char **argv) {
     int cifrar = -1, i = 0, j = 0, k = 0;
     int count;
     uint64_t key;
+    uint64_t* subkeys;
 
     if (argc > 1) {
         strncpy(entrada, argv[1], SIZE);
@@ -48,7 +49,7 @@ int main(int argc, char **argv) {
 
             case '1':
                 key = strtoull(optarg, NULL, 16);
-                printf("0x%"PRIx64"\n", key);
+                //printf("0x%"PRIx64"\n", key);
                 break;
 
             case '2':
@@ -75,8 +76,11 @@ int main(int argc, char **argv) {
                 break;
         }
     }
-    /*Calculamos subclaves*//*TODO en función en DES_tables.c*/
-
+    /*Obtenemos subclaves*/
+    subkeys = createSubkeys(key);
+    /*for (i = 0; i < 16; i++) {
+        printf("K%d: %" PRIx64 "\n", i, subkeys[i]);
+    }*/
     /*crear entrada estandar*/
     if (!fIn) {
         printf("Leyendo entrada estandar \n");
@@ -102,7 +106,7 @@ int main(int argc, char **argv) {
     if (fIn) {
         /*TODO*/
     }
-
+    free(subkeys);
     if (fIn) fclose(fIn);
     if (fOut) fclose(fOut);
 
