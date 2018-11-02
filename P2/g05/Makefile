@@ -43,4 +43,4 @@ clean:
 	-rm -f $(ODIR)/*.o *~ core $(INCDIR)/*~ 
 	-rm -f *.tar.gz
 	-rm -f seg-perf desCBC
-	-rm auxiliar.txt teclado.txt
+	-rm -f auxiliar.txt teclado.txt

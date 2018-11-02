@@ -185,18 +185,104 @@ uint64_t* createSubkeys(uint64_t key) {
     return subkeys;
 } 
 
-uint64_t perm_IP(uint64_t Mens){
+uint64_t f(uint32_t R, uint64_t Key){
 
-    uint64_t ip;
+    uint64_t EE = 0, B = 0, aux3 = 0, aux4 = 0; 
+    uint32_t SB = 0, aux2 = 0, efe = 0;
+    uint8_t bit = 0, aux = 0, b[NUM_S_BOXES] = {0}, sb[NUM_S_BOXES] = {0};
+    int i=0, j=0;
+    unsigned short fila = 0, columna = 0;
+
+    /*printf("R 0x%"PRIx32"\n", R);
+    printf("K 0x%"PRIx64"\n", Key);*/
+
+    B = (uint64_t)R << 32;
+    /*printf("B 0x%"PRIx64"\n", B);*/
+
+    for(i=0; i<BITS_IN_E; i++){
+        bit = get_bit(B, (uint8_t) E[i]-1);
+        EE = set_bit(EE, (uint8_t) i, bit);
+    }
+    /*convertimos a 48 bits, quitando los ultimos 4 0s*/
+    EE = EE >> 16;
+    /*printf("E 0x%"PRIx64"\n", EE);*/
+    B = Key ^ EE;
+    /*printf("E+K 0x%"PRIx64"\n", B);*/
+
+    /*calculo de SBoxes*/
+    /*NUM_S_BOXES 8 ROWS_PER_SBOX 4 COLUMNS_PER_SBOX 16*/
+    /*tenemos que separar B en 8 bloques de 6 bits*/
+    for(i=0; i<NUM_S_BOXES; i++){
+        aux = 0;
+        b[i] = B >> 6*(8-(i+1));
+        b[i] = b[i] & 0b00111111;
+        printf("b%d 0x%"PRIx8"\n", i+1, b[i]);
+        /*De cada Bi sacamos la fila y la columna con los correspondientes bits*/
+        /*sacar fila*/
+        bit = get_bit((uint64_t)b[i], (uint8_t) 58);
+        aux = set_bit(aux, (uint8_t) 62, bit);
+        bit = get_bit((uint64_t)b[i], (uint8_t) 63);
+        aux = set_bit(aux, (uint8_t) 63, bit);
+        /*printf("auxf%i 0x%"PRIx8"\n", i+1, aux);*/
+        fila = (unsigned short) aux;
+        /*printf("fila%i %d\n", i+1, fila);*/
+        /*sacar columna*/
+        aux = b[i] >> 1;
+        aux = aux & 0b00001111;
+        /*printf("auxc%i 0x%"PRIx8"\n", i+1, aux);*/
+        columna = (unsigned short) aux;
+        /*printf("columna%i %d\n", i+1, columna);*/
+
+        /*consultamos la tabla SBoxes*/
+        sb[i] = S_BOXES[i][fila][columna];
+        printf("sb%i 0x%"PRIx8"\n", i+1, sb[i]);
+    }
+    /*juntamos los sbi para formar SB de 32 bits*/
+    for(j=0; j<NUM_S_BOXES; j++){
+        aux2 = (uint32_t) sb[j];
+        SB = SB | (aux2<<(4*(7-j)));
+    }
+    printf("SB 0x%"PRIx32"\n", SB);
+
+    aux3 = ((uint64_t) SB) << 32;
+
+    for(i=0; i<BITS_IN_P; i++){
+        bit = get_bit(aux3, (uint8_t) P[i]-1);
+        aux4 = set_bit(aux4, (uint8_t) i, bit);
+    }
+    efe = (uint32_t) (aux4 >> 32);
+    printf("F 0x%"PRIx32"\n", efe);
+}
+
+uint64_t perm_IP(uint64_t Mens, uint64_t* subkeys){
+
+    uint64_t ip, aux;
+    uint32_t L[17] = {0}, R[17] = {0};
     uint8_t bit;
     int i=0;
+
     /*en M guardamos los primeros 64 bits*/
     /*creamos IP a partir de M con las permutaciones de la tabla IP*/
     for(i=0; i<BITS_IN_IP; i++){
         bit = get_bit(Mens, (uint8_t) IP[i]-1);
         ip = set_bit(ip, (uint8_t) i, bit);
     }
-    
-    printf("0x%"PRIx64"\n", ip);
+    printf("IP 0x%"PRIx64"\n", ip);
+
+    /*separamos ip en L0 y R0, de 32 bits cada una*/
+    L[0] = ip >> 32;
+    aux = ip << 32;
+    R[0] = aux >> 32;
+    printf("L0 0x%"PRIx32"\n", L[0]);
+    printf("R0 0x%"PRIx32"\n", R[0]);
+
+    for(i=1; i<=ROUNDS; i++){
+        L[i] = R[i-1];
+        printf("L%i 0x%"PRIx32"\n",i, L[i]);
+        /*el indice de las subclaves K va de 0 a 15*/
+        R[i] = L[i-1] ^ f(R[i-1], subkeys[i-1]);
+    }
+
+
     return ip;
 }

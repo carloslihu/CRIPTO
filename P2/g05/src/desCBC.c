@@ -81,11 +81,12 @@ int main(int argc, char **argv) {
                 break;
         }
     }
+
     /*Obtenemos subclaves*/
     subkeys = createSubkeys(key);
-    /*for (i = 0; i < 16; i++) {
+    for (i = 0; i < 16; i++) {
         printf("K%d: %" PRIx64 "\n", i, subkeys[i]);
-    }*/
+    }
     /*crear entrada estandar*/
     if (!fIn) {
         printf("Leyendo entrada estandar \n");
@@ -113,10 +114,10 @@ int main(int argc, char **argv) {
         /*en M guardamos los primeros 64 bits*/
         if(fread(&Mens, 8, 1, fIn)!=0){
             printf("0x%"PRIx64"\n", Mens1);
-            ip = perm_IP(Mens1);
+            ip = perm_IP(Mens1, subkeys);
         }
 
-        printf("0x%"PRIx64"\n", ip);
+        /*printf("0x%"PRIx64"\n", ip);*/
             
     }
     free(subkeys);
