@@ -29,4 +29,5 @@ Autores: Carlos Li Hu y David López Ramos
  * @return las subclaves generadas
  */
 uint64_t* createSubkeys(uint64_t key);
+uint64_t encode_block(uint64_t Mens, uint64_t* subkeys);
 #endif /* DES_TABLES_H */

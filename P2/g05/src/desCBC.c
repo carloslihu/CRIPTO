@@ -1,5 +1,5 @@
 /***************************************************************************
-seg-perf.c
+desCBC.c
 
 Autores: Carlos Li Hu y David López Ramos
 2018 EPS-UAM
@@ -13,13 +13,13 @@ int main(int argc, char **argv) {
     int long_index = 0;
     char opt;
     FILE *fIn = NULL, *fOut = NULL;
-    int cifrar = -1, i = 0, j = 0, k = 0;
+    int cifrar = -1, i = 0;
     int count;
     uint64_t key;
     uint64_t* subkeys;
     uint64_t Mens;
     uint64_t C;
-    uint8_t bit;
+    /*uint8_t bit;*/
     uint64_t Mens1 = 0x0123456789ABCDEF;
 
 
@@ -114,13 +114,13 @@ int main(int argc, char **argv) {
     if (fIn) {
         /*TODO*/
         /*en M guardamos los primeros 64 bits*/
-        if(fread(&Mens, 8, 1, fIn)!=0){
+        if (fread(&Mens, 8, 1, fIn) != 0) {
             printf("Mensaje a cifrar 0x%"PRIx64"\n", Mens);
             C = encode_block(Mens, subkeys);
         }
 
         printf("Cifrado 0x%"PRIx64"\n", C);
-            
+
     }
     free(subkeys);
     if (fIn) fclose(fIn);
