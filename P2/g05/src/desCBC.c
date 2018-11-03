@@ -15,12 +15,12 @@ int main(int argc, char **argv) {
     FILE *fIn = NULL, *fOut = NULL;
     int cifrar = -1, i = 0;
     int count;
-    uint64_t key;
+    uint64_t key = 0, iv = 0;
     uint64_t* subkeys;
     uint64_t Mens;
     uint64_t C;
     /*uint8_t bit;*/
-    uint64_t Mens1 = 0x0123456789ABCDEF;
+    /*uint64_t Mens1 = 0x0123456789ABCDEF;*/
 
 
     if (argc > 1) {
@@ -58,6 +58,7 @@ int main(int argc, char **argv) {
                 break;
 
             case '2':
+                iv = strtoull(optarg, NULL, 16);
                 break;
 
             case '3':
@@ -81,6 +82,20 @@ int main(int argc, char **argv) {
                 break;
         }
     }
+
+
+
+
+
+    /**/
+    /*DESCOMENTAR ESTO CUANDO ACABEMOS LAS PRUEBAS*/
+    /**/
+
+    /*if (cifrar == 1) {
+        key = createKey();
+        iv = createIV();
+    }*/
+
 
     /*Obtenemos subclaves*/
     subkeys = createSubkeys(key);

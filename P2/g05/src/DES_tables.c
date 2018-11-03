@@ -137,6 +137,49 @@ static const unsigned short S_BOXES[NUM_S_BOXES][ROWS_PER_SBOX][COLUMNS_PER_SBOX
     }
 };
 
+uint8_t odd_parity(uint8_t x) {
+    unsigned int count = 0, i, b = 1;
+    for (i = 0; i < 8; i++) {
+        if (x & (b << i)) {
+            count++;
+        }
+    }
+    /*caso impar */
+    if ((count % 2)) {
+        return 0;
+    } else {/*caso par*/
+        return 1;
+    }
+}
+
+uint64_t createKey() {
+    uint64_t key = 0;
+    uint8_t B;
+    int i = 0;
+    srand(time(NULL));
+    for (i = 0; i < 8; i++) {
+        B = (uint8_t) ((rand() % 128) << 1);
+        /*printf("%"PRIx8"\n", B);*/
+        B |= odd_parity(B);
+        key = (key << 8) | B;
+    }
+    printf("Key: %"PRIx64"\n", key);
+    return key;
+}
+
+uint64_t createIV() {
+    uint64_t iv;
+    uint8_t B;
+    int i = 0;
+    srand(time(NULL));
+    for (i = 0; i < 8; i++) {
+        B = (uint8_t) ((rand() % 256));
+        iv = (iv << 8) | B;
+    }
+    printf("IV: %"PRIx64"\n", iv);
+    return iv;
+}
+
 /**
  * @brief Genera las subclaves del DES a partir de la clave principal
  *
@@ -178,6 +221,7 @@ uint64_t* createSubkeys(uint64_t key) {
         CD[i] = (C[i + 1] << 28) | D[i + 1];
         //printf("CD%d: %" PRIx64 "\n", i, CD[i]);
         for (j = 0; j < BITS_IN_PC2; j++) {
+
             subkeys[i] = set_bit(subkeys[i], j + (64 - 48), get_bit(CD[i], PC2[j] + (64 - 56) - 1));
         }
         //printf("K%d: %" PRIx64 "\n", i, subkeys[i]);
@@ -251,6 +295,7 @@ uint32_t f(uint32_t R, uint64_t Key) {
         aux4 = set_bit(aux4, (uint8_t) i, bit);
     }
     efe = (uint32_t) (aux4 >> 32);
+
     /*printf("F 0x%"PRIx32"\n", efe);*/
 
     return efe;
