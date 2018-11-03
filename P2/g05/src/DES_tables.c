@@ -256,7 +256,7 @@ uint32_t f(uint32_t R, uint64_t Key) {
     return efe;
 }
 
-uint64_t encode_block(uint64_t Mens, uint64_t* subkeys) {
+uint64_t encode_block(uint64_t Mens, uint64_t* subkeys, int cifrar) {
 
     uint64_t ip, aux, C = 0;
     uint32_t L[17] = {0}, R[17] = {0}, efe = 0;
@@ -282,7 +282,11 @@ uint64_t encode_block(uint64_t Mens, uint64_t* subkeys) {
         L[i] = R[i - 1];
         /*printf("L%d 0x%"PRIx32"\n",i, L[i]);*/
         /*el indice de las subclaves K va de 0 a 15*/
-        efe = f(R[i - 1], subkeys[i - 1]);
+        if (cifrar == 1) {
+            efe = f(R[i - 1], subkeys[i - 1]);
+        } else {
+            efe = f(R[i - 1], subkeys[16 - i]);
+        }
         /*printf("EFE 0x%"PRIx32"\n", efe);*/
         R[i] = L[i - 1] ^ efe;
         /*printf("R%d 0x%"PRIx32"\n", i, R[i]);*/
@@ -292,7 +296,7 @@ uint64_t encode_block(uint64_t Mens, uint64_t* subkeys) {
     aux = (((uint64_t) R[16]) << 32) | L[16];
     /*printf("R16L16 0x%"PRIx64"\n", aux);*/
 
-    /*permutamos L16R16 con IP^-1*/
+    /*permutamos R16L16 con IP^-1*/
     for (i = 0; i < BITS_IN_IP; i++) {
         bit = get_bit(aux, (uint8_t) IP_INV[i] - 1);
         C = set_bit(C, (uint8_t) i, bit);

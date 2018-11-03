@@ -84,9 +84,9 @@ int main(int argc, char **argv) {
 
     /*Obtenemos subclaves*/
     subkeys = createSubkeys(key);
-    for (i = 0; i < 16; i++) {
+    /*for (i = 0; i < 16; i++) {
         printf("K%d: %" PRIx64 "\n", i, subkeys[i]);
-    }
+    }*/
     /*crear entrada estandar*/
     if (!fIn) {
         printf("Leyendo entrada estandar \n");
@@ -109,17 +109,18 @@ int main(int argc, char **argv) {
     /*leer fichero entrada o estandar*/
     fseek(fIn, 0, SEEK_SET);
 
-    fwrite(&Mens1, 8, 1, fOut);
+    /*fwrite(&Mens1, 8, 1, fOut);*/
     /*Aquí vamos leyendo del fichero*/
     if (fIn) {
         /*TODO*/
         /*en M guardamos los primeros 64 bits*/
         if (fread(&Mens, 8, 1, fIn) != 0) {
             printf("Mensaje a cifrar 0x%"PRIx64"\n", Mens);
-            C = encode_block(Mens, subkeys);
+            C = encode_block(Mens, subkeys, cifrar);
         }
 
         printf("Cifrado 0x%"PRIx64"\n", C);
+        fwrite(&C, 8, 1, fOut);
 
     }
     free(subkeys);
