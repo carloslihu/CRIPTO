@@ -18,9 +18,9 @@ int main(int argc, char **argv) {
     uint64_t key;
     uint64_t* subkeys;
     uint64_t Mens;
-    uint64_t ip;
+    uint64_t C;
     uint8_t bit;
-    uint64_t Mens1 = 0x123456789ABCDEF;
+    uint64_t Mens1 = 0x0123456789ABCDEF;
 
 
     if (argc > 1) {
@@ -61,12 +61,12 @@ int main(int argc, char **argv) {
                 break;
 
             case '3':
-                fIn = fopen(optarg, "r+");
+                fIn = fopen(optarg, "rb+");
                 if (!fIn) exit(-1);
                 break;
 
             case '4':
-                fOut = fopen(optarg, "w");
+                fOut = fopen(optarg, "wb");
                 if (!fOut) exit(-1);
                 break;
 
@@ -108,16 +108,18 @@ int main(int argc, char **argv) {
     for (i = 0; i < 8 - count && count != 0; i++) fwrite("0", 1, 1, fIn);
     /*leer fichero entrada o estandar*/
     fseek(fIn, 0, SEEK_SET);
+
+    fwrite(&Mens1, 8, 1, fOut);
     /*Aquí vamos leyendo del fichero*/
     if (fIn) {
         /*TODO*/
         /*en M guardamos los primeros 64 bits*/
         if(fread(&Mens, 8, 1, fIn)!=0){
-            printf("0x%"PRIx64"\n", Mens1);
-            ip = perm_IP(Mens1, subkeys);
+            printf("Mensaje a cifrar 0x%"PRIx64"\n", Mens);
+            C = encode_block(Mens, subkeys);
         }
 
-        /*printf("0x%"PRIx64"\n", ip);*/
+        printf("Cifrado 0x%"PRIx64"\n", C);
             
     }
     free(subkeys);
