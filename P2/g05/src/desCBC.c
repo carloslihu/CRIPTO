@@ -18,9 +18,7 @@ int main(int argc, char **argv) {
     uint64_t key = 0, iv = 0;
     uint64_t* subkeys;
     uint64_t Mens;
-    uint64_t C;
-    /*uint8_t bit;*/
-    /*uint64_t Mens1 = 0x0123456789ABCDEF;*/
+    uint64_t C, Caux;
 
 
     if (argc > 1) {
@@ -54,7 +52,6 @@ int main(int argc, char **argv) {
 
             case '1':
                 key = strtoull(optarg, NULL, 16);
-                //printf("0x%"PRIx64"\n", key);
                 break;
 
             case '2':
@@ -91,10 +88,10 @@ int main(int argc, char **argv) {
     /*DESCOMENTAR ESTO CUANDO ACABEMOS LAS PRUEBAS*/
     /**/
 
-    /*if (cifrar == 1) {
+    if (cifrar == 1) {
         key = createKey();
         iv = createIV();
-    }*/
+    }
 
 
     /*Obtenemos subclaves*/
@@ -106,10 +103,10 @@ int main(int argc, char **argv) {
     if (!fIn) {
         printf("Leyendo entrada estandar \n");
         fgets(cadena, SIZE, stdin);
-        fIn = fopen("teclado.txt", "w");
+        fIn = fopen("teclado.txt", "wb");
         fwrite(cadena, 1, strlen(cadena), fIn);
         fclose(fIn);
-        fIn = fopen("teclado.txt", "r+");
+        fIn = fopen("teclado.txt", "rb+");
     }
     /* Si no se especifica, usamos salida estandar */
     if (!fOut) {
@@ -119,25 +116,33 @@ int main(int argc, char **argv) {
     /*rellenar texto para hacerlo modulo 8 B*/
     fseek(fIn, 0, SEEK_END);
     count = ftell(fIn) % 8; /*macro para 8*/
-
     for (i = 0; i < 8 - count && count != 0; i++) fwrite("0", 1, 1, fIn);
-    /*leer fichero entrada o estandar*/
     fseek(fIn, 0, SEEK_SET);
 
-    /*fwrite(&Mens1, 8, 1, fOut);*/
     /*Aquí vamos leyendo del fichero*/
     if (fIn) {
-        /*TODO*/
-        /*en M guardamos los primeros 64 bits*/
-        if (fread(&Mens, 8, 1, fIn) != 0) {
-            printf("Mensaje a cifrar 0x%"PRIx64"\n", Mens);
-            C = encode_block(Mens, subkeys, cifrar);
+        if (cifrar == 1) {
+            C = iv;
+            while (fread(&Mens, 8, 1, fIn) != 0) {
+                Mens ^= C;
+                /*printf("Mensaje a cifrar 0x%"PRIx64"\n", Mens);*/
+                C = encode_block(Mens, subkeys, cifrar);
+                /*printf("Cifrado 0x%"PRIx64"\n", C);*/
+                fwrite(&C, 8, 1, fOut);
+            }
+        } else {
+            Caux = iv;
+            while (fread(&C, 8, 1, fIn) != 0) {
+                /*printf("Mensaje a descifrar 0x%"PRIx64"\n", C);*/
+                Mens = encode_block(C, subkeys, cifrar);
+                Mens ^= Caux;
+                /*printf("Descifrado 0x%"PRIx64"\n", Mens);*/
+                fwrite(&Mens, 8, 1, fOut);
+                Caux = C;
+            }
         }
-
-        printf("Cifrado 0x%"PRIx64"\n", C);
-        fwrite(&C, 8, 1, fOut);
-
     }
+    
     free(subkeys);
     if (fIn) fclose(fIn);
     if (fOut) fclose(fOut);
