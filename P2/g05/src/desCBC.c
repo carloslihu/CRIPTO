@@ -80,14 +80,6 @@ int main(int argc, char **argv) {
         }
     }
 
-
-
-
-
-    /**/
-    /*DESCOMENTAR ESTO CUANDO ACABEMOS LAS PRUEBAS*/
-    /**/
-
     if (cifrar == 1) {
         key = createKey();
         iv = createIV();
