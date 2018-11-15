@@ -247,41 +247,13 @@ uint64_t* createSubkeys(uint64_t key) {
     return subkeys;
 }
 
-/**
- * @brief Calcula la funcion f a partir de Rn-1 y Kn
- *
- * @param Rn-1 de 32b
- * @param clave Kn de 48b
- * 
- * @return resultado de f de 32b
- */
-uint32_t f(uint32_t R, uint64_t Key) {
+uint32_t SB_return(uint64_t B) {
 
-    uint64_t EE = 0, B = 0, aux3 = 0, aux4 = 0;
-    uint32_t SB = 0, aux2 = 0, efe = 0;
+    uint32_t SB = 0, aux2 = 0;
     uint8_t bit = 0, aux = 0, b[NUM_S_BOXES] = {0}, sb[NUM_S_BOXES] = {0};
     int i = 0;
-    unsigned short fila = 0, columna = 0;
+    unsigned short fila = 0, columna = 0; 
 
-    /*printf("R 0x%"PRIx32"\n", R);
-    printf("K 0x%"PRIx64"\n", Key);*/
-
-    B = (uint64_t) R << 32;
-    /*printf("B 0x%"PRIx64"\n", B);*/
-
-    for (i = 0; i < BITS_IN_E; i++) {
-        bit = get_bit(B, (uint8_t) E[i] - 1);
-        EE = set_bit(EE, (uint8_t) i, bit);
-    }
-    /*convertimos a 48 bits, quitando los ultimos 4 0s*/
-    EE = EE >> 16;
-    /*printf("E 0x%"PRIx64"\n", EE);*/
-    B = Key ^ EE;
-    /*printf("E+K 0x%"PRIx64"\n", B);*/
-
-    /*calculo de SBoxes*/
-    /*NUM_S_BOXES 8 ROWS_PER_SBOX 4 COLUMNS_PER_SBOX 16*/
-    /*tenemos que separar B en 8 bloques de 6 bits*/
     for (i = 0; i < NUM_S_BOXES; i++) {
         aux = 0;
         b[i] = B >> 6 * (8 - (i + 1));
@@ -307,12 +279,52 @@ uint32_t f(uint32_t R, uint64_t Key) {
         sb[i] = S_BOXES[i][fila][columna];
         /*printf("sb%d 0x%"PRIx8"\n", i+1, sb[i]);*/
     }
+
     /*juntamos los sbi para formar SB de 32 bits*/
     for (i = 0; i < NUM_S_BOXES; i++) {
         aux2 = (uint32_t) sb[i];
         SB = SB | (aux2 << (4 * (7 - i)));
     }
-    /*printf("SB 0x%"PRIx32"\n", SB);*/
+
+    return SB;
+
+}
+
+
+
+/**
+ * @brief Calcula la funcion f a partir de Rn-1 y Kn
+ *
+ * @param Rn-1 de 32b
+ * @param clave Kn de 48b
+ * 
+ * @return resultado de f de 32b
+ */
+uint32_t f(uint32_t R, uint64_t Key) {
+
+    uint64_t EE = 0, B = 0, aux3 = 0, aux4 = 0;
+    uint32_t SB = 0, efe = 0;
+    uint8_t bit = 0;
+    int i = 0;
+
+    /*printf("R 0x%"PRIx32"\n", R);
+    printf("K 0x%"PRIx64"\n", Key);*/
+
+    B = (uint64_t) R << 32;
+    /*printf("B 0x%"PRIx64"\n", B);*/
+
+    for (i = 0; i < BITS_IN_E; i++) {
+        bit = get_bit(B, (uint8_t) E[i] - 1);
+        EE = set_bit(EE, (uint8_t) i, bit);
+    }
+    /*convertimos a 48 bits, quitando los ultimos 4 0s*/
+    EE = EE >> 16;
+    /*printf("E 0x%"PRIx64"\n", EE);*/
+    B = Key ^ EE;
+    /*printf("E+K 0x%"PRIx64"\n", B);*/
+
+    /*calculo de SBoxes*/
+    SB = SB_return(B);
 
     aux3 = ((uint64_t) SB) << 32;
 
