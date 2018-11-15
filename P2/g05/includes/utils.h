@@ -112,5 +112,9 @@ uint64_t set_bit(uint64_t bits, uint8_t pos, uint8_t value);
  * @return la palabra modificada
  */
 uint64_t rotl(uint64_t value, unsigned int count);
+
+
+uint64_t cadena_aleatoria();
+
 #endif /* UTILS_H */
 

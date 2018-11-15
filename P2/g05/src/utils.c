@@ -183,3 +183,19 @@ uint64_t set_bit(uint64_t bits, uint8_t pos, uint8_t value) {
 uint64_t rotl(uint64_t value, unsigned int count) {
     return (value << count | value >> (28 - count)) & 0x0FFFFFFF;
 }
+
+
+
+uint64_t cadena_aleatoria(){
+
+    int i=0;
+    uint64_t cadena = 0;
+    uint8_t bit = 0;
+
+    for(i=64-48; i<64; i++){
+        bit= (uint8_t) (rand()%2);
+        cadena = set_bit(cadena, (uint8_t) i, bit);
+    }
+
+    return cadena;
+}

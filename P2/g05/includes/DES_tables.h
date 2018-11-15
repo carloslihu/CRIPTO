@@ -44,6 +44,11 @@ uint64_t createIV();
  */
 uint64_t* createSubkeys(uint64_t key);
 
+
+
+
+uint32_t SB_return(uint64_t B);
+
 /**
  * @brief Calcula la funcion f a partir de Rn-1 y Kn
  *
