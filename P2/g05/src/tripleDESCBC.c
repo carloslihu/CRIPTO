@@ -17,7 +17,7 @@ int main(int argc, char **argv) {
     int cifrar = -1, i = 0;
     int count;
     uint64_t key[3] = {0}, iv = 0;
-    uint64_t** subkeys = NULL;
+    uint64_t** subkeys;
     uint64_t Mens;
     uint64_t C, Caux;
 
@@ -54,7 +54,6 @@ int main(int argc, char **argv) {
                 for (i = 0; i < 3; i++) {
                     strncpy(clave, optarg + 16 * i, 16);
                     key[i] = strtoull(clave, NULL, 16);
-                    printf("Keys: %"PRIx64"\n", key[i]);
                 }
                 break;
 
@@ -88,10 +87,9 @@ int main(int argc, char **argv) {
         for (i = 0; i < 3; i++) {
             key[i] = createKey();
         }
-        subkeys = (uint64_t**) calloc(3, sizeof (uint64_t*));
         iv = createIV();
     }
-
+    subkeys = (uint64_t**) calloc(3, sizeof (uint64_t*));
 
     /*Obtenemos subclaves*/
     for (i = 0; i < 3; i++) {
