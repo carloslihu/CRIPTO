@@ -26,7 +26,6 @@ int main(int argc, char **argv) {
     } else {
         printf("Ejecucion: %s {-C | -D -k clave -iv vectorincializacion} "
                 "[-i filein] [-o fileout]\n", argv[0]);
-        /*printf("Ejemplo: %s -C -m 26 -a 5 -b 4\n", argv[0]);*/
         exit(-1);
     }
 
@@ -74,13 +73,13 @@ int main(int argc, char **argv) {
             default:
                 printf("Ejecucion: %s {-C | -D -k clave -iv vectorincializacion} "
                         "[-i filein] [-o fileout]\n", argv[0]);
-                /*printf("Ejemplo: %s -C -m 26 -a 5 -b 4\n", argv[0]);*/
                 exit(-1);
                 break;
         }
     }
 
     if (cifrar == 1) {
+        srand(time(NULL));
         key = createKey();
         iv = createIV();
     }
@@ -88,9 +87,6 @@ int main(int argc, char **argv) {
 
     /*Obtenemos subclaves*/
     subkeys = createSubkeys(key);
-    /*for (i = 0; i < 16; i++) {
-        printf("K%d: %" PRIx64 "\n", i, subkeys[i]);
-    }*/
     /*crear entrada estandar*/
     if (!fIn) {
         printf("Leyendo entrada estandar \n");
@@ -114,27 +110,23 @@ int main(int argc, char **argv) {
     /*Aquí vamos leyendo del fichero*/
     if (fIn) {
         if (cifrar == 1) {
-            C = iv;
+            //            C = iv; /*comentar para ECB*/
             while (fread(&Mens, 8, 1, fIn) != 0) {
-                Mens ^= C;
-                /*printf("Mensaje a cifrar 0x%"PRIx64"\n", Mens);*/
+                //                Mens ^= C; /*comentar para ECB*/
                 C = encode_block(Mens, subkeys, cifrar);
-                /*printf("Cifrado 0x%"PRIx64"\n", C);*/
                 fwrite(&C, 8, 1, fOut);
             }
         } else {
-            Caux = iv;
+            //            Caux = iv; /*comentar para ECB*/
             while (fread(&C, 8, 1, fIn) != 0) {
-                /*printf("Mensaje a descifrar 0x%"PRIx64"\n", C);*/
                 Mens = encode_block(C, subkeys, cifrar);
-                Mens ^= Caux;
-                /*printf("Descifrado 0x%"PRIx64"\n", Mens);*/
+                //                Mens ^= Caux; /*comentar para ECB*/
                 fwrite(&Mens, 8, 1, fOut);
-                Caux = C;
+                //                Caux = C; /*comentar para ECB*/
             }
         }
     }
-    
+
     free(subkeys);
     if (fIn) fclose(fIn);
     if (fOut) fclose(fOut);

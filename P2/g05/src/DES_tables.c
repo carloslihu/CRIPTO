@@ -169,7 +169,6 @@ uint64_t createKey() {
     uint64_t key = 0;
     uint8_t B;
     int i = 0;
-    srand(time(NULL));
     for (i = 0; i < 8; i++) {
         B = (uint8_t) ((rand() % 128) << 1);
         /*printf("%"PRIx8"\n", B);*/
@@ -189,7 +188,6 @@ uint64_t createIV() {
     uint64_t iv;
     uint8_t B;
     int i = 0;
-    srand(time(NULL));
     for (i = 0; i < 8; i++) {
         B = (uint8_t) ((rand() % 256));
         iv = (iv << 8) | B;
