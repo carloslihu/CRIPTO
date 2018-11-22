@@ -12,7 +12,7 @@ DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))
 
 OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 
-all: autores carpetas seg-perf desCBC tripleDESCBC sboxes_lin_des sboxes_lin_aes SBOX_AES
+all: autores carpetas seg-perf desCBC tripleDESCBC sboxes_lin_des sboxes_des sboxes_lin_aes SBOX_AES
 
 $(ODIR)/%.o: $(SDIR)/%.c $(DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS)
@@ -41,6 +41,9 @@ tripleDESCBC: $(OBJ) $(ODIR)/tripleDESCBC.o
 	
 sboxes_lin_des: $(OBJ) $(ODIR)/sboxes_lin_des.o
 	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
+
+sboxes_des: $(OBJ) $(ODIR)/sboxes_des.o
+	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
 	
 sboxes_lin_aes: $(OBJ) $(ODIR)/sboxes_lin_aes.o
 	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
@@ -55,5 +58,5 @@ tar:
 clean:
 	-rm -f $(ODIR)/*.o *~ core $(INCDIR)/*~ 
 	-rm -f *.tar.gz
-	-rm -f seg-perf desCBC tripleDESCBC sboxes_lin_des sboxes_lin_aes SBOX_AES
+	-rm -f seg-perf desCBC tripleDESCBC sboxes_lin_des sboxes_des sboxes_lin_aes SBOX_AES
 	-rm -f auxiliar.txt teclado.txt

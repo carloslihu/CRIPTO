@@ -16,11 +16,12 @@ Autores: Carlos Li Hu y David López Ramos
  * @return el maximo comun divisor
  */
 uint64_t AES_mcd(uint64_t a, uint64_t b) {
-    uint64_t resto = 0;
+    //uint64_t resto = 0;
     if (a == 0)
         return b;
 
     //return AES_mcd(b % a, a);
+    return 0;
 }
 /**
  * @brief Realiza la descomposición de Euclides Extendida.
@@ -56,7 +57,7 @@ int main(int argc, char **argv) {
     int long_index = 0;
     char opt;
     FILE *fOut = NULL;
-    int cifrar = -1, i = 0;
+    int cifrar = -1;
 
 
     if (argc > 1) {
