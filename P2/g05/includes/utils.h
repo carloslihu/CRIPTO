@@ -28,6 +28,7 @@ Autores: Carlos Li Hu y David López Ramos
 #define SIZE 512 /*tamaño de cadenas*/
 #define ERROR 0.01 /*error tolerado para IC*/
 
+
 /**
  * @brief Lee el fichero fIn las letras, y las pasa a mayusculas y les quita el acento.
  *  se escriben en fAux sólo los caracteres en mayuscula (ignora los espacios)
@@ -114,7 +115,7 @@ uint64_t set_bit(uint64_t bits, uint8_t pos, uint8_t value);
 uint64_t rotl(uint64_t value, unsigned int count);
 
 
-uint64_t cadena_aleatoria();
+uint64_t cadena_aleatoria(int num);
 
 #endif /* UTILS_H */
 
