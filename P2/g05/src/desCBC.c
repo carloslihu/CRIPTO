@@ -110,19 +110,19 @@ int main(int argc, char **argv) {
     /*Aquí vamos leyendo del fichero*/
     if (fIn) {
         if (cifrar == 1) {
-            //            C = iv; /*comentar para ECB*/
+            C = iv; /*comentar para ECB*/
             while (fread(&Mens, 8, 1, fIn) != 0) {
-                //                Mens ^= C; /*comentar para ECB*/
+                Mens ^= C; /*comentar para ECB*/
                 C = encode_block(Mens, subkeys, cifrar);
                 fwrite(&C, 8, 1, fOut);
             }
         } else {
-            //            Caux = iv; /*comentar para ECB*/
+            Caux = iv; /*comentar para ECB*/
             while (fread(&C, 8, 1, fIn) != 0) {
                 Mens = encode_block(C, subkeys, cifrar);
-                //                Mens ^= Caux; /*comentar para ECB*/
+                Mens ^= Caux; /*comentar para ECB*/
                 fwrite(&Mens, 8, 1, fOut);
-                //                Caux = C; /*comentar para ECB*/
+                Caux = C; /*comentar para ECB*/
             }
         }
     }
