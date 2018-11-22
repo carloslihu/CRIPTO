@@ -186,13 +186,13 @@ uint64_t rotl(uint64_t value, unsigned int count) {
 
 
 
-uint64_t cadena_aleatoria(){
+uint64_t cadena_aleatoria(int num){
 
     int i=0;
     uint64_t cadena = 0;
     uint8_t bit = 0;
 
-    for(i=64-48; i<64; i++){
+    for(i=64-num; i<64; i++){
         bit= (uint8_t) (rand()%2);
         cadena = set_bit(cadena, (uint8_t) i, bit);
     }
