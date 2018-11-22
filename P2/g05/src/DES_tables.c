@@ -395,3 +395,61 @@ uint64_t encode_block(uint64_t Mens, uint64_t* subkeys, int cifrar) {
 
     return C;
 }
+
+
+
+uint64_t encode_block_avalancha(uint64_t Mens, uint64_t* subkeys, int cifrar, uint64_t** rondas) {
+
+    uint64_t ip, aux, C = 0;
+    uint32_t L[17] = {0}, R[17] = {0}, efe = 0;
+    uint8_t bit;
+    int i = 0;
+    uint64_t ronda = 0;
+
+
+    /*en M guardamos los primeros 64 bits*/
+    /*creamos IP a partir de M con las permutaciones de la tabla IP*/
+    for (i = 0; i < BITS_IN_IP; i++) {
+        bit = get_bit(Mens, (uint8_t) IP[i] - 1);
+        ip = set_bit(ip, (uint8_t) i, bit);
+    }
+    /*printf("IP 0x%"PRIx64"\n", ip);*/
+
+    /*separamos ip en L0 y R0, de 32 bits cada una*/
+    L[0] = ip >> 32;
+    aux = ip << 32;
+    R[0] = aux >> 32;
+    /*printf("L0 0x%"PRIx32"\n", L[0]);
+    printf("R0 0x%"PRIx32"\n", R[0]);*/
+
+    for (i = 1; i <= ROUNDS; i++) {
+        L[i] = R[i - 1];
+        /*printf("L%d 0x%"PRIx32"\n",i, L[i]);*/
+        /*el indice de las subclaves K va de 0 a 15*/
+        if (cifrar == 1) {
+            efe = f(R[i - 1], subkeys[i - 1]);
+        } else {
+            efe = f(R[i - 1], subkeys[16 - i]);
+        }
+        /*printf("EFE 0x%"PRIx32"\n", efe);*/
+        R[i] = L[i - 1] ^ efe;
+        /*printf("R%d 0x%"PRIx32"\n", i, R[i]);*/
+
+        /*guardamos el resultado de la ronda LiRi*/
+        ronda = (((uint64_t) L[i]) << 32) | ((uint64_t) R[i]);
+        rondas[i] = ronda;
+    }
+
+    /*cambiamos de orden L16R16 para formar R16L16*/
+    aux = (((uint64_t) R[16]) << 32) | L[16];
+    /*printf("R16L16 0x%"PRIx64"\n", aux);*/
+
+    /*permutamos R16L16 con IP^-1*/
+    for (i = 0; i < BITS_IN_IP; i++) {
+        bit = get_bit(aux, (uint8_t) IP_INV[i] - 1);
+        C = set_bit(C, (uint8_t) i, bit);
+    }
+    /*printf("C 0x%"PRIx64"\n", C);*/
+
+    return C;
+}
