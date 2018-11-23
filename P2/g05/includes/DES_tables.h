@@ -73,6 +73,6 @@ uint64_t encode_block(uint64_t Mens, uint64_t* subkeys, int cifrar);
 
 
 
-uint64_t encode_block_avalancha(uint64_t Mens, uint64_t* subkeys, int cifrar, uint64_t** rondas);
+uint64_t encode_block_avalancha(uint64_t Mens, uint64_t key, int cifrar, uint64_t** rondas);
 
 #endif /* DES_TABLES_H */

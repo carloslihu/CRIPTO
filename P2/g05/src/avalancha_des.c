@@ -18,7 +18,6 @@ int main(int argc, char **argv) {
     uint64_t C, Caux;
     uint64_t *rondas, *rondas_mensaje, *rondas_clave;
 
-
     srand(time(NULL));
 
     rondas = (uint64_t*)malloc(sizeof(uint64_t)*16);
@@ -27,19 +26,18 @@ int main(int argc, char **argv) {
 
     key = createKey();
 
-    /*Obtenemos subclaves*/
-    subkeys = createSubkeys(key);
-    /*for (i = 0; i < 16; i++) {
-        printf("K%d: %" PRIx64 "\n", i, subkeys[i]);
-    }*/
 
     /*Aquí vamos leyendo del fichero*/
-    encode_block_avalancha(Mens, subkeys, cifrar, &rondas);
+    encode_block_avalancha(Mens, key, cifrar, &rondas);
     /*printf("Cifrado 0x%"PRIx64"\n", C);*/
-   
-    free(subkeys);
-    if (fIn) fclose(fIn);
-    if (fOut) fclose(fOut);
+
+
+    encode_block_avalancha(Mens, key, cifrar, &rondas_mensaje);
+
+
+
+    encode_block_avalancha(Mens, key, cifrar, &rondas_clave);
+
 
 
     return 0;

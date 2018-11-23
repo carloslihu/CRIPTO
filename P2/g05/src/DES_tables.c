@@ -398,14 +398,21 @@ uint64_t encode_block(uint64_t Mens, uint64_t* subkeys, int cifrar) {
 
 
 
-uint64_t encode_block_avalancha(uint64_t Mens, uint64_t* subkeys, int cifrar, uint64_t** rondas) {
+uint64_t encode_block_avalancha(uint64_t Mens, uint64_t key, int cifrar, uint64_t** rondas) {
 
     uint64_t ip, aux, C = 0;
     uint32_t L[17] = {0}, R[17] = {0}, efe = 0;
     uint8_t bit;
     int i = 0;
     uint64_t ronda = 0;
+    uint64_t *subkeys;
 
+
+    /*Obtenemos subclaves*/
+    subkeys = createSubkeys(key);
+    /*for (i = 0; i < 16; i++) {
+        printf("K%d: %" PRIx64 "\n", i, subkeys[i]);
+    }*/
 
     /*en M guardamos los primeros 64 bits*/
     /*creamos IP a partir de M con las permutaciones de la tabla IP*/
@@ -450,6 +457,7 @@ uint64_t encode_block_avalancha(uint64_t Mens, uint64_t* subkeys, int cifrar, ui
         C = set_bit(C, (uint8_t) i, bit);
     }
     /*printf("C 0x%"PRIx64"\n", C);*/
+    free(subkeys);
 
     return C;
 }
