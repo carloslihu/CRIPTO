@@ -12,7 +12,7 @@ DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))
 
 OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 
-all: autores carpetas seg-perf desCBC tripleDESCBC sboxes_lin_des sboxes_des sboxes_lin_aes SBOX_AES
+all: autores carpetas seg-perf desCBC tripleDESCBC sboxes_lin_des sboxes_des sboxes_lin_aes SBOX_AES avalancha_des
 
 $(ODIR)/%.o: $(SDIR)/%.c $(DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS)
@@ -50,6 +50,9 @@ sboxes_lin_aes: $(OBJ) $(ODIR)/sboxes_lin_aes.o
 
 SBOX_AES: $(OBJ) $(ODIR)/SBOX_AES.o
 	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
+
+avalancha_des: $(OBJ) $(ODIR)/avalancha_des.o
+	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
 	
 tar:
 	tar -czvf F-CSI_p2_g05.tgz ../g05/
@@ -58,5 +61,5 @@ tar:
 clean:
 	-rm -f $(ODIR)/*.o *~ core $(INCDIR)/*~ 
 	-rm -f *.tar.gz
-	-rm -f seg-perf desCBC tripleDESCBC sboxes_lin_des sboxes_des sboxes_lin_aes SBOX_AES
+	-rm -f seg-perf desCBC tripleDESCBC sboxes_lin_des sboxes_des sboxes_lin_aes SBOX_AES avalancha_des
 	-rm -f auxiliar.txt teclado.txt

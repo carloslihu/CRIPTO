@@ -199,3 +199,16 @@ uint64_t cadena_aleatoria(int num){
 
     return cadena;
 }
+
+
+int contar_unos(uint64_t cadena) { 
+
+    int count = 0; 
+
+    while (cadena) { 
+        count += cadena & 1; 
+        cadena >>= 1; 
+    } 
+
+    return count; 
+} 

@@ -428,6 +428,8 @@ uint64_t encode_block_avalancha(uint64_t Mens, uint64_t key, int cifrar, uint64_
     R[0] = aux >> 32;
     /*printf("L0 0x%"PRIx32"\n", L[0]);
     printf("R0 0x%"PRIx32"\n", R[0]);*/
+    ronda = (((uint64_t) L[0]) << 32) | ((uint64_t) R[0]);
+    (*rondas)[0] = ronda;
 
     for (i = 1; i <= ROUNDS; i++) {
         L[i] = R[i - 1];
@@ -444,7 +446,7 @@ uint64_t encode_block_avalancha(uint64_t Mens, uint64_t key, int cifrar, uint64_
 
         /*guardamos el resultado de la ronda LiRi*/
         ronda = (((uint64_t) L[i]) << 32) | ((uint64_t) R[i]);
-        rondas[i] = ronda;
+        (*rondas)[i] = ronda;
     }
 
     /*cambiamos de orden L16R16 para formar R16L16*/

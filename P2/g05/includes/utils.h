@@ -117,5 +117,7 @@ uint64_t rotl(uint64_t value, unsigned int count);
 
 uint64_t cadena_aleatoria(int num);
 
+int contar_unos(uint64_t cadena);
+
 #endif /* UTILS_H */
 
