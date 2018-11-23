@@ -45,8 +45,13 @@ uint64_t createIV();
 uint64_t* createSubkeys(uint64_t key);
 
 
-
-
+/**
+ * @brief Funcion que calcula los valores de la SBoxes
+ *
+ * @param cadena de 48 bits que va a ser pasada por las SBoxes
+ * 
+ * @return valor de retorno de 32 bits de las SBoxes
+ */
 uint32_t SB_return(uint64_t B);
 
 /**
@@ -64,7 +69,7 @@ uint32_t f(uint32_t R, uint64_t Key);
  *
  * @param Mensaje de 64 bits a cifrar
  * @param el conjunto de claves generadas en step 1
- * @param 1 si estamos ifrando, 0 si descifrando
+ * @param 1 si estamos cifrando, 0 si descifrando
  * 
  * @return el texto de 64 bits cifrado
  */
@@ -72,7 +77,16 @@ uint64_t encode_block(uint64_t Mens, uint64_t* subkeys, int cifrar);
 
 
 
-
+/**
+ * @brief Cifra un texto de 64 bits usando DES, especial para ejercicio de avalancha
+ *
+ * @param Mensaje de 64 bits a cifrar
+ * @param el clave
+ * @param 1 si estamos cifrando, 0 si descifrando
+ * @param puntero donde se guardarán los valores de cada ronda
+ * 
+ * @return el texto de 64 bits cifrado
+ */
 uint64_t encode_block_avalancha(uint64_t Mens, uint64_t key, int cifrar, uint64_t** rondas);
 
 #endif /* DES_TABLES_H */
