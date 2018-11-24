@@ -37,7 +37,8 @@ uint64_t AES_product(uint64_t a, uint64_t b) {
     l_a = get_length(a);
     l_b = get_length(b);
 
-    /*TODO criterio para decidir cual hacer xtime?*/
+    /*Para optimizar el proceso, 
+     * realizaremos xtime sobre la palabra de menor longitud*/
     if (l_a < l_b) {
         min = a;
         max = b;
@@ -47,12 +48,14 @@ uint64_t AES_product(uint64_t a, uint64_t b) {
         max = a;
         l_min = l_b;
     }
+    /*Término inicial antes de realizar xtime*/
     x = max;
     if (get_bit(min, 63) == 1) {
         r ^= x;
     }
     for (i = 1; i < l_min; i++) {
         x = xtime(x);
+        /*Suma el término del xtime si aparece en min*/
         if (get_bit(min, 63 - i) == 1) {
             r ^= x;
         }
@@ -76,10 +79,11 @@ void pol_division(const uint64_t n, const uint64_t d, uint64_t *q, uint64_t *r) 
     l_d = get_length(d);
     l_n = get_length(n);
     l_dist = l_n - l_d;
-    *q = 0;
-    *r = n;
-    /*Caso en que se pueda dividir*/
-    if (l_dist >= 0) {
+    /*Caso en que no se pueda dividir (n ya es módulo d)*/
+    if (l_dist < 0) {
+        *q = 0;
+        *r = n;
+    } else {/*Caso en que se dividir*/
         *r = (n >> l_dist) ^ d;
         *q = 1;
         for (i = 1; i <= l_dist; i++) {
@@ -136,9 +140,7 @@ uint64_t AES_mcdExtended(uint64_t a, uint64_t m, uint64_t *x, uint64_t *y) {
     uint64_t q, r, x1, y1;
     pol_division(m, a, &q, &r);
     uint64_t mcd = AES_mcdExtended(r, a, &x1, &y1);
-    /*TODO FDB nos ha colado un puto xtime D:*/
     prod = AES_product(q, x1);
-    //*x = y1 - q * x1;
     *x = y1 ^ prod;
     *y = x1;
 
@@ -181,7 +183,7 @@ int main(int argc, char **argv) {
                 break;
 
             case '1':
-                fOut = fopen(optarg, "wb");
+                fOut = fopen(optarg, "w");
                 if (!fOut) exit(-1);
                 break;
 
@@ -195,33 +197,6 @@ int main(int argc, char **argv) {
         }
     }
 
-    /*uint64_t n = 0b10011,
-            d = 0b10111,
-            q, r;
-    pol_division(n, d, &q, &r);
-    printf("q: %"PRIx64"\n"
-            "r: %"PRIx64"\n", q, r);*/
-    /*uint64_t n = 0b1011,
-            d = 0b100,
-            q, r;
-
-    printf("n: %"PRIx64"\n"
-            "d: %"PRIx64"\n"
-            "mcd: %"PRIx64"\n", n, d, mcd(n, d));*/
-    //printf("product: %"PRIx64"\n", AES_product(0x57, 0x13));
-    /*uint64_t a = 0b10000001, m = 0b100011011, x, y;*/
-
-    /*AES_mcdExtended(a, m, &x, & y);
-    printf("a: %"PRIx64"\n"
-            "m: %"PRIx64"\n"
-            "x: %"PRIx64"\n"
-            "y: %"PRIx64"\n", a, m, x, y);
-    uint64_t prod = AES_product(a, x);
-    printf("product: %"PRIx64"\n", prod);*/
-    /*uint64_t q, r;
-    pol_division(prod, m, &q, &r);
-    printf("p_mod: %"PRIx64"\n", r);*/
-
     /* Si no se especifica, usamos salida estandar */
     if (!fOut) {
         fOut = stdout;
@@ -229,11 +204,15 @@ int main(int argc, char **argv) {
     /*Calculamos ambas Sboxes a la vez*/
     for (i = 0; i < ROWS_PER_SBOX; i++) {
         for (j = 0; j < COLUMNS_PER_SBOX; j++) {
+            /*concatenamos indices*/
             s = (i << 4) | j;
+            /*calculamos el inverso de s*/
             AES_mcdExtended(s, MX, &x, &y);
+            /*Aplicamos la matriz*/
             s = x ^ rotl8(x, 1) ^ rotl8(x, 2) ^ rotl8(x, 3) ^ rotl8(x, 4) ^ C;
 
             sprintf(DIRECT_SBOX_PROP[i][j], "%02x", (unsigned int) s);
+            /*Asignamos la Sbox inversa asociada*/
             k = s >> 4;
             l = s & 0xF;
             sprintf(INVERSE_SBOX_PROP[k][l], "%02x", (i << 4) | j);
