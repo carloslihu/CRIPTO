@@ -17,7 +17,7 @@ int main(int argc, char **argv) {
     uint64_t diferencia[17] = {0};
     int bits_diferentes[17] = {0};
     int bits_xor[3] = {8, 12, 14}; /*cambiar bits en xor, teniendo en cuenta la clave con la ultima cifra de paridad 1000, 1100, 1110*/
-    FILE *fout; 
+    FILE *fout;
 
     srand(time(NULL));
 

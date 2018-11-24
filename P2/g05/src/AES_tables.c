@@ -45,6 +45,7 @@ static const char INVERSE_SBOX[ROWS_PER_SBOX][COLUMNS_PER_SBOX][HEX_STRING_SIZE]
     { "17", "2b", "04", "7e", "ba", "77", "d6", "26", "e1", "69", "14", "63", "55", "21", "0c", "7d"}
 };
 
+/*
 static const char MIX_COLUMN_MATRIX[BYTES_PER_WORD][BYTES_PER_WORD][HEX_STRING_SIZE] = {
     { "02", "03", "01", "01"},
     { "01", "02", "03", "01"},
@@ -58,7 +59,7 @@ static const char INV_MIX_COLUMN_MATRIX[BYTES_PER_WORD][BYTES_PER_WORD][HEX_STRI
     { "0D", "09", "0E", "0B"},
     { "0B", "0D", "09", "0E"}
 };
-
+ */
 uint64_t SB_AES_return(uint64_t B) {
 
     uint64_t SB = 0, aux2 = 0;

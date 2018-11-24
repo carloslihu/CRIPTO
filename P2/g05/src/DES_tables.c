@@ -288,12 +288,10 @@ uint8_t SBox_result(uint8_t b, unsigned int number_box) {
 uint32_t SB_return(uint64_t B) {
 
     uint32_t SB = 0, aux2 = 0;
-    uint8_t bit = 0, aux = 0, b[NUM_S_BOXES] = {0}, sb[NUM_S_BOXES] = {0};
+    uint8_t b[NUM_S_BOXES] = {0}, sb[NUM_S_BOXES] = {0};
     int i = 0;
-    unsigned short fila = 0, columna = 0;
 
     for (i = 0; i < NUM_S_BOXES; i++) {
-        aux = 0;
         b[i] = B >> 6 * (8 - (i + 1));
         b[i] = b[i] & 0b00111111;
         /*printf("b%d 0x%"PRIx8"\n", i+1, b[i]);*/

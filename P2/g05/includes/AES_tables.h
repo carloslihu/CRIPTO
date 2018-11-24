@@ -15,6 +15,8 @@ Autores: Carlos Li Hu y David López Ramos
 #define ROWS_PER_SBOX 16
 #define COLUMNS_PER_SBOX 16
 #define HEX_STRING_SIZE 3
+#define MX 0b100011011
+#define C 0b01100011
 
 uint64_t SB_AES_return(uint64_t B);
 

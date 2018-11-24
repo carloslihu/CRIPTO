@@ -185,6 +185,18 @@ uint64_t rotl(uint64_t value, unsigned int count) {
 }
 
 /**
+ * @brief Hace una rotación circular a la izquierda de una palabra de 8b
+ *
+ * @param palabra que desplazamos
+ * @param numero de posiciones que se desplaza
+ * 
+ * @return la palabra modificada
+ */
+uint64_t rotl8(uint64_t value, unsigned int count) {
+    return (value << count | value >> (8 - count)) & 0xFF;
+}
+
+/**
  * @brief Genera una cadena binaria aleatoria
  *
  * @param el tamaño de la cadena (max 64 bits)

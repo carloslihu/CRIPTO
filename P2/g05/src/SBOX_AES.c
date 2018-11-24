@@ -36,9 +36,8 @@ uint64_t AES_product(uint64_t a, uint64_t b) {
     int l_a, l_b, l_min, i;
     l_a = get_length(a);
     l_b = get_length(b);
-    /*TODO esto era recursivo
-     criterio para decidir cual hacer xtime?*/
 
+    /*TODO criterio para decidir cual hacer xtime?*/
     if (l_a < l_b) {
         min = a;
         max = b;
@@ -152,9 +151,11 @@ int main(int argc, char **argv) {
     int long_index = 0;
     char opt;
     FILE *fOut = NULL;
-    int cifrar = -1;
-
-
+    int cifrar = -1, i, j, k, l;
+    uint64_t x, y;
+    char DIRECT_SBOX_PROP[ROWS_PER_SBOX][COLUMNS_PER_SBOX][HEX_STRING_SIZE];
+    char INVERSE_SBOX_PROP[ROWS_PER_SBOX][COLUMNS_PER_SBOX][HEX_STRING_SIZE];
+    uint64_t s;
     if (argc > 1) {
         strncpy(entrada, argv[1], SIZE);
     } else {
@@ -194,38 +195,66 @@ int main(int argc, char **argv) {
         }
     }
 
+    /*uint64_t n = 0b10011,
+            d = 0b10111,
+            q, r;
+    pol_division(n, d, &q, &r);
+    printf("q: %"PRIx64"\n"
+            "r: %"PRIx64"\n", q, r);*/
+    /*uint64_t n = 0b1011,
+            d = 0b100,
+            q, r;
 
-    if (cifrar == 1) {
-        /*uint64_t n = 0b10011,
-                d = 0b10111,
-                q, r;
-        pol_division(n, d, &q, &r);
-        printf("q: %"PRIx64"\n"
-                "r: %"PRIx64"\n", q, r);*/
-        /*uint64_t n = 0b1011,
-                d = 0b100,
-                q, r;
+    printf("n: %"PRIx64"\n"
+            "d: %"PRIx64"\n"
+            "mcd: %"PRIx64"\n", n, d, mcd(n, d));*/
+    //printf("product: %"PRIx64"\n", AES_product(0x57, 0x13));
+    /*uint64_t a = 0b10000001, m = 0b100011011, x, y;*/
 
-        printf("n: %"PRIx64"\n"
-                "d: %"PRIx64"\n"
-                "mcd: %"PRIx64"\n", n, d, mcd(n, d));*/
-        //printf("product: %"PRIx64"\n", AES_product(0x57, 0x13));
-        uint64_t a = 0b10000001, m = 0b100011011, x, y;
+    /*AES_mcdExtended(a, m, &x, & y);
+    printf("a: %"PRIx64"\n"
+            "m: %"PRIx64"\n"
+            "x: %"PRIx64"\n"
+            "y: %"PRIx64"\n", a, m, x, y);
+    uint64_t prod = AES_product(a, x);
+    printf("product: %"PRIx64"\n", prod);*/
+    /*uint64_t q, r;
+    pol_division(prod, m, &q, &r);
+    printf("p_mod: %"PRIx64"\n", r);*/
 
-        /*AES_mcdExtended(a, m, &x, & y);
-        printf("a: %"PRIx64"\n"
-                "m: %"PRIx64"\n"
-                "x: %"PRIx64"\n"
-                "y: %"PRIx64"\n", a, m, x, y);
-        uint64_t prod = AES_product(a, x);
-        printf("product: %"PRIx64"\n", prod);*/
-        /*uint64_t q, r;
-        pol_division(prod, m, &q, &r);
-        printf("p_mod: %"PRIx64"\n", r);*/
-    }
     /* Si no se especifica, usamos salida estandar */
     if (!fOut) {
         fOut = stdout;
+    }
+    /*Calculamos ambas Sboxes a la vez*/
+    for (i = 0; i < ROWS_PER_SBOX; i++) {
+        for (j = 0; j < COLUMNS_PER_SBOX; j++) {
+            s = (i << 4) | j;
+            AES_mcdExtended(s, MX, &x, &y);
+            s = x ^ rotl8(x, 1) ^ rotl8(x, 2) ^ rotl8(x, 3) ^ rotl8(x, 4) ^ C;
+
+            sprintf(DIRECT_SBOX_PROP[i][j], "%02x", (unsigned int) s);
+            k = s >> 4;
+            l = s & 0xF;
+            sprintf(INVERSE_SBOX_PROP[k][l], "%02x", (i << 4) | j);
+        }
+    }
+    /*Imprimimos la Sbox directa*/
+    if (cifrar == 1) {
+        for (i = 0; i < ROWS_PER_SBOX; i++) {
+            for (j = 0; j < COLUMNS_PER_SBOX; j++) {
+                printf("%s ", DIRECT_SBOX_PROP[i][j]);
+            }
+            printf("\n");
+        }
+        /*Imprimimos la Sbox Inversa*/
+    } else {
+        for (i = 0; i < ROWS_PER_SBOX; i++) {
+            for (j = 0; j < COLUMNS_PER_SBOX; j++) {
+                printf("%s ", INVERSE_SBOX_PROP[i][j]);
+            }
+            printf("\n");
+        }
     }
 
     if (fOut) fclose(fOut);
