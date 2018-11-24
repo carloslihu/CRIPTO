@@ -54,7 +54,8 @@ int main(int argc, char **argv) {
 
     /*iteramos por cada caja*/
     for (cajas = 0; cajas < 8; cajas++) {
-
+        
+        /*numero de repeticiones fijadas*/
         for (i = 0; i < repeticiones; i++) {
 
             b = (uint8_t) cadena_aleatoria(6);

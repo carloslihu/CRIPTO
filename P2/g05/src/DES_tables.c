@@ -297,25 +297,7 @@ uint32_t SB_return(uint64_t B) {
         b[i] = B >> 6 * (8 - (i + 1));
         b[i] = b[i] & 0b00111111;
         /*printf("b%d 0x%"PRIx8"\n", i+1, b[i]);*/
-        /*De cada Bi sacamos la fila y la columna con los correspondientes bits*/
-        /*sacar fila*/
-        bit = get_bit((uint64_t) b[i], (uint8_t) 58);
-        aux = set_bit(aux, (uint8_t) 62, bit);
-        bit = get_bit((uint64_t) b[i], (uint8_t) 63);
-        aux = set_bit(aux, (uint8_t) 63, bit);
-        /*printf("auxf%i 0x%"PRIx8"\n", i+1, aux);*/
-        fila = (unsigned short) aux;
-        /*printf("fila%i %d\n", i+1, fila);*/
-        /*sacar columna*/
-        aux = b[i] >> 1;
-        aux = aux & 0b00001111;
-        /*printf("auxc%i 0x%"PRIx8"\n", i+1, aux);*/
-        columna = (unsigned short) aux;
-        /*printf("columna%i %d\n", i+1, columna);*/
-
-        /*consultamos la tabla SBoxes*/
-        sb[i] = S_BOXES[i][fila][columna];
-        /*printf("sb%d 0x%"PRIx8"\n", i+1, sb[i]);*/
+        sb[i] = SBox_result(b[i], i);
     }
 
     /*juntamos los sbi para formar SB de 32 bits*/
