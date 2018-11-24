@@ -27,6 +27,7 @@ Autores: Carlos Li Hu y David López Ramos
 #define K 65 /* desplazamiento para operar A-Z en Zm */
 #define SIZE 512 /*tamaño de cadenas*/
 #define ERROR 0.01 /*error tolerado para IC*/
+#define BSIZE 64
 
 
 /**
@@ -118,6 +119,13 @@ uint64_t rotl(uint64_t value, unsigned int count);
 uint64_t cadena_aleatoria(int num);
 
 int contar_unos(uint64_t cadena);
-
+/**
+ * @brief Devuelve la longitud real en bits de una palabra
+ *
+ * @param la palabra
+ * 
+ * @return su longitud
+ */
+int get_length(uint64_t bits);
 #endif /* UTILS_H */
 

@@ -8,6 +8,73 @@ Autores: Carlos Li Hu y David López Ramos
 #include "../includes/AES_tables.h"
 
 /**
+ * @brief realiza el xtime del AES sobre 8b
+ *
+ * @param palabra a aplicar xtime
+ *
+ * @return resultado
+ */
+uint64_t xtime(uint64_t bits) {
+    if (get_bit(bits, BSIZE - 8) == 1) {
+        return bits << 1;
+    } else {
+        return ((bits << 1) & 0xFF) ^ 0x1B;
+    }
+}
+/**
+ * @brief realiza el producto de 2 polinomios del AES sobre 8b
+ *
+ * @param primer operando
+ * @param primer operando
+ *
+ * @return resultado
+ */
+uint64_t AES_product(uint64_t a, uint64_t b) {
+    uint64_t r;
+    /*TODO esto era recursivo
+     criterio para decidir cual hacer xtime?*/
+    return r;
+}
+
+/**
+ * @brief pasandole n y d, calcula n/d, dando como resultados
+ * el cociente q y el resto r
+ *
+ * @param n dividendo de la division
+ * @param d divisor de la division
+ * @param q cociente de la división
+ * @param r resto de la division 
+ *
+ */
+void pol_division(const uint64_t n, const uint64_t d, uint64_t *q, uint64_t *r) {
+    int l_d, l_n, l_dist;
+    int i;
+    l_d = get_length(d);
+    l_n = get_length(n);
+    l_dist = l_n - l_d;
+    *q = 0;
+    *r = n;
+    /*Caso en que se pueda dividir*/
+    if (l_dist >= 0) {
+        *r = (n >> l_dist) ^ d;
+        *q = 1;
+        for (i = 1; i <= l_dist; i++) {
+            /*a r le añadimos el siguiente termino del dividendo */
+            *r = (*r << 1) | ((n >> (l_dist - i)) & 1);
+
+            /*Caso longitud resto < longitud divisor*/
+            if (get_length(*r) < l_d) {
+                /*q le añadimos un 0*/
+                *q <<= 1;
+            } else {/*Caso longitud resto = longitud divisor*/
+                *r = *r ^ d;
+                *q = (*q << 1) | 1;
+            }
+        }
+    }
+}
+
+/**
  * @brief Calcula el maximo comun divisor en GF(2⁸)
  *
  * @param primer polinomio
@@ -16,40 +83,40 @@ Autores: Carlos Li Hu y David López Ramos
  * @return el maximo comun divisor
  */
 uint64_t AES_mcd(uint64_t a, uint64_t b) {
-    //uint64_t resto = 0;
+    uint64_t q, r;
     if (a == 0)
         return b;
-
-    //return AES_mcd(b % a, a);
-    return 0;
+    pol_division(b, a, &q, &r);
+    return AES_mcd(r, a);
 }
+
 /**
- * @brief Realiza la descomposición de Euclides Extendida.
- *        Calcula el inverso de a modulo m en x
+ * @brief Realiza la descomposición de Euclides Extendida para polinomios.
+ *        Calcula el inverso de a modulo m(x) del AES en x
  *
- * @param el entero a calcular su inverso
- * @param el modulo de la operación
+ * @param el polinomio a calcular su inverso
  * @param el inverso de a
  * @param el otro factor por descomposición
  *
  * @return el maximo comun divisor
  */
-/*
-int AES_mcdExtended(int a, int m, int *x, int *y) {
+
+uint64_t AES_mcdExtended(uint64_t a, uint64_t m, uint64_t *x, uint64_t *y) {
     if (a == 0) {
- *x = 0;
- *y = 1;
+        *x = 0;
+        *y = 1;
         return m;
     }
 
-    int x1, y1;
-    int mcd = mcdExtended(m % a, a, &x1, &y1);
-
- *x = y1 - (m / a) * x1;
- *y = x1;
+    uint64_t q, r, x1, y1;
+    pol_division(m, a, &q, &r);
+    uint64_t mcd = AES_mcdExtended(r, a, &x1, &y1);
+    /*TODO FDB nos ha colado un puto xtime D:*/
+    //*x = y1 - q * x1;
+    *y = x1;
 
     return mcd;
-}*/
+}
 
 /* PROGRAMA PRINCIPAL */
 int main(int argc, char **argv) {
@@ -99,7 +166,24 @@ int main(int argc, char **argv) {
         }
     }
 
+
     if (cifrar == 1) {
+        /*uint64_t n = 0b10011,
+                d = 0b10111,
+                q, r;
+        pol_division(n, d, &q, &r);
+        printf("q: %"PRIx64"\n"
+                "r: %"PRIx64"\n", q, r);*/
+        /*uint64_t n = 0b1011,
+                d = 0b100,
+                q, r;
+
+        printf("n: %"PRIx64"\n"
+                "d: %"PRIx64"\n"
+                "mcd: %"PRIx64"\n", n, d, mcd(n, d));*/
+        
+        //uint64_t m = 0b100011011;
+
     }
     /* Si no se especifica, usamos salida estandar */
     if (!fOut) {
