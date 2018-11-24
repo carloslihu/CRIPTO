@@ -15,10 +15,10 @@ Autores: Carlos Li Hu y David López Ramos
  * @return resultado
  */
 uint64_t xtime(uint64_t bits) {
-    if (get_bit(bits, BSIZE - 8) == 1) {
-        return bits << 1;
-    } else {
+    if (get_bit(bits, (uint8_t) 56) == 1) {
         return ((bits << 1) & 0xFF) ^ 0x1B;
+    } else {
+        return bits << 1;
     }
 }
 
@@ -31,7 +31,7 @@ uint64_t xtime(uint64_t bits) {
  * @return resultado
  */
 uint64_t AES_product(uint64_t a, uint64_t b) {
-    uint64_t r, x;
+    uint64_t r = 0, x;
     int min, max;
     int l_a, l_b, l_min, i;
     l_a = get_length(a);
@@ -50,7 +50,7 @@ uint64_t AES_product(uint64_t a, uint64_t b) {
     }
     x = max;
     if (get_bit(min, 63) == 1) {
-        r = x;
+        r ^= x;
     }
     for (i = 1; i < l_min; i++) {
         x = xtime(x);
@@ -127,6 +127,7 @@ uint64_t AES_mcd(uint64_t a, uint64_t b) {
  */
 
 uint64_t AES_mcdExtended(uint64_t a, uint64_t m, uint64_t *x, uint64_t *y) {
+    uint64_t prod;
     if (a == 0) {
         *x = 0;
         *y = 1;
@@ -137,7 +138,9 @@ uint64_t AES_mcdExtended(uint64_t a, uint64_t m, uint64_t *x, uint64_t *y) {
     pol_division(m, a, &q, &r);
     uint64_t mcd = AES_mcdExtended(r, a, &x1, &y1);
     /*TODO FDB nos ha colado un puto xtime D:*/
+    prod = AES_product(q, x1);
     //*x = y1 - q * x1;
+    *x = y1 ^ prod;
     *y = x1;
 
     return mcd;
@@ -206,9 +209,19 @@ int main(int argc, char **argv) {
         printf("n: %"PRIx64"\n"
                 "d: %"PRIx64"\n"
                 "mcd: %"PRIx64"\n", n, d, mcd(n, d));*/
+        //printf("product: %"PRIx64"\n", AES_product(0x57, 0x13));
+        uint64_t a = 0b10000001, m = 0b100011011, x, y;
 
-        //uint64_t m = 0b100011011;
-
+        /*AES_mcdExtended(a, m, &x, & y);
+        printf("a: %"PRIx64"\n"
+                "m: %"PRIx64"\n"
+                "x: %"PRIx64"\n"
+                "y: %"PRIx64"\n", a, m, x, y);
+        uint64_t prod = AES_product(a, x);
+        printf("product: %"PRIx64"\n", prod);*/
+        /*uint64_t q, r;
+        pol_division(prod, m, &q, &r);
+        printf("p_mod: %"PRIx64"\n", r);*/
     }
     /* Si no se especifica, usamos salida estandar */
     if (!fOut) {
