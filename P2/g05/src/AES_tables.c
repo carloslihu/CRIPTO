@@ -26,7 +26,7 @@ static const char DIRECT_SBOX[ROWS_PER_SBOX][COLUMNS_PER_SBOX][HEX_STRING_SIZE] 
     { "8c", "a1", "89", "0d", "bf", "e6", "42", "68", "41", "99", "2d", "0f", "b0", "54", "bb", "16"}
 };
 
-static const char INVERSE_SBOX[ROWS_PER_SBOX][COLUMNS_PER_SBOX][HEX_STRING_SIZE] = {
+/*static const char INVERSE_SBOX[ROWS_PER_SBOX][COLUMNS_PER_SBOX][HEX_STRING_SIZE] = {
     { "52", "09", "6a", "d5", "30", "36", "a5", "38", "bf", "40", "a3", "9e", "81", "f3", "d7", "fb"},
     { "7c", "e3", "39", "82", "9b", "2f", "ff", "87", "34", "8e", "43", "44", "c4", "de", "e9", "cb"},
     { "54", "7b", "94", "32", "a6", "c2", "23", "3d", "ee", "4c", "95", "0b", "42", "fa", "c3", "4e"},
@@ -45,7 +45,6 @@ static const char INVERSE_SBOX[ROWS_PER_SBOX][COLUMNS_PER_SBOX][HEX_STRING_SIZE]
     { "17", "2b", "04", "7e", "ba", "77", "d6", "26", "e1", "69", "14", "63", "55", "21", "0c", "7d"}
 };
 
-/*
 static const char MIX_COLUMN_MATRIX[BYTES_PER_WORD][BYTES_PER_WORD][HEX_STRING_SIZE] = {
     { "02", "03", "01", "01"},
     { "01", "02", "03", "01"},

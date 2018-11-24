@@ -84,10 +84,13 @@ int main(int argc, char **argv) {
 
     if (cifrar == 1) {
         srand(time(NULL));
+        printf("Key: ");
         for (i = 0; i < 3; i++) {
             key[i] = createKey();
+            printf("%"PRIx64, key[i]);
         }
         iv = createIV();
+        printf("\nIV: %"PRIx64"\n", iv);
     }
     subkeys = (uint64_t**) calloc(3, sizeof (uint64_t*));
 

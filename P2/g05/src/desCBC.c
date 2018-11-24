@@ -81,7 +81,9 @@ int main(int argc, char **argv) {
     if (cifrar == 1) {
         srand(time(NULL));
         key = createKey();
+        printf("Key: %"PRIx64"\n", key);
         iv = createIV();
+        printf("IV: %"PRIx64"\n", iv);
     }
 
 

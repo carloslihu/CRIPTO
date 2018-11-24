@@ -171,11 +171,9 @@ uint64_t createKey() {
     int i = 0;
     for (i = 0; i < 8; i++) {
         B = (uint8_t) ((rand() % 128) << 1);
-        /*printf("%"PRIx8"\n", B);*/
         B |= odd_parity(B);
         key = (key << 8) | B;
     }
-    printf("Key: %"PRIx64"\n", key);
     return key;
 }
 
@@ -192,7 +190,6 @@ uint64_t createIV() {
         B = (uint8_t) ((rand() % 256));
         iv = (iv << 8) | B;
     }
-    printf("IV: %"PRIx64"\n", iv);
     return iv;
 }
 
