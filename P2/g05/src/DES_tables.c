@@ -245,6 +245,41 @@ uint64_t* createSubkeys(uint64_t key) {
     return subkeys;
 }
 
+
+
+/**
+ * @brief Devuelve la salida de 4 bits de los 6 bits de entrada de la SBOX
+ *
+ * @param la 6 bits entrada
+ * @param numero de SBOX
+ * 
+ * @return salida de la sbox, 4 bits
+ */
+uint8_t SBox_result(uint8_t b, unsigned int number_box){
+
+    unsigned int fila = 0, columna = 0;
+    uint8_t bit = 0, aux = 0, sb = 0;
+
+    bit = get_bit((uint64_t) b, (uint8_t) 58);
+    aux = set_bit(aux, (uint8_t) 62, bit);
+    bit = get_bit((uint64_t) b, (uint8_t) 63);
+    aux = set_bit(aux, (uint8_t) 63, bit);
+    fila = (unsigned short) aux;
+
+    aux = b >> 1;
+    aux = aux & 0b00001111;
+    /*printf("auxc%i 0x%"PRIx8"\n", i+1, aux);*/
+    columna = (unsigned short) aux;
+    /*printf("columna%i %d\n", i+1, columna);*/
+
+    /*consultamos la tabla SBoxes*/
+    sb = S_BOXES[number_box][fila][columna];
+    /*printf("sb%d 0x%"PRIx8"\n", i+1, sb[i]);*/
+
+    return sb;
+    
+}
+
 /**
  * @brief Funcion que calcula los valores de la SBoxes
  *

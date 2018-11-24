@@ -46,6 +46,16 @@ uint64_t* createSubkeys(uint64_t key);
 
 
 /**
+ * @brief Devuelve la salida de 4 bits de los 6 bits de entrada de la SBOX
+ *
+ * @param la 6 bits entrada
+ * @param numero de SBOX
+ * 
+ * @return salida de la sbox, 4 bits
+ */
+uint8_t SBox_result(uint8_t b, unsigned int number_box);
+
+/**
  * @brief Funcion que calcula los valores de la SBoxes
  *
  * @param cadena de 48 bits que va a ser pasada por las SBoxes
