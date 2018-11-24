@@ -20,9 +20,18 @@ int main(int argc, char **argv) {
     FILE *fout;
     uint8_t b = 0, sb = 0;
 
+
+    if(argc!=2){
+        printf("Ejecucion: %s num_iteraciones\n", argv[0]);
+        return -1;
+    }
+
+    repeticiones = atof(argv[1]);
+
     srand(time(NULL));
 
     fout = fopen("SAC_BIC.txt", "w");
+    fprintf(fout, "Numero de repeticiones: %d\n\n", (int)repeticiones);
 
     /*------------- SAC -------------*/
 
