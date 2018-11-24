@@ -59,16 +59,12 @@ static const char INV_MIX_COLUMN_MATRIX[BYTES_PER_WORD][BYTES_PER_WORD][HEX_STRI
     { "0B", "0D", "09", "0E"}
 };
 
-
-
-
-
 uint64_t SB_AES_return(uint64_t B) {
 
     uint64_t SB = 0, aux2 = 0;
     uint8_t aux = 0, b[16] = {0}, sb[16] = {0};
     int i = 0;
-    unsigned short fila = 0, columna = 0; 
+    unsigned short fila = 0, columna = 0;
     char hex[2];
 
     for (i = 0; i < 8; i++) {
@@ -93,7 +89,7 @@ uint64_t SB_AES_return(uint64_t B) {
         hex[0] = DIRECT_SBOX[fila][columna][0];
         hex[1] = DIRECT_SBOX[fila][columna][1];
 
-        int num = (int)strtol(hex, NULL, 16); 
+        int num = (int) strtol(hex, NULL, 16);
         sb[i] = (uint8_t) num;
         /*printf("sb%d 0x%"PRIx8"\n", i+1, sb[i]);*/
     }

@@ -21,6 +21,7 @@ uint64_t xtime(uint64_t bits) {
         return ((bits << 1) & 0xFF) ^ 0x1B;
     }
 }
+
 /**
  * @brief realiza el producto de 2 polinomios del AES sobre 8b
  *
@@ -181,7 +182,7 @@ int main(int argc, char **argv) {
         printf("n: %"PRIx64"\n"
                 "d: %"PRIx64"\n"
                 "mcd: %"PRIx64"\n", n, d, mcd(n, d));*/
-        
+
         //uint64_t m = 0b100011011;
 
     }

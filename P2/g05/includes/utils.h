@@ -116,8 +116,23 @@ uint64_t set_bit(uint64_t bits, uint8_t pos, uint8_t value);
 uint64_t rotl(uint64_t value, unsigned int count);
 
 
+/**
+ * @brief Genera una cadena binaria aleatoria
+ *
+ * @param el tamaño de la cadena (max 64 bits)
+ * 
+ * @return la cadena aleatoria
+ */
 uint64_t cadena_aleatoria(int num);
 
+
+/**
+ * @brief Cuenta el numero de unos de una cadena binaria
+ *
+ * @param la cadena de bits
+ * 
+ * @return el numero de unos
+ */
 int contar_unos(uint64_t cadena);
 /**
  * @brief Devuelve la longitud real en bits de una palabra

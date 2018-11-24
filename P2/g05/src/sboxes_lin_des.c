@@ -18,7 +18,7 @@ int main(int argc, char **argv) {
 
     srand(time(NULL));
 
-    for(rep = 0; rep < N; rep++) {
+    for (rep = 0; rep < N; rep++) {
         /*Generamos vectores aleatorios X, Y de 48 bits. Debemos comrprobar que f(X + Y) != f(X) + f(Y) */
 
         X = cadena_aleatoria(48);
@@ -30,12 +30,12 @@ int main(int argc, char **argv) {
 
         SB[0] = SB_return(B);
         SB[1] = SB_return(X);
-        SB[2] = SB_return(Y); 
+        SB[2] = SB_return(Y);
 
         aux = SB[1] ^ SB[2];
 
-        if(aux == SB[0]){
-            counter ++;
+        if (aux == SB[0]) {
+            counter++;
             printf("LINEALIDAD en rep=%d\n", rep);
         }
 

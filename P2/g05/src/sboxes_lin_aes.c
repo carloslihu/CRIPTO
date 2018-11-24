@@ -18,13 +18,13 @@ int main(int argc, char **argv) {
 
     srand(time(NULL));
 
-/*    B = 0x123456789A123456;
-    print_128((B << 64)|B);
-    printf("0x%"PRIx64"\n", (uint64_t)B);*/
+    /*    B = 0x123456789A123456;
+        print_128((B << 64)|B);
+        printf("0x%"PRIx64"\n", (uint64_t)B);*/
     /*counter = __SIZEOF_INT128__;
     printf("%d\n", counter);*/
 
-    for(rep = 0; rep < N; rep++) {
+    for (rep = 0; rep < N; rep++) {
         /*Generamos vectores aleatorios X, Y de 64 bits. Debemos comprobar que f(X + Y) != f(X) + f(Y) */
 
         X = cadena_aleatoria(64);
@@ -32,7 +32,7 @@ int main(int argc, char **argv) {
         /*B es el vector de 64 bits que va a ser dividido en 8 trozos de 8*/
         B = X ^ Y;
 
-       /* printf("0x%"PRIx64"\n", B);*/
+        /* printf("0x%"PRIx64"\n", B);*/
         SB[0] = SB_AES_return(B);
         /*printf("0x%"PRIx64"\n", SB[0]);*/
         /*printf("0x%"PRIx64"\n", X);*/
@@ -46,8 +46,8 @@ int main(int argc, char **argv) {
 
         /*printf("0x%"PRIx64"\n", aux);*/
 
-        if(aux == SB[0]){
-            counter ++;
+        if (aux == SB[0]) {
+            counter++;
             printf("LINEALIDAD en rep=%d\n", rep);
         }
 
