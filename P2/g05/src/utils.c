@@ -237,7 +237,7 @@ int contar_unos(uint64_t cadena) {
 }
 
 /**
- * @brief Devuelve la longitud real en bits de una palabra
+ * @brief Devuelve la longitud real en bits de una palabra (ignora los bits a 0 primeros)
  *
  * @param la palabra
  * 
