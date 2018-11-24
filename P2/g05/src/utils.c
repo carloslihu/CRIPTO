@@ -184,7 +184,6 @@ uint64_t rotl(uint64_t value, unsigned int count) {
     return (value << count | value >> (28 - count)) & 0x0FFFFFFF;
 }
 
-
 /**
  * @brief Genera una cadena binaria aleatoria
  *
@@ -192,14 +191,14 @@ uint64_t rotl(uint64_t value, unsigned int count) {
  * 
  * @return la cadena aleatoria
  */
-uint64_t cadena_aleatoria(int num){
+uint64_t cadena_aleatoria(int num) {
 
-    int i=0;
+    int i = 0;
     uint64_t cadena = 0;
     uint8_t bit = 0;
 
-    for(i=64-num; i<64; i++){
-        bit= (uint8_t) (rand()%2);
+    for (i = 64 - num; i < 64; i++) {
+        bit = (uint8_t) (rand() % 2);
         cadena = set_bit(cadena, (uint8_t) i, bit);
     }
 
@@ -213,14 +212,29 @@ uint64_t cadena_aleatoria(int num){
  * 
  * @return el numero de unos
  */
-int contar_unos(uint64_t cadena) { 
+int contar_unos(uint64_t cadena) {
 
-    int count = 0; 
+    int count = 0;
 
-    while (cadena) { 
-        count += cadena & 1; 
-        cadena >>= 1; 
-    } 
+    while (cadena) {
+        count += cadena & 1;
+        cadena >>= 1;
+    }
 
-    return count; 
-} 
+    return count;
+}
+
+/**
+ * @brief Devuelve la longitud real en bits de una palabra
+ *
+ * @param la palabra
+ * 
+ * @return su longitud
+ */
+int get_length(uint64_t bits) {
+    int count;
+    for (count = BSIZE; count > 0 && (get_bit(bits, 0) == 0); count--) {
+        bits <<= 1;
+    }
+    return count;
+}

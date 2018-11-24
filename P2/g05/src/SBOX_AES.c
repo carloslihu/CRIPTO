@@ -31,9 +31,33 @@ uint64_t xtime(uint64_t bits) {
  * @return resultado
  */
 uint64_t AES_product(uint64_t a, uint64_t b) {
-    uint64_t r;
+    uint64_t r, x;
+    int min, max;
+    int l_a, l_b, l_min, i;
+    l_a = get_length(a);
+    l_b = get_length(b);
     /*TODO esto era recursivo
      criterio para decidir cual hacer xtime?*/
+
+    if (l_a < l_b) {
+        min = a;
+        max = b;
+        l_min = l_a;
+    } else {
+        min = b;
+        max = a;
+        l_min = l_b;
+    }
+    x = max;
+    if (get_bit(min, 63) == 1) {
+        r = x;
+    }
+    for (i = 1; i < l_min; i++) {
+        x = xtime(x);
+        if (get_bit(min, 63 - i) == 1) {
+            r ^= x;
+        }
+    }
     return r;
 }
 
@@ -121,7 +145,7 @@ uint64_t AES_mcdExtended(uint64_t a, uint64_t m, uint64_t *x, uint64_t *y) {
 
 /* PROGRAMA PRINCIPAL */
 int main(int argc, char **argv) {
-    char entrada[SIZE], cadena[SIZE];
+    char entrada[SIZE]; //, cadena[SIZE];
     int long_index = 0;
     char opt;
     FILE *fOut = NULL;

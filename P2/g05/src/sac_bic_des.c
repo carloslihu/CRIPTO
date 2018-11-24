@@ -28,7 +28,7 @@ int main(int argc, char **argv) {
 
     fprintf(fout, "Resultados de SAC\n\n");
 
-    for(i = 0; i<repeticiones; i++){
+    for (i = 0; i < repeticiones; i++) {
 
         cadena = cadena_aleatoria(48);
         /* 000001 000001 000001 000001 000001 000001 000001 000001 = 0x41041041041*/
@@ -37,15 +37,15 @@ int main(int argc, char **argv) {
         SB2 = SB_return(cadena2);
 
         /*contamos los unos y los ceros de cada una de las posiciones bi de la salida de las SBoxes*/
-        for(j = 0; j<32; j++){
-            if(get_bit((uint64_t)SB2, (uint8_t)(j+32)) == 0) ceros[j] ++;
-            else unos[j] ++;
+        for (j = 0; j < 32; j++) {
+            if (get_bit((uint64_t) SB2, (uint8_t) (j + 32)) == 0) ceros[j]++;
+            else unos[j]++;
         }
 
     }
 
-    for(j = 0; j<32; j++){
-        fprintf(fout, "b%d\t\tP(1) = %lf\t\tP(0) = %lf\n", j+1, unos[j]/repeticiones, ceros[j]/repeticiones);
+    for (j = 0; j < 32; j++) {
+        fprintf(fout, "b%d\t\tP(1) = %lf\t\tP(0) = %lf\n", j + 1, unos[j] / repeticiones, ceros[j] / repeticiones);
     }
 
     /*------------- BIC -------------*/
@@ -53,39 +53,39 @@ int main(int argc, char **argv) {
     fprintf(fout, "\nResultados de BIC\n\n");
 
     /*iteramos por cada caja*/
-    for(cajas = 0; cajas < 8; cajas++){
+    for (cajas = 0; cajas < 8; cajas++) {
 
-        for(i = 0; i<repeticiones; i++){
+        for (i = 0; i < repeticiones; i++) {
 
             b = (uint8_t) cadena_aleatoria(6);
 
             sb = SBox_result(b, cajas);
 
             /*comprobamos los ceros en cada bi, deberian ser la mitad (1/2)*/
-            for(j = 0; j < 4; j++){
-                if(get_bit((uint64_t)sb, (uint8_t)(j+60)) == 0) ceros_b[j] ++;
+            for (j = 0; j < 4; j++) {
+                if (get_bit((uint64_t) sb, (uint8_t) (j + 60)) == 0) ceros_b[j]++;
             }
             /*calculamos ceros conjuntos, por cada par, deberia ser (1/4)*/
-            for(r = 0; r < 4; r++){
-                for(s = r+1; s < 4; s++){
-                    if(get_bit((uint64_t)sb, (uint8_t)(r+60)) == 0 && get_bit((uint64_t)sb, (uint8_t)(s+60)) == 0) pares_ceros[r][s] ++;
+            for (r = 0; r < 4; r++) {
+                for (s = r + 1; s < 4; s++) {
+                    if (get_bit((uint64_t) sb, (uint8_t) (r + 60)) == 0 && get_bit((uint64_t) sb, (uint8_t) (s + 60)) == 0) pares_ceros[r][s]++;
                 }
             }
 
         }
 
-        fprintf(fout, "\nSBOX %d\n", cajas+1);
+        fprintf(fout, "\nSBOX %d\n", cajas + 1);
         /*probabilidades simples*/
-        for(r = 0; r < 4; r++){
-            fprintf(fout, "b%d\tP(0) = %lf\n", r+1, ceros_b[r]/repeticiones);
+        for (r = 0; r < 4; r++) {
+            fprintf(fout, "b%d\tP(0) = %lf\n", r + 1, ceros_b[r] / repeticiones);
             ceros_b[r] = 0;
         }
         /*probabilidades conjuntas*/
-        for(r = 0; r < 4; r++){
-            for(s = r+1; s < 4; s++){
-                fprintf(fout, "b%d,%d\tP(0,0) = %lf\n", r+1, s+1, pares_ceros[r][s]/repeticiones);
+        for (r = 0; r < 4; r++) {
+            for (s = r + 1; s < 4; s++) {
+                fprintf(fout, "b%d,%d\tP(0,0) = %lf\n", r + 1, s + 1, pares_ceros[r][s] / repeticiones);
                 pares_ceros[r][s] = 0;
-                }
+            }
         }
     }
 

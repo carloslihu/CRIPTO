@@ -245,8 +245,6 @@ uint64_t* createSubkeys(uint64_t key) {
     return subkeys;
 }
 
-
-
 /**
  * @brief Devuelve la salida de 4 bits de los 6 bits de entrada de la SBOX
  *
@@ -255,7 +253,7 @@ uint64_t* createSubkeys(uint64_t key) {
  * 
  * @return salida de la sbox, 4 bits
  */
-uint8_t SBox_result(uint8_t b, unsigned int number_box){
+uint8_t SBox_result(uint8_t b, unsigned int number_box) {
 
     unsigned int fila = 0, columna = 0;
     uint8_t bit = 0, aux = 0, sb = 0;
@@ -277,7 +275,7 @@ uint8_t SBox_result(uint8_t b, unsigned int number_box){
     /*printf("sb%d 0x%"PRIx8"\n", i+1, sb[i]);*/
 
     return sb;
-    
+
 }
 
 /**
