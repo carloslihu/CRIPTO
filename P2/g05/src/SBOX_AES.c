@@ -222,17 +222,17 @@ int main(int argc, char **argv) {
     if (cifrar == 1) {
         for (i = 0; i < ROWS_PER_SBOX; i++) {
             for (j = 0; j < COLUMNS_PER_SBOX; j++) {
-                printf("%s ", DIRECT_SBOX_PROP[i][j]);
+                fprintf(fOut, "%s ", DIRECT_SBOX_PROP[i][j]);
             }
-            printf("\n");
+            fprintf(fOut, "\n");
         }
         /*Imprimimos la Sbox Inversa*/
     } else {
         for (i = 0; i < ROWS_PER_SBOX; i++) {
             for (j = 0; j < COLUMNS_PER_SBOX; j++) {
-                printf("%s ", INVERSE_SBOX_PROP[i][j]);
+                fprintf(fOut, "%s ", INVERSE_SBOX_PROP[i][j]);
             }
-            printf("\n");
+            fprintf(fOut, "\n");
         }
     }
 
