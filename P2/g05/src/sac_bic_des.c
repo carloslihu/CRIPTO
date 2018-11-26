@@ -21,7 +21,7 @@ int main(int argc, char **argv) {
     uint8_t b = 0, sb = 0;
 
 
-    if(argc!=2){
+    if (argc != 2) {
         printf("Ejecucion: %s num_iteraciones\n", argv[0]);
         return -1;
     }
@@ -31,7 +31,7 @@ int main(int argc, char **argv) {
     srand(time(NULL));
 
     fout = fopen("SAC_BIC.txt", "w");
-    fprintf(fout, "Numero de repeticiones: %d\n\n", (int)repeticiones);
+    fprintf(fout, "Numero de repeticiones: %d\n\n", (int) repeticiones);
 
     /*------------- SAC -------------*/
 
@@ -43,7 +43,7 @@ int main(int argc, char **argv) {
         /* 000001 000001 000001 000001 000001 000001 000001 000001 = 0x41041041041*/
         cadena2 = cadena ^ 0x41041041041; /*cambiamos un bit de cada una de las 8 cajas de 6 bits*/
 
-        SB2 = SB_return(cadena2);
+        SB2 = SB_return(cadena2, NULL);
 
         /*contamos los unos y los ceros de cada una de las posiciones bi de la salida de las SBoxes*/
         for (j = 0; j < 32; j++) {
@@ -69,7 +69,7 @@ int main(int argc, char **argv) {
 
             b = (uint8_t) cadena_aleatoria(6);
 
-            sb = SBox_result(b, cajas);
+            sb = SBox_result(b, cajas, NULL);
 
             /*comprobamos los ceros en cada bi, deberian ser la mitad (1/2)*/
             for (j = 0; j < 4; j++) {

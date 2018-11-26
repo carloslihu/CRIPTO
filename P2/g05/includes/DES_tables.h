@@ -50,19 +50,21 @@ uint64_t* createSubkeys(uint64_t key);
  *
  * @param la 6 bits entrada
  * @param numero de SBOX
+ * @param s_boxes a usar, si es NULL se usa la del DES
  * 
  * @return salida de la sbox, 4 bits
  */
-uint8_t SBox_result(uint8_t b, unsigned int number_box);
+uint8_t SBox_result(uint8_t b, unsigned int number_box, unsigned short s_boxes[NUM_S_BOXES][ROWS_PER_SBOX][COLUMNS_PER_SBOX]);
 
 /**
  * @brief Funcion que calcula los valores de la SBoxes
  *
  * @param cadena de 48 bits que va a ser pasada por las SBoxes
+ * @param s_boxes a usar, si es NULL se usa la del DES
  * 
  * @return valor de retorno de 32 bits de las SBoxes
  */
-uint32_t SB_return(uint64_t B);
+uint32_t SB_return(uint64_t B, unsigned short s_boxes[NUM_S_BOXES][ROWS_PER_SBOX][COLUMNS_PER_SBOX]);
 
 /**
  * @brief Calcula la funcion f a partir de Rn-1 y Kn

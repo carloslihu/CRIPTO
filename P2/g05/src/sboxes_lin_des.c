@@ -20,17 +20,15 @@ int main(int argc, char **argv) {
 
     for (rep = 0; rep < N; rep++) {
         /*Generamos vectores aleatorios X, Y de 48 bits. Debemos comrprobar que f(X + Y) != f(X) + f(Y) */
-
         X = cadena_aleatoria(48);
-        /*printf("X 0x%"PRIx64"\n", X);*/
         Y = cadena_aleatoria(48);
-        /*printf("Y 0x%"PRIx64"\n", Y);*/
+        
         /*B es el vector de 48 bits que va a ser dividido en 8 trozos de 6*/
         B = X ^ Y;
 
-        SB[0] = SB_return(B);
-        SB[1] = SB_return(X);
-        SB[2] = SB_return(Y);
+        SB[0] = SB_return(B, NULL);
+        SB[1] = SB_return(X, NULL);
+        SB[2] = SB_return(Y, NULL);
 
         aux = SB[1] ^ SB[2];
 
@@ -43,7 +41,6 @@ int main(int argc, char **argv) {
 
     printf("Casos probados = %d\n", N);
     printf("Numero de casos lineales = %d\n", counter);
-
 
     return 0;
 

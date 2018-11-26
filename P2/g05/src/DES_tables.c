@@ -247,10 +247,11 @@ uint64_t* createSubkeys(uint64_t key) {
  *
  * @param la 6 bits entrada
  * @param numero de SBOX
+ * @param s_boxes a usar, si es NULL se usa la del DES
  * 
  * @return salida de la sbox, 4 bits
  */
-uint8_t SBox_result(uint8_t b, unsigned int number_box) {
+uint8_t SBox_result(uint8_t b, unsigned int number_box, unsigned short s_boxes[NUM_S_BOXES][ROWS_PER_SBOX][COLUMNS_PER_SBOX]) {
 
     unsigned int fila = 0, columna = 0;
     uint8_t bit = 0, aux = 0, sb = 0;
@@ -268,8 +269,12 @@ uint8_t SBox_result(uint8_t b, unsigned int number_box) {
     /*printf("columna%i %d\n", i+1, columna);*/
 
     /*consultamos la tabla SBoxes*/
-    sb = S_BOXES[number_box][fila][columna];
-    /*printf("sb%d 0x%"PRIx8"\n", i+1, sb[i]);*/
+    if (s_boxes != NULL) {
+        sb = s_boxes[number_box][fila][columna];
+    } else {
+        sb = S_BOXES[number_box][fila][columna];
+        /*printf("sb%d 0x%"PRIx8"\n", i+1, sb[i]);*/
+    }
 
     return sb;
 
@@ -279,10 +284,11 @@ uint8_t SBox_result(uint8_t b, unsigned int number_box) {
  * @brief Funcion que calcula los valores de la SBoxes
  *
  * @param cadena de 48 bits que va a ser pasada por las SBoxes
+ * @param s_boxes a usar, si es NULL se usa la del DES
  * 
  * @return valor de retorno de 32 bits de las SBoxes
  */
-uint32_t SB_return(uint64_t B) {
+uint32_t SB_return(uint64_t B, unsigned short s_boxes[NUM_S_BOXES][ROWS_PER_SBOX][COLUMNS_PER_SBOX]) {
 
     uint32_t SB = 0, aux2 = 0;
     uint8_t b[NUM_S_BOXES] = {0}, sb[NUM_S_BOXES] = {0};
@@ -292,7 +298,7 @@ uint32_t SB_return(uint64_t B) {
         b[i] = B >> 6 * (8 - (i + 1));
         b[i] = b[i] & 0b00111111;
         /*printf("b%d 0x%"PRIx8"\n", i+1, b[i]);*/
-        sb[i] = SBox_result(b[i], i);
+        sb[i] = SBox_result(b[i], i, s_boxes);
     }
 
     /*juntamos los sbi para formar SB de 32 bits*/
@@ -337,7 +343,7 @@ uint32_t f(uint32_t R, uint64_t Key) {
     /*printf("E+K 0x%"PRIx64"\n", B);*/
 
     /*calculo de SBoxes*/
-    SB = SB_return(B);
+    SB = SB_return(B, NULL);
 
     aux3 = ((uint64_t) SB) << 32;
 
