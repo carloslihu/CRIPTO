@@ -21,7 +21,6 @@ int main(int argc, char **argv) {
         strncpy(entrada, argv[1], SIZE);
     } else {
         printf("Ejecucion: %s {-P|-I} [-i filein] [-o fileout]\n", argv[0]);
-        /*printf("Ejemplo: %s -C -m 26 -a 5 -b 4\n", argv[0]);*/
         exit(-1);
     }
 
@@ -58,7 +57,6 @@ int main(int argc, char **argv) {
 
             default:
                 printf("Ejecucion: %s {-P|-I} [-i filein] [-o fileout]\n", argv[0]);
-                /*printf("Ejemplo: %s -C -m 26 -a 5 -b 4\n", argv[0]);*/
                 exit(-1);
                 break;
         }
@@ -66,7 +64,6 @@ int main(int argc, char **argv) {
 
     if (equi == -1) {
         printf("Ejecucion: %s {-P|-I} [-i filein] [-o fileout]\n", argv[0]);
-        /*printf("Ejemplo: %s -C -m 26 -a 5 -b 4\n", argv[0]);*/
         exit(-1);
     }
 
@@ -93,21 +90,25 @@ int main(int argc, char **argv) {
     if (fIn) {
         while (fscanf(fIn, "%c", &simbolo_in) != EOF) {
             simbolo_in -= K;
+            /*frecuencia del caracter en el texto plano*/
             p_p[(int) simbolo_in]++;
 
-            if (equi == 1) {
+            /*generamos la clave aleatoria*/
+            if (equi == 1) {/*distribución equiprobable*/
                 k = (rand() % M);
-            } else {
+            } else {/*distribución normal*/
                 k = (int) randn(13, 1) % M;
 
             }
+            /*ciframos el caracter por desplazamiento*/
             simbolo_out = simbolo_in + k;
             simbolo_out %= M;
+            /*frecuencia del caracter en el texto cifrado*/
             p_c[(int) simbolo_out]++;
+            /*frecuencia conjunta del caracter plano y cifrado*/
             p_cond[(int) simbolo_in][(int) simbolo_out]++;
             cont++;
             simbolo_out += K;
-            //fwrite(&simbolo_out, sizeof (char), 1, fOut);
         }
     }
 
@@ -116,13 +117,11 @@ int main(int argc, char **argv) {
     for (i = 0; i < M; i++) {
         p_p[i] /= cont;
         p_c[i] /= cont;
-        //fprintf(fOut, "Pp(%c) = %lf, Pc(%c) = %lf\n", i + K, p_p[i], i + K, p_c[i]);
         fprintf(fOut, "Pp(%c) = %lf\n", i + K, p_p[i]);
     }
-
-
     for (i = 0; i < M; i++) {
         for (j = 0; j < M; j++) {
+            /*Calculamos la probabilidad condicionada*/
             p_cond[i][j] /= (p_c[j] * cont);
             fprintf(fOut, "Pp(%c|%c) = %lf\t", i + K, j + K, p_cond[i][j]);
         }
