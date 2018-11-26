@@ -87,8 +87,6 @@ uint32_t f(uint32_t R, uint64_t Key);
  */
 uint64_t encode_block(uint64_t Mens, uint64_t* subkeys, int cifrar);
 
-
-
 /**
  * @brief Cifra un texto de 64 bits usando DES, especial para ejercicio de avalancha
  *

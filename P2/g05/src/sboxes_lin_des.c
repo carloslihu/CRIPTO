@@ -22,7 +22,7 @@ int main(int argc, char **argv) {
         /*Generamos vectores aleatorios X, Y de 48 bits. Debemos comrprobar que f(X + Y) != f(X) + f(Y) */
         X = cadena_aleatoria(48);
         Y = cadena_aleatoria(48);
-        
+
         /*B es el vector de 48 bits que va a ser dividido en 8 trozos de 6*/
         B = X ^ Y;
 

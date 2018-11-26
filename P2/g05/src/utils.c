@@ -40,7 +40,6 @@ int parsear(FILE *fIn, FILE **fAux) {
 
                 if ('A' <= simbolo_in && simbolo_in <= 'Z') {
                     /*escribir fichero auxiliar de entrada*/
-                    /*printf("Anadiendo a auxiliar \n");  */
                     fwrite(&simbolo_in, 1, 1, *fAux);
                     count++;
                 }
@@ -150,7 +149,6 @@ double randn(double mu, double sigma) {
  * @return el bit leido
  */
 uint8_t get_bit(uint64_t bits, uint8_t pos) {
-
     return ((bits >> (63 - pos)) & 0x01);
 }
 

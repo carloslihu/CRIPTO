@@ -59,6 +59,7 @@ static const char INV_MIX_COLUMN_MATRIX[BYTES_PER_WORD][BYTES_PER_WORD][HEX_STRI
     { "0B", "0D", "09", "0E"}
 };
  */
+
 uint64_t SB_AES_return(uint64_t B) {
 
     uint64_t SB = 0, aux2 = 0;
@@ -70,18 +71,13 @@ uint64_t SB_AES_return(uint64_t B) {
     for (i = 0; i < 8; i++) {
         aux = 0;
         b[i] = B >> 8 * (8 - (i + 1));
-        /*printf("b%d 0x%"PRIx8"\n", i+1, b[i]);*/
         /*De cada Bi sacamos la fila y la columna con los correspondientes bits*/
         /*sacar fila*/
         aux = (b[i] >> 4) & 0x0F;
-        /*printf("auxf%i 0x%"PRIx8"\n", i+1, aux);*/
         fila = (unsigned short) aux;
-        /*printf("fila%i %d\n", i+1, fila);*/
         /*sacar columna*/
         aux = b[i] & 0x0F;
-        /*printf("auxc%i 0x%"PRIx8"\n", i+1, aux);*/
         columna = (unsigned short) aux;
-        /*printf("columna%i %d\n", i+1, columna);*/
 
         /*consultamos la tabla SBoxes*/
         /*hay que pasar los dos char leidos en las posiciones 0 y 1 a hexadecimal*/
@@ -91,7 +87,6 @@ uint64_t SB_AES_return(uint64_t B) {
 
         int num = (int) strtol(hex, NULL, 16);
         sb[i] = (uint8_t) num;
-        /*printf("sb%d 0x%"PRIx8"\n", i+1, sb[i]);*/
     }
 
     /*juntamos los sbi para formar SB de 64 bits*/

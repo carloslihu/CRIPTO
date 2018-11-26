@@ -5,10 +5,8 @@ Autores: Carlos Li Hu y David López Ramos
 2018 EPS-UAM
  ***************************************************************************/
 
-
 #ifndef UTILS_H
 #define UTILS_H
-
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -21,13 +19,14 @@ Autores: Carlos Li Hu y David López Ramos
 #include <math.h>
 #include <stdint.h>
 #include <inttypes.h>
+
 /*Definicion de constantes *************************************************/
 #define M 26 /* tamaño del alfabeto */
 #define TAM 1000000 /*tamaño para vectores en IC*/
 #define K 65 /* desplazamiento para operar A-Z en Zm */
 #define SIZE 512 /*tamaño de cadenas*/
-#define ERROR 0.01 /*error tolerado para IC*/
-#define BSIZE 64
+#define ERROR 0.01 /*error tolerado para la generación de SBOXES del DES*/
+#define BSIZE 64 /*Tamaño en bits de los bloques*/
 
 
 /**
@@ -151,5 +150,6 @@ int contar_unos(uint64_t cadena);
  * @return su longitud
  */
 int get_length(uint64_t bits);
+
 #endif /* UTILS_H */
 
