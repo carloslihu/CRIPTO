@@ -26,6 +26,7 @@ int main(int argc, char **argv) {
         return -1;
     }
 
+    /*numero de casos pasados por argumentos*/
     repeticiones = atof(argv[1]);
 
     srand(time(NULL));
@@ -53,6 +54,7 @@ int main(int argc, char **argv) {
 
     }
 
+    /*imprimimos los resultados en fichero*/
     for (j = 0; j < 32; j++) {
         fprintf(fout, "b%d\t\tP(1) = %lf\t\tP(0) = %lf\n", j + 1, unos[j] / repeticiones, ceros[j] / repeticiones);
     }

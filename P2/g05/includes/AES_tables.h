@@ -18,6 +18,13 @@ Autores: Carlos Li Hu y David López Ramos
 #define MX 0b100011011 /*polinomio m(x) del AES*/
 #define C 0b01100011 /*constante para generación de Sboxes del AES*/
 
+/**
+ * @brief Calcula el resultado de 64 bits de la caja directa del AES
+ *
+ * @param la cadena de 64 bits que va a ser pasada por la sbox en trozos de 8 bits 
+ * 
+ * @return el resultado de 64 bits
+ */
 uint64_t SB_AES_return(uint64_t B);
 
 #endif /* AES_TABLES_H */

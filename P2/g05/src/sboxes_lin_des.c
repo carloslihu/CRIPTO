@@ -15,23 +15,27 @@ int main(int argc, char **argv) {
     uint32_t SB[3] = {0}, aux = 0;
     int counter = 0, N = 1000000;
 
-
     srand(time(NULL));
 
+    /*realizamos tantas repeticiones como N*/
     for (rep = 0; rep < N; rep++) {
         /*Generamos vectores aleatorios X, Y de 48 bits. Debemos comrprobar que f(X + Y) != f(X) + f(Y) */
         X = cadena_aleatoria(48);
         Y = cadena_aleatoria(48);
-
         /*B es el vector de 48 bits que va a ser dividido en 8 trozos de 6*/
         B = X ^ Y;
 
+        /*resultado sbox de X + Y*/
         SB[0] = SB_return(B, NULL);
+        /*resultado sbox de X*/
         SB[1] = SB_return(X, NULL);
+        /*resultado sbox de Y*/
         SB[2] = SB_return(Y, NULL);
 
+        /*resultado sbox X + sbox Y*/
         aux = SB[1] ^ SB[2];
 
+        /*Comparamos para ver que no coinciden*/
         if (aux == SB[0]) {
             counter++;
             printf("LINEALIDAD en rep=%d\n", rep);
@@ -39,6 +43,7 @@ int main(int argc, char **argv) {
 
     }
 
+    /*resultados de la prueba*/
     printf("Casos probados = %d\n", N);
     printf("Numero de casos lineales = %d\n", counter);
 

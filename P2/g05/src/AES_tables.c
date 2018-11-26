@@ -60,6 +60,14 @@ static const char INV_MIX_COLUMN_MATRIX[BYTES_PER_WORD][BYTES_PER_WORD][HEX_STRI
 };
  */
 
+
+/**
+ * @brief Calcula el resultado de 64 bits de la caja directa del AES
+ *
+ * @param la cadena de 64 bits que va a ser pasada por la sbox en trozos de 8 bits 
+ * 
+ * @return el resultado de 64 bits
+ */
 uint64_t SB_AES_return(uint64_t B) {
 
     uint64_t SB = 0, aux2 = 0;

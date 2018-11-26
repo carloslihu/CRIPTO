@@ -30,7 +30,7 @@ int main(int argc, char **argv) {
     key = createKey();
     Mens = 0x0123456789ABCDEF;
 
-
+    /*ciframos el mensaje, y nos quedamos con los resultados de las rondas del mensaje y clave originales*/
     encode_block_avalancha(Mens, key, 1, &rondas);
 
     /*vamos realizando cambios en el numero de bits*/
@@ -40,8 +40,10 @@ int main(int argc, char **argv) {
         Mens2 = Mens ^ bits_xor[cambios - 1];
         encode_block_avalancha(Mens2, key, 1, &rondas_mensaje);
         fprintf(fout, "\nCambiando %d bits del mensaje\n", cambios);
+        /*comparamos los bits de los resultados de cada ronda respecto al cifrado original*/
         for (i = 0; i < 17; i++) {
             diferencia[i] = rondas[i] ^ rondas_mensaje[i];
+            /*el numero de 1's tras el xor nos indica el numero de diferencias*/
             bits_diferentes[i] = contar_unos(diferencia[i]);
             fprintf(fout, "Ronda %d:\tbits diferentes = %d\n", i, bits_diferentes[i]);
         }
@@ -50,8 +52,10 @@ int main(int argc, char **argv) {
         key2 = key ^ bits_xor[cambios - 1];
         encode_block_avalancha(Mens, key2, 1, &rondas_clave);
         fprintf(fout, "\nCambiando %d bits de la clave\n", cambios);
+        /*comparamos los bits de los resultados de cada ronda respecto al cifrado original*/
         for (i = 0; i < 17; i++) {
             diferencia[i] = rondas[i] ^ rondas_clave[i];
+            /*el numero de 1's tras el xor nos indica el numero de diferencias*/
             bits_diferentes[i] = contar_unos(diferencia[i]);
             fprintf(fout, "Ronda %d:\tbits diferentes = %d\n", i, bits_diferentes[i]);
         }
