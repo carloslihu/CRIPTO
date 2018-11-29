@@ -12,7 +12,7 @@ DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))
 
 OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 
-all: autores carpetas primo
+all: autores carpetas powm primo vegas
 
 $(ODIR)/%.o: $(SDIR)/%.c $(DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS)
@@ -30,9 +30,14 @@ carpetas:
 	mkdir -p obj
 
 #EJECUTABLES
+powm: $(OBJ) $(ODIR)/powm.o
+	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
+	
 primo: $(OBJ) $(ODIR)/primo.o
 	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
-
+	
+vegas: $(OBJ) $(ODIR)/vegas.o
+	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
 	
 tar:
 	tar -czvf F-CSI_p3_g05.tgz ../g05/
@@ -41,5 +46,5 @@ tar:
 clean:
 	-rm -f $(ODIR)/*.o *~ core $(INCDIR)/*~ 
 	-rm -f *.tar.gz
-	-rm -f primo
+	-rm -f powm primo vegas
 	-rm -f auxiliar.txt teclado.txt
