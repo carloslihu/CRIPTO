@@ -7,13 +7,12 @@ Autores: Carlos Li Hu y David López Ramos
 
 #include "../includes/utils.h"
 
-
 /* PROGRAMA PRINCIPAL */
 int main(int argc, char **argv) {
     char entrada[SIZE]; //, cadena[SIZE];
     int long_index = 0;
     char opt;
-    mpz_t base, exp, mod, pot;
+    mpz_t base, exp, mod, pot, pot2;
 
     if (argc > 1) {
         strncpy(entrada, argv[1], SIZE);
@@ -28,7 +27,7 @@ int main(int argc, char **argv) {
         {"m", required_argument, 0, '3'},
         {0, 0, 0, 0}
     };
-    mpz_inits(base, exp, mod, pot, NULL);
+    mpz_inits(base, exp, mod, pot, pot2, NULL);
     while ((opt = getopt_long_only(argc, argv, "1:2:3", options, &long_index)) != -1) {
         switch (opt) {
             case '1':
@@ -52,9 +51,15 @@ int main(int argc, char **argv) {
                 break;
         }
     }
-    mpz_powm(pot, base, exp, mod);
-    gmp_printf ("El resultado de la potenciación con GMP es %Zd\n", pot);
-    mpz_clears(base, exp, mod, pot, NULL);
+    powm(pot, base, exp, mod);
+    gmp_printf("Resultado: %Zd\n", pot);
+    mpz_powm(pot2, base, exp, mod);
+
+    if (mpz_cmp(pot, pot2) == 0) {
+        printf("El resultado coincide con el de la librería GMP\n");
+    }
+
+    mpz_clears(base, exp, mod, pot, pot2, NULL);
     return 0;
 
 

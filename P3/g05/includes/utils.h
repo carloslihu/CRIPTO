@@ -151,6 +151,15 @@ int contar_unos(uint64_t cadena);
  */
 int get_length(uint64_t bits);
 
+/**
+ * @brief Calcula la potenciación modular rop=base^exp (mod mod)
+ *
+ * @param el resultado de la potenciación modular
+ * @param la base de la potencia
+ * @param el exponente de la potencia
+ * @param el módulo
+ * 
+ */
 void powm (mpz_t rop, const mpz_t base, const mpz_t exp, const mpz_t mod);
 #endif /* UTILS_H */
 

@@ -249,6 +249,26 @@ int get_length(uint64_t bits) {
     return count;
 }
 
+/**
+ * @brief Calcula la potenciación modular rop=base^exp (mod mod)
+ *
+ * @param el resultado de la potenciación modular
+ * @param la base de la potencia
+ * @param el exponente de la potencia
+ * @param el módulo
+ * 
+ */
 void powm(mpz_t rop, const mpz_t base, const mpz_t exp, const mpz_t mod) {
-    
+    size_t l;
+    long int i;
+    mpz_set_ui(rop, 1);
+    l = mpz_sizeinbase(exp, 2);
+    for (i = l - 1; i >= 0; i--) {
+        mpz_mul(rop, rop, rop);
+        mpz_mod(rop, rop, mod);
+        if (mpz_tstbit(exp, i) == 1) {
+            mpz_mul(rop, rop, base);
+            mpz_mod(rop, rop, mod);
+        }
+    }
 }
