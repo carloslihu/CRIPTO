@@ -151,5 +151,6 @@ int contar_unos(uint64_t cadena);
  */
 int get_length(uint64_t bits);
 
+void powm (mpz_t rop, const mpz_t base, const mpz_t exp, const mpz_t mod);
 #endif /* UTILS_H */
 

@@ -248,3 +248,7 @@ int get_length(uint64_t bits) {
     }
     return count;
 }
+
+void powm(mpz_t rop, const mpz_t base, const mpz_t exp, const mpz_t mod) {
+    
+}

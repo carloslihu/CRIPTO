@@ -12,7 +12,7 @@ DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))
 
 OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 
-all: autores carpetas powm primo vegas
+all: autores carpetas potencia primo vegas
 
 $(ODIR)/%.o: $(SDIR)/%.c $(DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS)
@@ -30,7 +30,7 @@ carpetas:
 	mkdir -p obj
 
 #EJECUTABLES
-powm: $(OBJ) $(ODIR)/powm.o
+potencia: $(OBJ) $(ODIR)/potencia.o
 	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
 	
 primo: $(OBJ) $(ODIR)/primo.o
@@ -46,5 +46,5 @@ tar:
 clean:
 	-rm -f $(ODIR)/*.o *~ core $(INCDIR)/*~ 
 	-rm -f *.tar.gz
-	-rm -f powm primo vegas
+	-rm -f potencia primo vegas
 	-rm -f auxiliar.txt teclado.txt
