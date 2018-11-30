@@ -160,6 +160,7 @@ int get_length(uint64_t bits);
  * @param el módulo
  * 
  */
+
 void powm (mpz_t rop, const mpz_t base, const mpz_t exp, const mpz_t mod);
 #endif /* UTILS_H */
 
