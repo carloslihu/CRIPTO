@@ -12,8 +12,8 @@ Autores: Carlos Li Hu y David López Ramos
  *        p y q tal que n = p*q del algoritmo RSA. 
  *        Sabiendo la clave pública (n,e) y el exponente de descifrado d
  *
- * @param p primer factor primo resultado
- * @param q segundo factor primo resultado
+ * @param p primer factor primo resultado (vale 0 si el algoritmo no responde)
+ * @param q segundo factor primo resultado (vale 0 si el algoritmo no responde)
  * @param d exponente de descifrado
  * @param e exponente de cifrado
  * @param n producto de p y q
@@ -40,8 +40,11 @@ void vegas(mpz_t p, mpz_t q, const mpz_t d, const mpz_t e, const mpz_t n) {
         k++;
     }
     /*1 < a < n-1*/
-    //aqui generamos 0 <= a <= n-1
-    mpz_urandomm(a, state, n);
+    //repetimos hasta que a sea mayor que 1
+    do {
+        //aqui generamos 0 <= a < n-1
+        mpz_urandomm(a, state, n_1);
+    } while (mpz_cmp_ui(a, 2) < 0);
 
     //Si (a,n) > 1
     mpz_gcd(gcd, a, n);
@@ -61,9 +64,12 @@ void vegas(mpz_t p, mpz_t q, const mpz_t d, const mpz_t e, const mpz_t n) {
         return;
     }
     for (i = 1; i < k; i++) {
+        //y = x
         mpz_set(y, x);
+        //x = (x^2 mod n)
         mpz_mul(x, x, x);
         mpz_mod(x, x, n);
+
         if (mpz_cmp_ui(x, 1) == 0) {
             mpz_add_ui(y, y, 1);
             mpz_gcd(p, y, n);
@@ -77,6 +83,7 @@ void vegas(mpz_t p, mpz_t q, const mpz_t d, const mpz_t e, const mpz_t n) {
             return;
         }
     }
+    //p = mcd(x+1, n)
     mpz_add_ui(x, x, 1);
     mpz_gcd(p, x, n);
     mpz_tdiv_q(q, n, p);
@@ -129,9 +136,7 @@ int main(int argc, char **argv) {
         }
     }
     vegas(p, q, d, e, n);
-    gmp_printf("Factores primos:\n%Zd\n%Zd\n", p, q);
+    gmp_printf("Factores primos de %Zd:\n%Zd\n%Zd\n", n, p, q);
     mpz_clears(p, q, d, e, n, NULL);
     return 0;
-
-
 }
