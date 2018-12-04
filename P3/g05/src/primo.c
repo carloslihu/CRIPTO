@@ -30,6 +30,7 @@ int miller_rabin_test(const mpz_t n, int reps) {
     mpz_inits(n_1, m, a, x, NULL);
     gmp_randinit_mt(state);
     gmp_randseed_ui(state, time(NULL));
+    
     // n-1 = 2^k * m
     mpz_sub_ui(n_1, n, 1);
     mpz_tdiv_q_ui(m, n_1, 2);
