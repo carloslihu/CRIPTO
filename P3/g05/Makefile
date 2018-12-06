@@ -12,7 +12,7 @@ DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))
 
 OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 
-all: autores carpetas potencia primo vegas
+all: autores carpetas potencia primo vegas key_gen
 
 $(ODIR)/%.o: $(SDIR)/%.c $(DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS)
@@ -38,6 +38,9 @@ primo: $(OBJ) $(ODIR)/primo.o
 	
 vegas: $(OBJ) $(ODIR)/vegas.o
 	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
+
+key_gen: $(OBJ) $(ODIR)/key_gen.o
+	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
 	
 tar:
 	tar -czvf F-CSI_p3_g05.tgz ../g05/
@@ -46,5 +49,5 @@ tar:
 clean:
 	-rm -f $(ODIR)/*.o *~ core $(INCDIR)/*~ 
 	-rm -f *.tar.gz
-	-rm -f potencia primo vegas
+	-rm -f potencia primo vegas key_gen
 	-rm -f auxiliar.txt teclado.txt

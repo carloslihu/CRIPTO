@@ -135,8 +135,12 @@ int main(int argc, char **argv) {
                 break;
         }
     }
-    vegas(p, q, d, e, n);
-    gmp_printf("Factores primos de %Zd:\n%Zd\n%Zd\n", n, p, q);
+    //repetimos el algoritmo hasta que responda
+    do {
+        vegas(p, q, d, e, n);
+    } while (mpz_cmp_ui(p, 0) == 0);
+
+    gmp_printf("Factores primos son:\n%Zd\n\n%Zd\n", p, q);
     mpz_clears(p, q, d, e, n, NULL);
     return 0;
 }

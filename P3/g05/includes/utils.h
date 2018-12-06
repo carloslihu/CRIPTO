@@ -37,6 +37,6 @@ Autores: Carlos Li Hu y David López Ramos
  * @param el módulo
  * 
  */
-void powm (mpz_t rop, const mpz_t base, const mpz_t exp, const mpz_t mod);
+void powm(mpz_t rop, const mpz_t base, const mpz_t exp, const mpz_t mod);
 #endif /* UTILS_H */
 
