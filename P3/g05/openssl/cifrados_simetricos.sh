@@ -1,11 +1,14 @@
 #!/bin/bash
 
+cd simetricos
+
 if [ "$#" -eq  "1" ] && [ $1 == "remove" ]
 	then
 
 	rm -f in_aes.txt in_aria.txt in_blowfish.txt in_camellia.txt in_cast5.txt in_rc2.txt in_seed.txt in_6.txt in_sm4.txt 
 	rm -f out_aes.txt out_aria.txt out_blowfish.txt out_camellia.txt out_cast5.txt out_rc2.txt out_seed.txt out_sm4.txt out_7.txt
 
+	cd ..
 
 else
 
@@ -42,5 +45,7 @@ else
 	printf "SM4\n"
 	openssl enc -e -sm4-ecb -K FFFFFFFFFFFFFFFF0000000000000000 -in in.txt -out out_sm4.txt
 	openssl enc -d -sm4-ecb -K FFFFFFFFFFFFFFFF0000000000000000 -out in_sm4.txt -in out_sm4.txt
+
+	cd ..
 	
 	fi
